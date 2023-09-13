@@ -1,0 +1,46 @@
+{
+  "name": "Report1",
+  "pages": [
+    {
+      "name": "Page1",
+      "displayName": "Page1 Display Name",
+      "width": 500,
+      "height":  500,
+      "containers": [
+        {
+          "height": 100,
+          "width": 100,
+          "visualType": "textbox",
+          "value": "BO To PBI Migration"
+        },
+        {
+          "height": 100,
+          "width": 100,
+          "visualType": "shape",
+          "value": "rectangle"
+        },
+        {
+          "height": 100,
+          "width": 100,
+          "visualType": "tableEx",
+          "schema": "HumanResources",
+          "tableName": "vEmployee",
+          "columns": [ "FirstName", "LastName", "PhoneNumber", "Title", "JobTitle", "City", "EmailAddress" ]
+        }
+      ]
+    },
+    {
+      "name": "Page2",
+      "displayName": "Page2 Display Name",
+      "containers": [
+        {
+          "height": 100,
+          "width": 100,
+          "visualType": "shape",
+          "value": "rectangle"
+        }
+      ]
+
+    }
+  ]
+}

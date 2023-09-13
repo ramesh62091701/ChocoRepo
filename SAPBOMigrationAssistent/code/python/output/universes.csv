@@ -1,0 +1,49 @@
+id,cuid,name,type,subType,folderId,revision,description
+6816,ARVjUijBiI1ClmVC2H.XYgc,BI platform CMS system database.unx,unx,UnxRelational,6819,423003,
+5636,AVy_0kTnql9IpZ167YoP5SA,eFashion.unx,unx,UnxRelational,5639,9,"eFashion retail Data Warehouse dated 14 Oct 2007. 89,000+ row fact table.
+
+Version 14
+
+Updated March 9th 2018 as unic univers (UNX)
+
+SAP Development Team
+eFashion retail Data Warehouse dated 14 Oct 2007. 89,000+ row fact table.
+
+Version 14
+
+Updated March 9th 2018 as unic univers (UNX)
+
+Version 15
+
+Add Date and DateTime columns for Time Dimension tests
+
+Version 16
+
+Updated May 15th  2019 for migration on SQLite database (replace: concat by ||, ucase by upper, iff by case when end) 
+
+SAP Development Team
+eFashion retail Data Warehouse dated 14 Oct 2007. 89,000+ row fact table.
+
+Version 14
+
+Updated March 9th 2018 as unic univers (UNX)
+
+SAP Development Team
+eFashion retail Data Warehouse dated 14 Oct 2007. 89,000+ row fact table.
+
+Version 14
+
+Updated March 9th 2018 as unic univers (UNX)
+
+Version 15
+
+Add Date and DateTime columns for Time Dimension tests
+
+Version 16
+
+Updated May 15th  2019 for migration on SQLite database (replace: concat by ||, ucase by upper, iff by case when end) 
+
+SAP Development Team"
+6845,AfgXNuog4EVGtRaVOyhw0rA,Promotion Universe,unv,UnvClassic,6158,1,
+5646,AamfjLdF3Y1IoWCqLq7LobA,Rio2016.unx,unx,UnxRelational,5639,4,
+6159,Abk2MhnEU7NDsOrWiXmVQFs,Univers2,unv,UnvClassic,6158,1,

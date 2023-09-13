@@ -1,0 +1,101 @@
+[
+    {
+      "Id": "6809",
+      "Name": "BI platform CMS system database",
+      "Type": "Relational",
+      "Path": "Connections/BI on BI",
+      "Database": "SAP BI platform CMS system database",
+      "NetworkLayer": "BO OC",
+      "ConnectionString": ""
+    },
+    {
+      "Id": "6721",
+      "Name": "clib-webi",
+      "Type": "Relational",
+      "Path": "Connections",
+      "Database": "MS Access 2019",
+      "NetworkLayer": "ODBC",
+      "ConnectionString": ""
+    },
+    {
+      "Id": "6839",
+      "Name": "clubwebi",
+      "Type": "Relational",
+      "Path": "Connections",
+      "Database": "MS Access 2010",
+      "NetworkLayer": "ODBC",
+      "ConnectionString": ""
+    },
+    {
+      "Id": "5660",
+      "Name": "CustomerXML",
+      "Type": "Relational",
+      "Path": "Connections",
+      "Database": "XML Files",
+      "NetworkLayer": "XML",
+      "ConnectionString": ""
+    },
+  {
+    "Id": "5649",
+    "Name": "efashion-webi",
+    "Type": "Relational",
+    "Path": "Connections",
+    "Database": "SQlite",
+    "NetworkLayer": "SQlite",
+    "ConnectionString": "data/efashion.db"
+  },
+    {
+      "Id": "6720",
+      "Name": "Islandresorts",
+      "Type": "Relational",
+      "Path": "Connections",
+      "Database": "MS Access 2019",
+      "NetworkLayer": "ODBC",
+      "ConnectionString": ""
+    },
+    {
+      "Id": "5661",
+      "Name": "Orders2XML",
+      "Type": "Relational",
+      "Path": "Connections",
+      "Database": "XML Files",
+      "NetworkLayer": "XML",
+      "ConnectionString": ""
+    },
+    {
+      "Id": "5664",
+      "Name": "ProductXML",
+      "Type": "Relational",
+      "Path": "Connections",
+      "Database": "XML Files",
+      "NetworkLayer": "XML",
+      "ConnectionString": ""
+    },
+    {
+      "Id": "5643",
+      "Name": "Rio2016",
+      "Type": "Relational",
+      "Path": "Connections",
+      "Database": "SQlite",
+      "NetworkLayer": "SQlite",
+      "ConnectionString": "data/rio_2016.db"
+    },
+    {
+      "Id": "6840",
+      "Name": "Test",
+      "Type": "Relational",
+      "Path": "Connections",
+      "Database": "MS Excel 2019",
+      "NetworkLayer": "ODBC",
+      "ConnectionString": ""
+    },
+    {
+      "Id": "6841",
+      "Name": "Test1",
+      "Type": "Relational",
+      "Path": "Connections",
+      "Database": "MS Access 2019",
+      "NetworkLayer": "ODBC",
+      "ConnectionString": ""
+    }
+ ]

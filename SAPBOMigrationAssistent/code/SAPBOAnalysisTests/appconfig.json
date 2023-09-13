@@ -1,0 +1,12 @@
+{
+  "sapConnection": {
+    "server": "http://172.29.67.6:6405/biprws",
+    "userName": "Administrator",
+    "password": "Admin@123",
+    "auth": "secEnterprise"
+  },
+  "genai": {
+    "completionApi": "http://localhost:7112/api/Completion"
+  },
+  "csvFilePath": "D:\\Sonata\\CSVFiles"
+}
