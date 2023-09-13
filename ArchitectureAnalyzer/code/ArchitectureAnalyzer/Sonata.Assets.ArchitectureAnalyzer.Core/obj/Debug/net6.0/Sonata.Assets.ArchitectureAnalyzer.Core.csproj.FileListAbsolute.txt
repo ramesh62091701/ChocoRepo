@@ -1,0 +1,12 @@
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Core\bin\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Core.deps.json
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Core\bin\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Core.dll
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Core\bin\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Core.pdb
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Core\obj\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Core.csproj.AssemblyReference.cache
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Core\obj\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Core\obj\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Core.AssemblyInfoInputs.cache
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Core\obj\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Core.AssemblyInfo.cs
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Core\obj\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Core.csproj.CoreCompileInputs.cache
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Core\obj\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Core.dll
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Core\obj\Debug\net6.0\refint\Sonata.Assets.ArchitectureAnalyzer.Core.dll
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Core\obj\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Core.pdb
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Core\obj\Debug\net6.0\ref\Sonata.Assets.ArchitectureAnalyzer.Core.dll

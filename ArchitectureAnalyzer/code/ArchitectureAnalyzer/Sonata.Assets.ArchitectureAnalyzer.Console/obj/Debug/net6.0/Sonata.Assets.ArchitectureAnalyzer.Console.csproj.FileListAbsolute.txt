@@ -1,0 +1,15 @@
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Console\bin\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Console.exe
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Console\bin\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Console.deps.json
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Console\bin\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Console.runtimeconfig.json
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Console\bin\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Console.dll
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Console\bin\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Console.pdb
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Console\obj\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Console.csproj.AssemblyReference.cache
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Console\obj\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Console.GeneratedMSBuildEditorConfig.editorconfig
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Console\obj\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Console.AssemblyInfoInputs.cache
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Console\obj\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Console.AssemblyInfo.cs
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Console\obj\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Console.csproj.CoreCompileInputs.cache
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Console\obj\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Console.dll
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Console\obj\Debug\net6.0\refint\Sonata.Assets.ArchitectureAnalyzer.Console.dll
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Console\obj\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Console.pdb
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Console\obj\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.Console.genruntimeconfig.cache
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.Console\obj\Debug\net6.0\ref\Sonata.Assets.ArchitectureAnalyzer.Console.dll

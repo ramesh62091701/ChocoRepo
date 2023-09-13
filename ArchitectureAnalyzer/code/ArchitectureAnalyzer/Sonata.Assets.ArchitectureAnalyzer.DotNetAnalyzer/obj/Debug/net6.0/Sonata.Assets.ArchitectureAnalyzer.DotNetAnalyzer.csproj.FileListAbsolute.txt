@@ -1,0 +1,5 @@
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.DotNetAnalyzer\obj\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.DotNetAnalyzer.csproj.AssemblyReference.cache
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.DotNetAnalyzer\obj\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.DotNetAnalyzer.GeneratedMSBuildEditorConfig.editorconfig
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.DotNetAnalyzer\obj\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.DotNetAnalyzer.AssemblyInfoInputs.cache
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.DotNetAnalyzer\obj\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.DotNetAnalyzer.AssemblyInfo.cs
+D:\Rnd\source\modernization-assets\ArchitectureAnalyzer\Sonata.Assets.ArchitectureAnalyzer.DotNetAnalyzer\obj\Debug\net6.0\Sonata.Assets.ArchitectureAnalyzer.DotNetAnalyzer.csproj.CoreCompileInputs.cache

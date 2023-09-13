@@ -1,0 +1,32 @@
+[
+  {
+    "Namespace": "MyCompany.MyProject.Domain",
+    "Assembly": "MyCompany.MyProject.dll",
+    "Type": "ShouldBeLocatedInAssembly",
+    "Value": "MyCompany.MyProject.dll"
+  },
+  {
+    "Namespace": "MyCompany.MyProject.Services",
+    "Assembly": "MyCompany.MyProject.dll",
+    "Type": "ShouldBeAssignableTo",
+    "Value": "MyCompany.MyProject.Domain.IMyInterface"
+  },
+  {
+    "Namespace": "MyCompany.MyProject.Services",
+    "Assembly": "MyCompany.MyProject.dll",
+    "Type": "ShouldHaveMethod",
+    "Value": "Execute"
+  },
+  {
+    "Namespace": "MyCompany.MyProject.Services",
+    "Assembly": "MyCompany.MyProject.dll",
+    "Type": "ShouldBePublic",
+    "Value": "True"
+  },
+  {
+    "Namespace": "MyCompany.MyProject.Services",
+    "Assembly": "MyCompany.MyProject.dll",
+    "Type": "ShouldBeInSamePackage",
+    "Value": "MyCompany.MyProject.Services.Utility"
+  }
+]
