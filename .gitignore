@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/LegacyExplorer/code/LegacyExplorer.UIApp/obj/Debug
+/LegacyExplorer/code/LegacyExplorer.ConsoleApp/bin/Debug
+/LegacyExplorer/code/LegacyExplorer.UIApp/bin/Debug
+/LegacyExplorer/code/LegacyExplorer.ConsoleApp/obj/Debug
+/LegacyExplorer/code/.vs/LegacyExplorer/FileContentIndex
+/LegacyExplorer/code/.vs/LegacyExplorer/v17/.suo
