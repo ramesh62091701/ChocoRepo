@@ -62,12 +62,6 @@
     <Compile Include="Models\ScannerOutput.cs" />
     <Compile Include="TypeScanner.cs" />
     <Compile Include="FormsScanner.cs" />
-    <Compile Include="Models\Assembly.cs" />
-    <Compile Include="Models\Fields.cs" />
-    <Compile Include="Models\InHerits.cs" />
-    <Compile Include="Models\Methods.cs" />
-    <Compile Include="Models\References.cs" />
-    <Compile Include="Models\Type.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test\Test.cs" />
     <Compile Include="Validators\Validators.cs" />
