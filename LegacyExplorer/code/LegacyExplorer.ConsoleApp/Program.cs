@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LegacyExplorer.Processors;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,20 @@ namespace LegacyExplorer.ConsoleApp
     {
         static void Main(string[] args)
         {
+            //TestProgram1(args);
+
+            TestProgram2(args);
+        }
+
+        static void TestProgram2(string[] args)
+        {
+            string libPath = "LegacyExplorer.Processors.dll";
+            TypeScanner scanner = new TypeScanner();
+            scanner.Scan(new ScannerInput{ AssemblyPath = libPath });
+
+        }
+        static void TestProgram1(string[] args)
+        {
             Processors.FormsScanner scanner = new Processors.FormsScanner();
 
             string lib = "LegacyExplorer.Processors.dll";
@@ -18,7 +33,7 @@ namespace LegacyExplorer.ConsoleApp
             string asmName = string.Empty;
 
             Console.WriteLine("Enter Source assembly type (l -> dll, e -> exe):");
-            char asmType = (char) Console.Read();
+            char asmType = (char)Console.Read();
             Console.WriteLine("\n");
             switch (asmType)
             {
