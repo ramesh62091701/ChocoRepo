@@ -11,8 +11,36 @@ namespace LegacyExplorer.ConsoleApp
         static void Main(string[] args)
         {
             Processors.FormsScanner scanner = new Processors.FormsScanner();
-            scanner.ScanForms(@"D:\test.dll");
 
+            string lib = "LegacyExplorer.Processors.dll";
+            //string lib = "DCPSupply.Infrastructure.dll";
+            string ex = "LegacyExplorer.UIApp.exe";
+            string asmName = string.Empty;
+
+            Console.WriteLine("Enter Source assembly type (l -> dll, e -> exe):");
+            char asmType = (char) Console.Read();
+            Console.WriteLine("\n");
+            switch (asmType)
+            {
+                case 'l':
+                    asmName = lib; break;
+                case 'e':
+                    asmName = ex; break;
+
+                default:
+                    Console.WriteLine("Unknown assembly Type");
+                    break;
+            }
+
+            List<string> lstInfo = scanner.ScanForms(@"D:\Output\" + asmName);
+
+            Console.WriteLine("Output\n");
+            Console.WriteLine("======\n");
+            foreach (string line in lstInfo)
+            {
+                Console.WriteLine(line);
+            }
+            Console.ReadKey();
         }
     }
 }
