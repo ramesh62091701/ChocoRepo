@@ -5,6 +5,10 @@ namespace LegacyExplorer.Processors
 {
     public class NetType
     {
+        #region variable declartion
+        private string id;
+        #endregion
+
         public NetType()
         {
             Fields = new List<NetField>();
@@ -15,15 +19,15 @@ namespace LegacyExplorer.Processors
         {
             get
             {
-                if (string.IsNullOrEmpty(this.Id))
+                if (string.IsNullOrEmpty(this.id))
                 {
-                    this.Id = new Guid().ToString();
+                    this.id = new Guid().ToString();
                 }
-                return this.Id;
+                return this.id;
             }
             set
             {
-                this.Id = value;
+                this.id = value;
             }
         }
         public string AssemblyId { get; set; }

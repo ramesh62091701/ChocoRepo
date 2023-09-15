@@ -29,11 +29,21 @@ namespace LegacyExplorer.Processors
 
                 //Get assembly info
                 NetAssembly netAssembly = GetAssemblyInfo(assembly);
+                Console.WriteLine($"{netAssembly.Id}");
 
                 output.Assemblies.Add(netAssembly);
 
                 //Get assembly references
                 netAssembly.References = GetAssemblyReferenceInfo(assembly);
+
+
+                //assigning root assembly Guid to all the reference assemblt as a reference
+                netAssembly.References.ForEach(reff =>
+                {
+
+                    reff.AssemblyId = netAssembly.Id;
+                });
+
 
                 // Get all types
                 IEnumerable<TypeInfo> allTypes = assembly.DefinedTypes.ToArray();

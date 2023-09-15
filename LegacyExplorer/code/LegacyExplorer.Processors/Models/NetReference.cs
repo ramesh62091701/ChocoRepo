@@ -8,19 +8,23 @@ namespace LegacyExplorer.Processors.Models
 {
     public class NetReference
     {
+        #region variable declartion
+        private string id;
+        #endregion
+
         public string Id
         {
             get
             {
-                if (string.IsNullOrEmpty(this.Id))
+                if (string.IsNullOrEmpty(this.id))
                 {
-                    this.Id = new Guid().ToString();
+                    this.id = new Guid().ToString();
                 }
-                return this.Id;
+                return this.id;
             }
             set
             {
-                this.Id = value;
+                this.id = value;
             }
         }
         public string AssemblyId { get; set; }
