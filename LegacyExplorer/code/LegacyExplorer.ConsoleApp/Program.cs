@@ -23,7 +23,7 @@ namespace LegacyExplorer.ConsoleApp
         {
             string libPath = "LegacyExplorer.Processors.dll";
             AssemblyScanner scanner = new AssemblyScanner();
-            scanner.Scan(new ScannerInput{ AssemblyPath = libPath });
+            scanner.Scan(new ScannerInput{ AssemblyPaths = { libPath } });
 
         }
         static void TestProgram1(string[] args)

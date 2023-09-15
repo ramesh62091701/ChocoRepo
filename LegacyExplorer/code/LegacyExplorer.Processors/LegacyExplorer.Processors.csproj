@@ -71,6 +71,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyScanner.Info.cs" />
+    <Compile Include="AssemblyScanner.Scan.cs" />
     <Compile Include="Export\CsvExporter.cs" />
     <Compile Include="Export\ExportAttribute.cs" />
     <Compile Include="Models\NetBaseClass.cs" />

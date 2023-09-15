@@ -13,11 +13,14 @@ namespace LegacyExplorer.ConsoleApp
     {
         public static void Test(string[] args)
         {
-            string libPath = "D:\\Downloads\\ProductVision 5.3\\ProductVision.Windows.Forms.dll";
+            List<string> listAssemnlyPath = new List<string>();
+            listAssemnlyPath.Add("D:\\Downloads\\BlogEngine.NET-master\\BlogEngine.NET-master\\BlogEngine\\BlogEngine.NET\\bin\\BlogEngine.NET.dll");
+            listAssemnlyPath.Add("D:\\Downloads\\BlogEngine.NET-master\\BlogEngine.NET-master\\BlogEngine\\BlogEngine.NET\\bin\\BlogEngine.Core.dll");
+
             AssemblyScanner scanner = new AssemblyScanner();
 
-            Console.WriteLine($"Scanning assembly {libPath}");
-            var output = scanner.Scan(new ScannerInput { AssemblyPath = libPath });
+            Console.WriteLine($"Scanning assembly/s {string.Join("\n", listAssemnlyPath)}");
+            var output = scanner.Scan(new ScannerInput { AssemblyPaths = listAssemnlyPath });
 
             // Export the Addresses collection to a separate CSV file
             var csvExporter = new CsvExporter("D:\\rnd\\output");
