@@ -16,8 +16,8 @@ namespace LegacyExplorer.Processors
             ScannerInputValidator inputValidator = new ScannerInputValidator();
             var validator = inputValidator.Validate(input);
 
-            if (validator.IsValid)
-                throw new Exception(string.Join("\n", validator.Errors));
+            //if (validator.IsValid)
+            //    throw new Exception(string.Join("\n", validator.Errors));
 
 
             ScannerOutput output = new ScannerOutput();
@@ -34,7 +34,7 @@ namespace LegacyExplorer.Processors
                 output.Assemblies.Add(netAssembly);
 
                 //Get assembly references
-                netAssembly.References = GetAssemblyReferenceInfo(assembly);
+                output.References = GetAssemblyReferenceInfo(assembly);
 
 
                 ////assigning root assembly Guid to all the reference assemblt as a reference
@@ -65,17 +65,17 @@ namespace LegacyExplorer.Processors
                     foreach (PropertyInfo field in typeClass.GetProperties())
                     {
                         NetField netField = GetPropertyInfo(field);
-                        netType.Fields.Add(netField);
+                        output.Fields.Add(netField);
 
                     }
                     //Get fields
                     foreach (MethodInfo method in typeClass.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
                     {
                         NetMethod netMethod = GetMethodsInfo(method);
-                        netType.Methods.Add(netMethod);
+                        output.Methods.Add(netMethod);
                     }
 
-                    netAssembly.Types.Add(netType);
+                    output.Types.Add(netType);
 
                 }
             }

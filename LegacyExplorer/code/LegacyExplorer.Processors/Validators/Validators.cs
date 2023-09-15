@@ -17,7 +17,7 @@ namespace LegacyExplorer.Processors.Validators
         {
             RuleFor(x => x.AssemblyPath).NotNull().WithMessage("Path cannot be null");
             RuleFor(x => x.AssemblyPath).NotEmpty().WithMessage("Path cannot be empty");
-            RuleFor(x => x.AssemblyPath).SetValidator(new FilePathValidator()).WithMessage("Path is not valid");
+            //RuleFor(x => x.AssemblyPath).Matches(@"^(([a-zA-Z]:)|(\))(\{1}|((\{1})[^\]([^/:*?<>""|]*))+)$").WithMessage("Path is not valid");
         }
     }
     public class FilePathValidator : AbstractValidator<string>

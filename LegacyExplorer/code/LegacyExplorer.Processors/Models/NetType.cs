@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LegacyExplorer.Processors.Export;
+using System;
 using System.Collections.Generic;
 
 namespace LegacyExplorer.Processors
@@ -9,12 +10,7 @@ namespace LegacyExplorer.Processors
         private string id;
         #endregion
 
-        public NetType()
-        {
-            Fields = new List<NetField>();
-            Methods = new List<NetMethod>();
-        }
-            
+        [Export]
         public string Id
         {
             get
@@ -30,18 +26,18 @@ namespace LegacyExplorer.Processors
                 this.id = value;
             }
         }
+
+        [Export]
         public string AssemblyId { get; set; }
-
+        [Export]
         public string Name { get; set; }
-
+        [Export]
         public string TypeOfType { get; set; }
+
+        [Export]
         public string Namespage { get; set; }
-
+        [Export]
         public string Category { get; set; }
-
-        public List<NetField> Fields { get; set; }
-
-        public List<NetMethod> Methods { get; set; }    
 
     }
 

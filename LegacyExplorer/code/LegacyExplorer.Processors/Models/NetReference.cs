@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LegacyExplorer.Processors.Export;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace LegacyExplorer.Processors.Models
         #region variable declartion
         private string id;
         #endregion
-
+        [Export]
         public string Id
         {
             get
@@ -27,9 +28,13 @@ namespace LegacyExplorer.Processors.Models
                 this.id = value;
             }
         }
+        [Export] 
         public string AssemblyId { get; set; }
 
+        [Export]
         public string Name { get; set; }
+
+        [Export]
         public string Location { get; set; }
 
     }

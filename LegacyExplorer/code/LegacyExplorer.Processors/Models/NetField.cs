@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LegacyExplorer.Processors.Export;
+using System;
 
 namespace LegacyExplorer.Processors
 {
@@ -7,7 +8,7 @@ namespace LegacyExplorer.Processors
         #region variable declartion
         private string id;
         #endregion
-
+        [Export]
         public string Id
         {
             get
@@ -23,10 +24,11 @@ namespace LegacyExplorer.Processors
                 this.id = value;
             }
         }
+        [Export]
         public string TypeId { get; set; }
-
+        [Export]
         public string Name { get; set; }
-
+        [Export]
         public string FieldType { get; set; }
     }
 

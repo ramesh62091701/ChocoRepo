@@ -1,4 +1,5 @@
-﻿using LegacyExplorer.Processors.Models;
+﻿using LegacyExplorer.Processors.Export;
+using LegacyExplorer.Processors.Models;
 using System;
 using System.Collections.Generic;
 
@@ -9,11 +10,7 @@ namespace LegacyExplorer.Processors
         #region variable declartion
         private string id;
         #endregion
-        public NetAssembly()
-        {
-            Types = new List<NetType>();
-            References = new List<NetReference>();
-        }
+        [Export]
         public string Id
         {
             get
@@ -29,17 +26,14 @@ namespace LegacyExplorer.Processors
                 this.id = value;
             }
         }
-                        
+        [Export]
         public string Name { get; set; }
-
+        [Export]
         public string FileName { get; set; }
+        [Export] 
         public string Type { get; set; }
-
+        [Export]
         public string Location { get; set; }
-
-        public List<NetType> Types { get; set; }
-
-        public List<NetReference>  References { get; set; }
     }
 
 

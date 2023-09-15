@@ -13,6 +13,8 @@ namespace LegacyExplorer.ConsoleApp
         {
             //TestProgram1(args);
 
+            TestProgram3.Test(args);
+
             TestProgram2(args);
         }
 
