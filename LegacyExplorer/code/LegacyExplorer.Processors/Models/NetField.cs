@@ -8,7 +8,7 @@ namespace LegacyExplorer.Processors
         {
             get
             {
-                if (this.Id == String.Empty)
+                if (string.IsNullOrEmpty(this.Id))
                 {
                     this.Id = new Guid().ToString();
                 }

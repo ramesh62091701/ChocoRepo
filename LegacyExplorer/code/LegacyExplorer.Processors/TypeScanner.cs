@@ -75,8 +75,8 @@ namespace LegacyExplorer.Processors
         public NetAssembly GetAssemblyInfo(Assembly assembly)
         {
             NetAssembly netAssembly = new NetAssembly();
-            netAssembly.Name = assembly.FullName;
-            netAssembly.FileName = assembly.Location;
+            netAssembly.Name = assembly.GetName().Name;
+            netAssembly.FileName = (assembly.Location.Split('\\')[assembly.Location.Split('\\').Length - 1]).Split(',')[0];
             netAssembly.Location = assembly.Location;
 
             return netAssembly;
@@ -90,7 +90,7 @@ namespace LegacyExplorer.Processors
             foreach (var reference in referenceAssemblies)
             {
                 NetReference netRef = new NetReference();
-                netRef.Name = reference.FullName;
+                netRef.Name = reference.Name;
                 references.Add(netRef);
             }
 
