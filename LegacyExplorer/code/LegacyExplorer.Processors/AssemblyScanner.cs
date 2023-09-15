@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace LegacyExplorer.Processors
 {
-    public class TypeScanner : IScanner<ScannerInput, ScannerOutput>
+    public class AssemblyScanner : IScanner<ScannerInput, ScannerOutput>
     {
         public ScannerOutput Scan(ScannerInput input)
         {
@@ -43,7 +43,7 @@ namespace LegacyExplorer.Processors
                 }
 
                 // Get all types
-                IEnumerable<TypeInfo> allTypes = assembly.DefinedTypes.ToArray();
+                IEnumerable<Type> allTypes = GetAssemblyTypes(assembly);
 
                 foreach (Type typeClass in allTypes)
                 {
@@ -54,18 +54,20 @@ namespace LegacyExplorer.Processors
 
                     ////Get fields  --commenting due to bring deferent details of field instead of exact name, type of field. 
                     ///added Get properties block below
-                    //foreach (FieldInfo field in typeClass.GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
-                    //{
-                    //    NetField netField = GetFieldInfo(field);
-                    //    netType.Fields.Add(netField);
-
-                    //}
-                    //Get properties
-                    foreach (PropertyInfo field in typeClass.GetProperties())
+                    foreach (FieldInfo field in typeClass.GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
                     {
-                        NetField netField = GetPropertyInfo(field);
+                        NetField netField = GetFieldInfo(field);
                         netField.TypeId = netType.Id;
                         output.Fields.Add(netField);
+
+                    }
+
+                    //Get properties
+                    foreach (PropertyInfo property in typeClass.GetProperties())
+                    {
+                        NetProperty netProperty = GetPropertyInfo(property);
+                        netProperty.TypeId = netType.Id;
+                        output.Properties.Add(netProperty);
 
                     }
                     //Get fields
@@ -88,7 +90,17 @@ namespace LegacyExplorer.Processors
             return output;
         }
 
+        public IEnumerable<Type> GetAssemblyTypes(Assembly assembly)
+        {
+            IEnumerable<Type> allTypes = assembly.GetTypes().Where(type => !IsCompilerGenerated(type)).ToList();
 
+            return allTypes;
+        }
+
+        private bool IsCompilerGenerated(Type type)
+        {
+            return type.FullName.Contains("<>"); // Common pattern for compiler-generated types
+        }
 
         public NetAssembly GetAssemblyInfo(Assembly assembly)
         {
@@ -131,15 +143,15 @@ namespace LegacyExplorer.Processors
 
         }
 
-        public NetField GetPropertyInfo(PropertyInfo property)
+        public NetProperty GetPropertyInfo(PropertyInfo property)
         {
 
-            NetField netField = new NetField();
+            NetProperty netProperty = new NetProperty();
 
-            netField.Name = property.Name;
-            netField.FieldType = property.PropertyType.Name;
+            netProperty.Name = property.Name;
+            netProperty.PropertyType = property.PropertyType.Name;
 
-            return netField;
+            return netProperty;
 
         }
 

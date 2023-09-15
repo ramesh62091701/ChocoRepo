@@ -14,14 +14,15 @@ namespace LegacyExplorer.ConsoleApp
             //TestProgram1(args);
 
             TestProgram3.Test(args);
+            //TestProgram2(args);
 
-            TestProgram2(args);
+            Console.ReadKey();
         }
 
         static void TestProgram2(string[] args)
         {
             string libPath = "LegacyExplorer.Processors.dll";
-            TypeScanner scanner = new TypeScanner();
+            AssemblyScanner scanner = new AssemblyScanner();
             scanner.Scan(new ScannerInput{ AssemblyPath = libPath });
 
         }

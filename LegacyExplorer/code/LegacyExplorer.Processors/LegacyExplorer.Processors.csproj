@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="Export\CsvExporter.cs" />
     <Compile Include="Export\ExportAttribute.cs" />
+    <Compile Include="Models\NetProperty.cs" />
     <Compile Include="Models\NetField.cs" />
     <Compile Include="Interfaces\IScanner.cs" />
     <Compile Include="Models\NetMethod.cs" />
@@ -81,7 +82,7 @@
     <Compile Include="References.cs" />
     <Compile Include="Models\ScannerInput.cs" />
     <Compile Include="Models\ScannerOutput.cs" />
-    <Compile Include="TypeScanner.cs" />
+    <Compile Include="AssemblyScanner.cs" />
     <Compile Include="FormsScanner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test\Test.cs" />

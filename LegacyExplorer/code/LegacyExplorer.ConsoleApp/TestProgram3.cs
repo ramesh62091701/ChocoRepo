@@ -13,33 +13,26 @@ namespace LegacyExplorer.ConsoleApp
     {
         public static void Test(string[] args)
         {
-            string libPath = "LegacyExplorer.Processors.dll";
-            TypeScanner scanner = new TypeScanner();
+            string libPath = "D:\\Downloads\\ProductVision 5.3\\ProductVision.Windows.Forms.dll";
+            AssemblyScanner scanner = new AssemblyScanner();
+
+            Console.WriteLine($"Scanning assembly {libPath}");
             var output = scanner.Scan(new ScannerInput { AssemblyPath = libPath });
 
             // Export the Addresses collection to a separate CSV file
-            var asmCsvExporter = new CsvExporter<NetAssembly>();
-            asmCsvExporter.ExportToCsv(output.Assemblies, "D:\\rnd\\output");
+            var csvExporter = new CsvExporter("D:\\rnd\\output");
 
-            var typeCsvExporter = new CsvExporter<NetType>();
-            typeCsvExporter.ExportToCsv(output.Types, "D:\\rnd\\output");
+            Console.WriteLine($"Writing output to location {csvExporter.OutputDirectory}");
 
-            var fldCsvExporter = new CsvExporter<NetField>();
-            fldCsvExporter.ExportToCsv(output.Fields, "D:\\rnd\\output");
+            csvExporter.ExportToCsv<NetAssembly>(output.Assemblies);
+            csvExporter.ExportToCsv<NetReference>(output.References);
+            csvExporter.ExportToCsv<NetType>(output.Types);
+            csvExporter.ExportToCsv<NetField>(output.Fields);
+            csvExporter.ExportToCsv<NetProperty>(output.Properties);
+            csvExporter.ExportToCsv<NetMethod>(output.Methods);
 
-            var methodCsvExporter = new CsvExporter<NetMethod>();
-            methodCsvExporter.ExportToCsv(output.Methods, "D:\\rnd\\output"); 
-            
-            var refCsvExporter = new CsvExporter<NetReference>();
-            refCsvExporter.ExportToCsv(output.References, "D:\\rnd\\output");
 
-        }
-
-        public static void Exporter(Type exportType, ScannerOutput output)
-
-        {
-            var csvExporter = new CsvExporter<NetAssembly>();
-            csvExporter.ExportToCsv(output.Assemblies, "D:\\rnd\\output");
+            Console.WriteLine($"Export Complete...");
 
         }
     }

@@ -12,12 +12,14 @@ namespace LegacyExplorer.Processors
             References = new List<NetReference>();
             Methods = new List<NetMethod>();
             Types = new List<NetType>();
+            Properties = new List<NetProperty>();
 
         }
         public List<NetAssembly> Assemblies { get; set; }
 
         public List<NetType> Types { get; set; }
         public List<NetField> Fields { get; set; }
+        public List<NetProperty> Properties { get; set; }
         public List<NetReference> References { get; set; }
         public List<NetMethod> Methods { get; set; }
     }

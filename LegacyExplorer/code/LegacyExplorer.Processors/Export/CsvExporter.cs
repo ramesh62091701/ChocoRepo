@@ -10,28 +10,40 @@ using CsvHelper.TypeConversion;
 
 namespace LegacyExplorer.Processors.Export
 {
-    public class CsvExporter<T>
+    public class CsvExporter
     {
-        public void ExportToCsv(IEnumerable<T> data, string directoryPath)
-        { 
-                var objectType = typeof(T);
-                var fileName = objectType.Name + ".csv"; // Use the name of the object as the filename
+        public string ExportId = $"{DateTime.Now.ToString("yyyy-MM-dd-HHmmss")}";
 
-                using (var writer = new StreamWriter(Path.Combine(directoryPath, fileName)))
-                using (var csv = new CsvWriter(writer, new CsvConfiguration(new CultureInfo("en-US"))))
-                {
-                    csv.WriteRecords(data);
-                }
+        public string OutputDirectory { get; set; } 
 
+        public CsvExporter(string outputDirectory)
+        {
+            ExportId = $"{DateTime.Now:yyyyMMddHHmmss}";
+            OutputDirectory = outputDirectory;
         }
 
-        public void ExportCollectionToCsv<TCollection>(IEnumerable<TCollection> collection, string outputPath)
+        public CsvExporter(string exportId, string outputDirectory)
         {
-            using (var writer = new StreamWriter(outputPath))
+            ExportId = exportId;
+            OutputDirectory = outputDirectory;
+        }
+
+        public void ExportToCsv<TCollection>(IEnumerable<TCollection> collection)
+        {
+            var directoryPath = Path.Combine(OutputDirectory, ExportId);
+            Directory.CreateDirectory(directoryPath);
+
+            var objectType = typeof(TCollection);
+
+
+            var fileName = $"{objectType.Name}-{ExportId}.csv";
+
+            using (var writer = new StreamWriter(Path.Combine(directoryPath, fileName)))
             using (var csv = new CsvWriter(writer, new CsvConfiguration(new CultureInfo("en-US"))))
             {
                 csv.WriteRecords(collection);
             }
+
         }
     }
 }
