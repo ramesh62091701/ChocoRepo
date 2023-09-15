@@ -1,6 +1,0 @@
-D:\lightning-suite\ModernizationTools\LegacyExplorer\LegacyExplorer.Processors\bin\Debug\LegacyExplorer.Processors.dll
-D:\lightning-suite\ModernizationTools\LegacyExplorer\LegacyExplorer.Processors\bin\Debug\LegacyExplorer.Processors.pdb
-D:\lightning-suite\ModernizationTools\LegacyExplorer\LegacyExplorer.Processors\obj\Debug\LegacyExplorer.Processors.csproj.AssemblyReference.cache
-D:\lightning-suite\ModernizationTools\LegacyExplorer\LegacyExplorer.Processors\obj\Debug\LegacyExplorer.Processors.csproj.CoreCompileInputs.cache
-D:\lightning-suite\ModernizationTools\LegacyExplorer\LegacyExplorer.Processors\obj\Debug\LegacyExplorer.Processors.dll
-D:\lightning-suite\ModernizationTools\LegacyExplorer\LegacyExplorer.Processors\obj\Debug\LegacyExplorer.Processors.pdb
