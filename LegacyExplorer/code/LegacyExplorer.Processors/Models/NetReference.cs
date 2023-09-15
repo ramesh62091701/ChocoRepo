@@ -18,7 +18,7 @@ namespace LegacyExplorer.Processors.Models
             {
                 if (string.IsNullOrEmpty(this.id))
                 {
-                    this.id = new Guid().ToString();
+                    this.id = Guid.NewGuid().ToString();
                 }
                 return this.id;
             }

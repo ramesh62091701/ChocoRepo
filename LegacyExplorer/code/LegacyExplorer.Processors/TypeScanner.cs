@@ -37,12 +37,12 @@ namespace LegacyExplorer.Processors
                 netAssembly.References = GetAssemblyReferenceInfo(assembly);
 
 
-                //assigning root assembly Guid to all the reference assemblt as a reference
-                netAssembly.References.ForEach(reff =>
-                {
+                ////assigning root assembly Guid to all the reference assemblt as a reference
+                //netAssembly.References.ForEach(reff =>
+                //{
 
-                    reff.AssemblyId = netAssembly.Id;
-                });
+                //    reff.AssemblyId = netAssembly.Id;
+                //});
 
 
                 // Get all types
