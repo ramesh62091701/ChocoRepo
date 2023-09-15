@@ -30,6 +30,7 @@ namespace LegacyExplorer.ConsoleApp
             csvExporter.ExportToCsv<NetField>(output.Fields);
             csvExporter.ExportToCsv<NetProperty>(output.Properties);
             csvExporter.ExportToCsv<NetMethod>(output.Methods);
+            csvExporter.ExportToCsv<NetBaseClass>(output.BaseClasses);
 
 
             Console.WriteLine($"Export Complete...");

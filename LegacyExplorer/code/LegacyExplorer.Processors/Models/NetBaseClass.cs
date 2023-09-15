@@ -1,15 +1,13 @@
 ﻿using LegacyExplorer.Processors.Export;
 using System;
-using System.Collections.Generic;
 
 namespace LegacyExplorer.Processors
 {
-    public class NetType
+    public class NetBaseClass
     {
         #region variable declartion
         private string id;
         #endregion
-
         [Export]
         public string Id
         {
@@ -26,9 +24,8 @@ namespace LegacyExplorer.Processors
                 this.id = value;
             }
         }
-
         [Export]
-        public string AssemblyId { get; set; }
+        public string TypeId { get; set; }
         [Export]
         public string Name { get; set; }
         [Export]
@@ -38,9 +35,6 @@ namespace LegacyExplorer.Processors
 
         [Export]
         public string Namespace { get; set; }
-        [Export]
-        public string Category { get; set; }
-
     }
 
 

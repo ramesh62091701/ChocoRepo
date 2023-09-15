@@ -13,6 +13,7 @@ namespace LegacyExplorer.Processors
             Methods = new List<NetMethod>();
             Types = new List<NetType>();
             Properties = new List<NetProperty>();
+            BaseClasses = new List<NetBaseClass>();
 
         }
         public List<NetAssembly> Assemblies { get; set; }
@@ -22,6 +23,8 @@ namespace LegacyExplorer.Processors
         public List<NetProperty> Properties { get; set; }
         public List<NetReference> References { get; set; }
         public List<NetMethod> Methods { get; set; }
+
+        public List<NetBaseClass> BaseClasses { get; set; } 
     }
 
 

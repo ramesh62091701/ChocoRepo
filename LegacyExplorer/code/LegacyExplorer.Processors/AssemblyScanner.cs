@@ -2,6 +2,7 @@
 using LegacyExplorer.Processors.Validators;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -51,6 +52,14 @@ namespace LegacyExplorer.Processors
                     NetType netType = GetTypeInfo(typeClass);
                     netType.AssemblyId = netAssembly.Id;
 
+                    var baseClasses = GetBaseClasses(typeClass);
+                    foreach (Type baseClass in baseClasses)
+                    {
+                        NetBaseClass netBaseClass = GetBaseTypeInfo(baseClass);
+                        netBaseClass.TypeId = netType.Id;
+                        output.BaseClasses.Add(netBaseClass);
+                    }
+
 
                     ////Get fields  --commenting due to bring deferent details of field instead of exact name, type of field. 
                     ///added Get properties block below
@@ -92,20 +101,27 @@ namespace LegacyExplorer.Processors
 
         public IEnumerable<Type> GetAssemblyTypes(Assembly assembly)
         {
-            IEnumerable<Type> allTypes = assembly.GetTypes().Where(type => !IsCompilerGenerated(type)).ToList();
+            //IEnumerable<Type> allTypes = assembly.GetTypes().Where(type => type.IsClass).ToList();
+
+            //var allTypes = assembly.GetTypes()
+            //                           .Where(type => type.IsClass 
+            //                               && !type.IsNested 
+            //                               && !type.IsGenericType 
+            //                               && !type.IsDefined(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), false))
+            //                           .ToList();
+
+            var allTypes = assembly.GetTypes()
+                                      .Where(type => type.IsClass
+                                          && !type.IsDefined(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), false))
+                                      .ToList();
 
             return allTypes;
-        }
-
-        private bool IsCompilerGenerated(Type type)
-        {
-            return type.FullName.Contains("<>"); // Common pattern for compiler-generated types
         }
 
         public NetAssembly GetAssemblyInfo(Assembly assembly)
         {
             NetAssembly netAssembly = new NetAssembly();
-            netAssembly.Name = assembly.GetName().Name;
+            netAssembly.Name = assembly.FullName;
             netAssembly.FileName = (assembly.Location.Split('\\')[assembly.Location.Split('\\').Length - 1]).Split(',')[0];
             netAssembly.Location = assembly.Location;
 
@@ -125,12 +141,41 @@ namespace LegacyExplorer.Processors
 
             NetType netType = new NetType();
             netType.Name = typeClass.Name;
-            netType.Namespage = typeClass.Namespace;
-            netType.TypeOfType = typeClass.GetType().Name;
-
+            netType.FullName = typeClass.FullName;
+            netType.Namespace = typeClass.Namespace;
+            netType.TypeOfType = typeClass.BaseType.FullName;
             return netType;
 
         }
+
+        public NetBaseClass GetBaseTypeInfo(Type typeClass)
+        {
+
+            NetBaseClass netBaseClass = new NetBaseClass();
+            netBaseClass.Name = typeClass.Name;
+            netBaseClass.FullName = typeClass.FullName;
+            netBaseClass.Namespace = typeClass.Namespace;
+            netBaseClass.TypeOfType = typeClass.GetType().Name;
+
+            return netBaseClass;
+
+        }
+
+        public List<Type> GetBaseClasses(Type typeClass)
+        {
+
+            List<Type> baseClasses = new List<Type>();
+
+            Type currentType = typeClass.BaseType;
+            while (currentType != null)
+            {
+                baseClasses.Add(currentType);
+                currentType = currentType.BaseType;
+            }
+
+            return baseClasses;
+        }
+
         public NetField GetFieldInfo(FieldInfo field)
         {
 
