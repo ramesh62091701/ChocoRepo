@@ -53,14 +53,21 @@ namespace LegacyExplorer.Processors
                     // Get type info
                     NetType netType = GetTypeInfo(typeClass);
 
-                    //Get fields
-                    foreach (FieldInfo field in typeClass.GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
+                    ////Get fields  --commenting due to bring deferent details of field instead of exact name, type of field. 
+                    ///added Get properties block below
+                    //foreach (FieldInfo field in typeClass.GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
+                    //{
+                    //    NetField netField = GetFieldInfo(field);
+                    //    netType.Fields.Add(netField);
+
+                    //}
+                    //Get properties
+                    foreach (PropertyInfo field in typeClass.GetProperties())
                     {
-                        NetField netField = GetFieldInfo(field);
+                        NetField netField = GetPropertyInfo(field);
                         netType.Fields.Add(netField);
 
                     }
-
                     //Get fields
                     foreach (MethodInfo method in typeClass.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
                     {
@@ -103,7 +110,7 @@ namespace LegacyExplorer.Processors
                 netRef.Name = reference.Name;
                 references.Add(netRef);
             }
-
+      
             return references;
         }
 
@@ -129,6 +136,19 @@ namespace LegacyExplorer.Processors
             return netField;
 
         }
+
+        public NetField GetPropertyInfo(PropertyInfo property)
+        {
+
+            NetField netField = new NetField();
+
+            netField.Name = property.Name;
+            netField.FieldType = property.PropertyType.Name;
+
+            return netField;
+
+        }
+
         public NetMethod GetMethodsInfo(MethodInfo method)
         {
 
