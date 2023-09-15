@@ -13,29 +13,11 @@ namespace LegacyExplorer.ConsoleApp
     {
         public static void Test(string[] args)
         {
-            var persons = new List<Person>
-            {
-                new Person
-                {
-                    Name = "John Doe",
-                    Age = 30,
-                    Addresses = new List<Address>
-                    {
-                        new Address { Street = "123 Main St", City = "New York" },
-                        new Address { Street = "456 Elm St", City = "Los Angeles" }
-                    }
-                },
-                // Add more persons
-            };
-
             string libPath = "LegacyExplorer.Processors.dll";
             TypeScanner scanner = new TypeScanner();
             var output = scanner.Scan(new ScannerInput { AssemblyPath = libPath });
 
             // Export the Addresses collection to a separate CSV file
-
-
-
             var asmCsvExporter = new CsvExporter<NetAssembly>();
             asmCsvExporter.ExportToCsv(output.Assemblies, "D:\\rnd\\output");
 

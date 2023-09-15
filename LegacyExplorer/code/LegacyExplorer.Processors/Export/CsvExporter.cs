@@ -34,26 +34,4 @@ namespace LegacyExplorer.Processors.Export
             }
         }
     }
-
-    public class Person
-    {
-        [Export]
-        public string Name { get; set; }
-
-        [Export()]
-        public int Age { get; set; }
-
-        [Export(CsvFileName = "Addresses")]
-        public List<Address> Addresses { get; set; }
-    }
-
-    public class Address
-    {
-        [Export]
-        public string Street { get; set; }
-
-        [Export]
-        public string City { get; set; }
-    }
-
 }

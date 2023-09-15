@@ -34,16 +34,13 @@ namespace LegacyExplorer.Processors
                 output.Assemblies.Add(netAssembly);
 
                 //Get assembly references
-                output.References = GetAssemblyReferenceInfo(assembly);
-
-
-                ////assigning root assembly Guid to all the reference assemblt as a reference
-                //netAssembly.References.ForEach(reff =>
-                //{
-
-                //    reff.AssemblyId = netAssembly.Id;
-                //});
-
+                var referenceAssemblies = assembly.GetReferencedAssemblies();
+                foreach (var reference in referenceAssemblies)
+                {
+                    NetReference netRef = GetAssemblyReferenceInfo(reference);
+                    netRef.AssemblyId = netAssembly.Id; 
+                    output.References.Add(netRef);
+                }
 
                 // Get all types
                 IEnumerable<TypeInfo> allTypes = assembly.DefinedTypes.ToArray();
@@ -52,6 +49,8 @@ namespace LegacyExplorer.Processors
                 {
                     // Get type info
                     NetType netType = GetTypeInfo(typeClass);
+                    netType.AssemblyId = netAssembly.Id;
+
 
                     ////Get fields  --commenting due to bring deferent details of field instead of exact name, type of field. 
                     ///added Get properties block below
@@ -65,6 +64,7 @@ namespace LegacyExplorer.Processors
                     foreach (PropertyInfo field in typeClass.GetProperties())
                     {
                         NetField netField = GetPropertyInfo(field);
+                        netField.TypeId = netType.Id;
                         output.Fields.Add(netField);
 
                     }
@@ -72,6 +72,7 @@ namespace LegacyExplorer.Processors
                     foreach (MethodInfo method in typeClass.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
                     {
                         NetMethod netMethod = GetMethodsInfo(method);
+                        netMethod.TypeId = netType.Id;
                         output.Methods.Add(netMethod);
                     }
 
@@ -99,19 +100,12 @@ namespace LegacyExplorer.Processors
             return netAssembly;
         }
 
-        public List<NetReference> GetAssemblyReferenceInfo(Assembly assembly)
+        public NetReference GetAssemblyReferenceInfo(AssemblyName assemblyName)
         {
-            List<NetReference> references = new List<NetReference>();
+            NetReference netRef = new NetReference();
+            netRef.Name = assemblyName.Name;
 
-            var referenceAssemblies = assembly.GetReferencedAssemblies();
-            foreach (var reference in referenceAssemblies)
-            {
-                NetReference netRef = new NetReference();
-                netRef.Name = reference.Name;
-                references.Add(netRef);
-            }
-      
-            return references;
+            return netRef;
         }
 
         public NetType GetTypeInfo(Type typeClass)
