@@ -1,7 +1,10 @@
 ﻿using LegacyExplorer.Processors;
+using LegacyExplorer.Processors.Interfaces;
 using System;
 using System.Collections.Generic;
+using Mono.Cecil;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,7 +27,8 @@ namespace LegacyExplorer.ConsoleApp
             string libPath = "LegacyExplorer.Processors.dll";
             List<string> lstLibPath = new List<string>();
             lstLibPath.Add(libPath);
-            AssemblyScanner scanner = new AssemblyScanner();
+            ILineCount<MethodInfo> ilineCount = new RefelectionLineCount();
+            AssemblyScanner scanner = new AssemblyScanner(ilineCount);
             scanner.Scan(new ScannerInput{ AssemblyPaths = lstLibPath });
 
         }

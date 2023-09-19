@@ -97,6 +97,7 @@
     <Compile Include="AssemblyScanner.Scan.cs" />
     <Compile Include="Export\CsvExporter.cs" />
     <Compile Include="Export\ExportAttribute.cs" />
+    <Compile Include="Interfaces\ILineCount.cs" />
     <Compile Include="Models\NetBaseClass.cs" />
     <Compile Include="Models\NetProperty.cs" />
     <Compile Include="Models\NetField.cs" />
@@ -105,6 +106,8 @@
     <Compile Include="Models\NetAssembly.cs" />
     <Compile Include="Models\NetReference.cs" />
     <Compile Include="Models\NetType.cs" />
+    <Compile Include="MonoCecilLineCount.cs" />
+    <Compile Include="RefelectionLineCount.cs" />
     <Compile Include="References.cs" />
     <Compile Include="Models\ScannerInput.cs" />
     <Compile Include="Models\ScannerOutput.cs" />

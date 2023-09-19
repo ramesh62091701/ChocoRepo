@@ -1,11 +1,13 @@
 ﻿using LegacyExplorer.Processors;
 using LegacyExplorer.Processors.Export;
 using LegacyExplorer.Processors.Models;
+using LegacyExplorer.Processors.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace LegacyExplorer.ConsoleApp
 {
@@ -18,7 +20,9 @@ namespace LegacyExplorer.ConsoleApp
             listAssemnlyPath.Add("D:\\Downloads\\BlogEngine.NET-master\\BlogEngine.NET-master\\BlogEngine\\BlogEngine.NET\\bin\\BlogEngine.Core.dll");
             listAssemnlyPath.Add("LegacyExplorer.Processors.dll");
 
-            AssemblyScanner scanner = new AssemblyScanner();
+            ILineCount<MethodInfo> ilineCount = new RefelectionLineCount();
+
+            AssemblyScanner scanner = new AssemblyScanner(ilineCount);
 
             Console.WriteLine($"Scanning assembly/s {string.Join("\n", listAssemnlyPath)}");
             var output = scanner.Scan(new ScannerInput { AssemblyPaths = listAssemnlyPath });
