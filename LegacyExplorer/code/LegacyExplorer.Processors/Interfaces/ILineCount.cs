@@ -7,8 +7,8 @@ using System.Reflection;
 
 namespace LegacyExplorer.Processors.Interfaces
 {
-    public interface ILineCount<T>
+    public interface ILineCount<Tin, Tout>
     {
-        int GetMethodLineCount(T method);
-    }
+        Tout GetMethodLineCount(Tin method);
+    }     
 }

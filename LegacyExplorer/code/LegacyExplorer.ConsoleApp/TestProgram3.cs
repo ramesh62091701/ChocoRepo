@@ -20,9 +20,9 @@ namespace LegacyExplorer.ConsoleApp
             listAssemnlyPath.Add("D:\\Downloads\\BlogEngine.NET-master\\BlogEngine.NET-master\\BlogEngine\\BlogEngine.NET\\bin\\BlogEngine.Core.dll");
             listAssemnlyPath.Add("LegacyExplorer.Processors.dll");
 
-            ILineCount<MethodInfo> ilineCount = new RefelectionLineCount();
+            ILineCount<MethodInfo, int> iLineCount = new RefelectionLineCount();
 
-            AssemblyScanner scanner = new AssemblyScanner(ilineCount);
+            AssemblyScanner scanner = new AssemblyScanner(iLineCount);
 
             Console.WriteLine($"Scanning assembly/s {string.Join("\n", listAssemnlyPath)}");
             var output = scanner.Scan(new ScannerInput { AssemblyPaths = listAssemnlyPath });

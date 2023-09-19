@@ -27,7 +27,7 @@ namespace LegacyExplorer.ConsoleApp
             string libPath = "LegacyExplorer.Processors.dll";
             List<string> lstLibPath = new List<string>();
             lstLibPath.Add(libPath);
-            ILineCount<MethodInfo> ilineCount = new RefelectionLineCount();
+            ILineCount<MethodInfo,int> ilineCount = new RefelectionLineCount();
             AssemblyScanner scanner = new AssemblyScanner(ilineCount);
             scanner.Scan(new ScannerInput{ AssemblyPaths = lstLibPath });
 

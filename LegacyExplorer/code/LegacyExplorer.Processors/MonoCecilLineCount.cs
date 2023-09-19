@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace LegacyExplorer.Processors
 {
-    public class MonoCecilLineCount : ILineCount<MethodDefinition>
+    public class MonoCecilLineCount : ILineCount<MethodDefinition,int>
     {
         public int GetMethodLineCount(MethodDefinition method)
         {

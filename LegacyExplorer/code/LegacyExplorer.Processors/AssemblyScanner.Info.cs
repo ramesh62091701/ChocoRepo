@@ -17,11 +17,11 @@ namespace LegacyExplorer.Processors
 {
     public partial class AssemblyScanner : IScanner<ScannerInput, ScannerOutput>
     {
-        private ILineCount<MethodInfo> iInfoLineCount = null;
+        private ILineCount<MethodInfo, int> iLineCount = null;
          
-        public AssemblyScanner(ILineCount<MethodInfo> infoLineCount)
+        public AssemblyScanner(ILineCount<MethodInfo,int> iLineCount)
         {
-            iInfoLineCount = infoLineCount;
+            this.iLineCount = iLineCount;
         }
         public IEnumerable<Type> GetAssemblyTypes(Assembly assembly)
         {
@@ -130,7 +130,7 @@ namespace LegacyExplorer.Processors
             NetMethod netMethod = new NetMethod
             {
                 Name = method.Name,
-                LineCount = iInfoLineCount.GetMethodLineCount(method).ToString()
+                LineCount = this.iLineCount.GetMethodLineCount(method).ToString()
             };
 
             return netMethod;

@@ -8,12 +8,12 @@ using LegacyExplorer.Processors.Interfaces;
 
 namespace LegacyExplorer.Processors
 {
-    public class RefelectionLineCount : ILineCount<MethodInfo>
+    public class RefelectionLineCount : ILineCount<MethodInfo,int>
     {
         public int GetMethodLineCount(MethodInfo method) {
            
             int lineCount = 0;
-
+            
             System.Reflection.MethodBody methodBody = method.GetMethodBody();
             if (methodBody != null)
             {
