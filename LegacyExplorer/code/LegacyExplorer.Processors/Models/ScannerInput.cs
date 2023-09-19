@@ -1,8 +1,10 @@
-﻿namespace LegacyExplorer.Processors
+﻿using System.Collections.Generic;
+
+namespace LegacyExplorer.Processors
 {
     public class ScannerInput
     {
-        public string AssemblyPath { get; set; }
+        public List<string> AssemblyPaths { get; set; }
     }
 
 

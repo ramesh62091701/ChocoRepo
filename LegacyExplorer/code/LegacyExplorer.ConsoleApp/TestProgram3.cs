@@ -13,51 +13,30 @@ namespace LegacyExplorer.ConsoleApp
     {
         public static void Test(string[] args)
         {
-            var persons = new List<Person>
-            {
-                new Person
-                {
-                    Name = "John Doe",
-                    Age = 30,
-                    Addresses = new List<Address>
-                    {
-                        new Address { Street = "123 Main St", City = "New York" },
-                        new Address { Street = "456 Elm St", City = "Los Angeles" }
-                    }
-                },
-                // Add more persons
-            };
+            List<string> listAssemnlyPath = new List<string>();
+            listAssemnlyPath.Add("D:\\Downloads\\BlogEngine.NET-master\\BlogEngine.NET-master\\BlogEngine\\BlogEngine.NET\\bin\\BlogEngine.NET.dll");
+            listAssemnlyPath.Add("D:\\Downloads\\BlogEngine.NET-master\\BlogEngine.NET-master\\BlogEngine\\BlogEngine.NET\\bin\\BlogEngine.Core.dll");
 
-            string libPath = "LegacyExplorer.Processors.dll";
-            TypeScanner scanner = new TypeScanner();
-            var output = scanner.Scan(new ScannerInput { AssemblyPath = libPath });
+            AssemblyScanner scanner = new AssemblyScanner();
+
+            Console.WriteLine($"Scanning assembly/s {string.Join("\n", listAssemnlyPath)}");
+            var output = scanner.Scan(new ScannerInput { AssemblyPaths = listAssemnlyPath });
 
             // Export the Addresses collection to a separate CSV file
+            var csvExporter = new CsvExporter("D:\\rnd\\output");
+
+            Console.WriteLine($"Writing output to location {csvExporter.OutputDirectory}");
+
+            csvExporter.ExportToCsv<NetAssembly>(output.Assemblies);
+            csvExporter.ExportToCsv<NetReference>(output.References);
+            csvExporter.ExportToCsv<NetType>(output.Types);
+            csvExporter.ExportToCsv<NetField>(output.Fields);
+            csvExporter.ExportToCsv<NetProperty>(output.Properties);
+            csvExporter.ExportToCsv<NetMethod>(output.Methods);
+            csvExporter.ExportToCsv<NetBaseClass>(output.BaseClasses);
 
 
-
-            var asmCsvExporter = new CsvExporter<NetAssembly>();
-            asmCsvExporter.ExportToCsv(output.Assemblies, "D:\\rnd\\output");
-
-            var typeCsvExporter = new CsvExporter<NetType>();
-            typeCsvExporter.ExportToCsv(output.Types, "D:\\rnd\\output");
-
-            var fldCsvExporter = new CsvExporter<NetField>();
-            fldCsvExporter.ExportToCsv(output.Fields, "D:\\rnd\\output");
-
-            var methodCsvExporter = new CsvExporter<NetMethod>();
-            methodCsvExporter.ExportToCsv(output.Methods, "D:\\rnd\\output"); 
-            
-            var refCsvExporter = new CsvExporter<NetReference>();
-            refCsvExporter.ExportToCsv(output.References, "D:\\rnd\\output");
-
-        }
-
-        public static void Exporter(Type exportType, ScannerOutput output)
-
-        {
-            var csvExporter = new CsvExporter<NetAssembly>();
-            csvExporter.ExportToCsv(output.Assemblies, "D:\\rnd\\output");
+            Console.WriteLine($"Export Complete...");
 
         }
     }
