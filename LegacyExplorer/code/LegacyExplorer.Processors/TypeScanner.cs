@@ -47,73 +47,20 @@ namespace LegacyExplorer.Processors
             try
             {
                 if (!isMonoCecilPackage) {
-                    // Load the assembly from the DLL file.
-                    Assembly assembly = Assembly.LoadFrom(input.AssemblyPath);
-
-                    //Get assembly info
-                    NetAssembly netAssembly = GetAssemblyInfo(assembly);
-                    Console.WriteLine($"{netAssembly.Id}");
-
-                    output.Assemblies.Add(netAssembly);
-
-                    //Get assembly references
-                    output.References = GetAssemblyReferenceInfo(assembly);
-
-
-                    ////assigning root assembly Guid to all the reference assemblt as a reference
-                    //netAssembly.References.ForEach(reff =>
-                    //{
-
-                    //    reff.AssemblyId = netAssembly.Id;
-                    //});
-
-
-                    // Get all types
-                    IEnumerable<TypeInfo> allTypes = assembly.DefinedTypes.ToArray();
-
-                    foreach (Type typeClass in allTypes)
+                    #region scanning information by System.Reflection standard libary
+                    foreach (string assemblyPath in input.AssemblyPaths)
                     {
-                        // Get type info
-                        NetType netType = GetTypeInfo(typeClass);
+                        // Load the assembly from the DLL file.
+                        Assembly assembly = Assembly.LoadFrom(assemblyPath);
 
-                        ////Get fields  --commenting due to bring deferent details of field instead of exact name, type of field. 
-                        ///added Get properties block below
-                        //foreach (FieldInfo field in typeClass.GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
-                        //{
-                        //    NetField netField = GetFieldInfo(field);
-                        //    netType.Fields.Add(netField);
+                        //Get assembly info
+                        NetAssembly netAssembly = GetAssemblyInfo(assembly);
+                        Console.WriteLine($"{netAssembly.Id}");
 
-                        //}
-                        //Get properties
-                        foreach (PropertyInfo field in typeClass.GetProperties())
-                        {
-                            NetField netField = GetPropertyInfo(field);
-                            output.Fields.Add(netField);
+                        output.Assemblies.Add(netAssembly);
 
-                        }
-                        //Get fields
-                        foreach (MethodInfo method in typeClass.GetMethods(BindingFlags.NonPublic | BindingFlags.Public |BindingFlags.Instance)) // 
-                        {
-                            //if ((method.Attributes.HasFlag(System.Reflection.MethodAttributes.Public
-                            //    | System.Reflection.MethodAttributes.HideBySig)
-                            //    && !method.Attributes.HasFlag(System.Reflection.MethodAttributes.SpecialName))
-                            //    && method.MethodImplementationFlags.HasFlag(System.Reflection.MethodImplAttributes.IL))
-                            //{
-                                NetMethod netMethod = GetMethodsInfo(method, netAssembly);
-                                output.Methods.Add(netMethod);
-                            //}
-                        }
-
-
-
-
-                        output.Types.Add(netType);
-
-                    }
-                }
-                else {
-                    using (var assembly = AssemblyDefinition.ReadAssembly(input.AssemblyPath))
-                    {
+                        //Get assembly references
+                        output.References = GetAssemblyReferenceInfo(assembly);
 
 
                         ////assigning root assembly Guid to all the reference assemblt as a reference
@@ -122,72 +69,140 @@ namespace LegacyExplorer.Processors
 
                         //    reff.AssemblyId = netAssembly.Id;
                         //});
-                        
-                        foreach (var typeClass in assembly.MainModule.Types)
+
+
+                        // Get all types
+                        IEnumerable<TypeInfo> allTypes = assembly.DefinedTypes.ToArray();
+
+                        foreach (Type typeClass in allTypes)
                         {
-                            if (typeClass != null) //CsvExporter`1, CsvExporter // && type.Name == "Program" || type.Name == "Program"
+                            // Get type info
+                            NetType netType = GetTypeInfo(typeClass);
+
+                            ////Get fields  --commenting due to bring deferent details of field instead of exact name, type of field. 
+                            ///added Get properties block below
+                            //foreach (FieldInfo field in typeClass.GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
+                            //{
+                            //    NetField netField = GetFieldInfo(field);
+                            //    netType.Fields.Add(netField);
+
+                            //}
+                            //Get properties
+                            foreach (PropertyInfo field in typeClass.GetProperties())
                             {
+                                NetField netField = GetPropertyInfo(field);
+                                output.Fields.Add(netField);
 
-                                ////Get assembly info
-                                //NetAssembly netAssembly1 = GetAssemblyInfo(assembly1);
-                                //Console.WriteLine($"{netAssembly1.Id}");
-
-                                //output.Assemblies.Add(netAssembly1);
-
-                                ////Get assembly references
-                                //output.References = GetAssemblyReferenceInfo(assembly1);
-                                //// Get type info
-                                //NetType netType = GetTypeInfo(typeClass);
-
-                                //////Get fields  --commenting due to bring deferent details of field instead of exact name, type of field. 
-                                /////added Get properties block below
-                                ////foreach (FieldInfo field in typeClass.GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
-                                ////{
-                                ////    NetField netField = GetFieldInfo(field);
-                                ////    netType.Fields.Add(netField);
-
-                                ////}
-                                ////Get properties
-                                //foreach (PropertyInfo field in typeClass.GetProperties())
+                            }
+                            //Get fields
+                            foreach (MethodInfo method in typeClass.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance)) // 
+                            {
+                                //if ((method.Attributes.HasFlag(System.Reflection.MethodAttributes.Public
+                                //    | System.Reflection.MethodAttributes.HideBySig)
+                                //    && !method.Attributes.HasFlag(System.Reflection.MethodAttributes.SpecialName))
+                                //    && method.MethodImplementationFlags.HasFlag(System.Reflection.MethodImplAttributes.IL))
                                 //{
-                                //    NetField netField = GetPropertyInfo(field);
-                                //    output.Fields.Add(netField);
-
+                                NetMethod netMethod = GetMethodsInfo(method, netAssembly);
+                                output.Methods.Add(netMethod);
                                 //}
-
-                                var methods = typeClass.Methods;//.SingleOrDefault(m => m.Name == methodName);
-                                int lineCount = 0;
-                                foreach (var method in typeClass.Methods)
-                                {
-                                    if (method != null)
-                                    {
-                                        lineCount = 0;
-                                        //Console.WriteLine($"Declaring Type - {method.DeclaringType.Name}, Type Class - {typeClass.Name}, type - {type.Name}");
-
-                                        NetMethod netMethod = new NetMethod();
-
-                                        lineCount = CountMethodLines(method);
-
-                                        netMethod.LineCount = $"Method {method.Name} and Line Count: {lineCount}";
-                                        output.Methods.Add(netMethod);
-
-
-                                        Console.WriteLine($"Method {method.Name} in {typeClass.Name} has {lineCount} lines of code.");
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine($"Method {method.Name} not found in {typeClass.Name}.");
-                                    }
-
-                                }
                             }
-                            else
-                            {
-                                Console.WriteLine($"Type {typeClass.Name} not found in the assembly.");
-                            }
+
+
+
+
+                            output.Types.Add(netType);
 
                         }
                     }
+                    
+                    #endregion
+
+                    
+                }
+                else {
+                    foreach (var assemblyPath in input.AssemblyPaths)
+                    {
+                        #region scanning information using Mono.Cecil library
+
+                        using (var assembly = AssemblyDefinition.ReadAssembly(assemblyPath))
+                        {
+
+
+                            ////assigning root assembly Guid to all the reference assemblt as a reference
+                            //netAssembly.References.ForEach(reff =>
+                            //{
+
+                            //    reff.AssemblyId = netAssembly.Id;
+                            //});
+
+                            foreach (var typeClass in assembly.MainModule.Types)
+                            {
+                                if (typeClass != null) //CsvExporter`1, CsvExporter // && type.Name == "Program" || type.Name == "Program"
+                                {
+
+                                    ////Get assembly info
+                                    //NetAssembly netAssembly1 = GetAssemblyInfo(assembly1);
+                                    //Console.WriteLine($"{netAssembly1.Id}");
+
+                                    //output.Assemblies.Add(netAssembly1);
+
+                                    ////Get assembly references
+                                    //output.References = GetAssemblyReferenceInfo(assembly1);
+                                    //// Get type info
+                                    //NetType netType = GetTypeInfo(typeClass);
+
+                                    //////Get fields  --commenting due to bring deferent details of field instead of exact name, type of field. 
+                                    /////added Get properties block below
+                                    ////foreach (FieldInfo field in typeClass.GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
+                                    ////{
+                                    ////    NetField netField = GetFieldInfo(field);
+                                    ////    netType.Fields.Add(netField);
+
+                                    ////}
+                                    ////Get properties
+                                    //foreach (PropertyInfo field in typeClass.GetProperties())
+                                    //{
+                                    //    NetField netField = GetPropertyInfo(field);
+                                    //    output.Fields.Add(netField);
+
+                                    //}
+
+                                    var methods = typeClass.Methods;//.SingleOrDefault(m => m.Name == methodName);
+                                    int lineCount = 0;
+                                    foreach (var method in typeClass.Methods)
+                                    {
+                                        if (method != null)
+                                        {
+                                            lineCount = 0;
+                                            //Console.WriteLine($"Declaring Type - {method.DeclaringType.Name}, Type Class - {typeClass.Name}, type - {type.Name}");
+
+                                            NetMethod netMethod = new NetMethod();
+
+                                            lineCount = CountMethodLines(method);
+
+                                            netMethod.LineCount = $"Method {method.Name} and Line Count: {lineCount}";
+                                            output.Methods.Add(netMethod);
+
+
+                                            Console.WriteLine($"Method {method.Name} in {typeClass.Name} has {lineCount} lines of code.");
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine($"Method {method.Name} not found in {typeClass.Name}.");
+                                        }
+
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"Type {typeClass.Name} not found in the assembly.");
+                                }
+
+                            }
+                        }
+                        #endregion
+                    }
+
                 }
                 
 
@@ -232,7 +247,7 @@ namespace LegacyExplorer.Processors
 
             NetType netType = new NetType();
             netType.Name = typeClass.Name;
-            netType.Namespage = typeClass.Namespace;
+            netType.Namespace = typeClass.Namespace;
             netType.TypeOfType = typeClass.GetType().Name;
 
             return netType;

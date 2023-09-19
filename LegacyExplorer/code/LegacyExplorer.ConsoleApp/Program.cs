@@ -22,8 +22,10 @@ namespace LegacyExplorer.ConsoleApp
         static void TestProgram2(string[] args)
         {
             string libPath = "LegacyExplorer.Processors.dll";
+            List<string> lstLibPath = new List<string>();
+            lstLibPath.Add(libPath);
             AssemblyScanner scanner = new AssemblyScanner();
-            scanner.Scan(new ScannerInput{ AssemblyPaths = { libPath } });
+            scanner.Scan(new ScannerInput{ AssemblyPaths = lstLibPath });
 
         }
         static void TestProgram1(string[] args)
