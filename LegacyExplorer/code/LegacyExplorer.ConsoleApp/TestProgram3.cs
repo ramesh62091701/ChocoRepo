@@ -16,6 +16,7 @@ namespace LegacyExplorer.ConsoleApp
             List<string> listAssemnlyPath = new List<string>();
             listAssemnlyPath.Add("D:\\Downloads\\BlogEngine.NET-master\\BlogEngine.NET-master\\BlogEngine\\BlogEngine.NET\\bin\\BlogEngine.NET.dll");
             listAssemnlyPath.Add("D:\\Downloads\\BlogEngine.NET-master\\BlogEngine.NET-master\\BlogEngine\\BlogEngine.NET\\bin\\BlogEngine.Core.dll");
+            listAssemnlyPath.Add("LegacyExplorer.Processors.dll");
 
             AssemblyScanner scanner = new AssemblyScanner();
 

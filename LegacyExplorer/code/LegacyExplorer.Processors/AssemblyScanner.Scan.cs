@@ -66,11 +66,13 @@ namespace LegacyExplorer.Processors
 
                 }
                 //Get fields
-                foreach (MethodInfo method in typeClass.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
+                foreach (MethodInfo method in typeClass.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance))
                 {
                     NetMethod netMethod = GetMethodsInfo(method);
                     netMethod.TypeId = netType.Id;
-                    output.Methods.Add(netMethod);
+                    if(!string.IsNullOrEmpty(netMethod.LineCount))
+                        if(int.Parse(netMethod.LineCount) > 0)
+                            output.Methods.Add(netMethod);
                 }
 
                 output.Types.Add(netType);

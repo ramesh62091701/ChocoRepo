@@ -27,9 +27,17 @@ namespace LegacyExplorer.Processors
             {
                 try
                 {
-                    // Load the assembly from the DLL file.
-                    Assembly assembly = Assembly.LoadFrom(assemblyFile);
-                    ScanAssemebly(assembly, output);
+                    if (File.Exists(assemblyFile))
+                    {
+                        Console.WriteLine($"{assemblyFile} file path found and scanning started...");
+                        // Load the assembly from the DLL file.
+                        Assembly assembly = Assembly.LoadFrom(assemblyFile);
+                        ScanAssemebly(assembly, output);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{assemblyFile} file path not found");
+                    }
                 }
                 catch (Exception ex)
                 {
