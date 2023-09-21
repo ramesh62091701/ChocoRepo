@@ -12,6 +12,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using LegacyExplorer.Processors.Interfaces;
+using System.Runtime.Remoting;
 
 namespace LegacyExplorer.Processors
 {
@@ -48,6 +49,36 @@ namespace LegacyExplorer.Processors
             netAssembly.Name = assembly.FullName;
             netAssembly.FileName = (assembly.Location.Split('\\')[assembly.Location.Split('\\').Length - 1]).Split(',')[0];
             netAssembly.Location = assembly.Location;
+            netAssembly.Type = !String.IsNullOrEmpty(assembly.GetType().BaseType.AssemblyQualifiedName) ?
+                assembly.GetType().BaseType.AssemblyQualifiedName : string.Empty;
+            netAssembly.Version = assembly.GetName().Version.ToString();
+
+
+            object[] targetFrameworks = assembly.GetCustomAttributes(typeof(System.Runtime.Versioning.TargetFrameworkAttribute), false);
+
+            if (targetFrameworks.Length > 0)
+            {
+                netAssembly.Framework = ((System.Runtime.Versioning.TargetFrameworkAttribute)targetFrameworks[0]).FrameworkName;
+            }
+            object[] assemblyTitles = assembly.GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
+
+            if (assemblyTitles.Length > 0)
+            {
+                netAssembly.Title = ((AssemblyTitleAttribute)assemblyTitles[0]).Title;
+            }
+
+            object[] assemblyCompanys = assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
+            if (assemblyCompanys.Length > 0)
+            { 
+                netAssembly.Company = ((AssemblyCompanyAttribute)assemblyCompanys[0]).Company;
+            }
+
+
+            object[] assemblyCopyrights = assembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
+            if (assemblyCopyrights.Length > 0)
+            {
+                netAssembly.Copyright = ((AssemblyCopyrightAttribute)assemblyCopyrights[0]).Copyright;
+            }
 
             return netAssembly;
         }

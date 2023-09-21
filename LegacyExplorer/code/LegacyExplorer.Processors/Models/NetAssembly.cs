@@ -34,6 +34,12 @@ namespace LegacyExplorer.Processors
         public string Type { get; set; }
         [Export]
         public string Location { get; set; }
+        public string Framework { get; set; }
+        public string Title { get; set; }
+        public string Company { get; set; }
+        public string Copyright { get; set; }
+        public string Version { get; set; }
+
     }
 
 
