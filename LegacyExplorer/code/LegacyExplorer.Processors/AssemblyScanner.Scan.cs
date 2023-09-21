@@ -70,6 +70,7 @@ namespace LegacyExplorer.Processors
                 {
                     NetMethod netMethod = GetMethodsInfo(method);
                     netMethod.TypeId = netType.Id;
+                    netMethod.TypeName = netType.FullName;
                     if(!string.IsNullOrEmpty(netMethod.LineCount))
                         if(int.Parse(netMethod.LineCount) > 0)
                             output.Methods.Add(netMethod);

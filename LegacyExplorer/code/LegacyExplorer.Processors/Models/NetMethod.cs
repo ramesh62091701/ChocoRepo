@@ -1,5 +1,6 @@
 ﻿using LegacyExplorer.Processors.Export;
 using System;
+using System.ComponentModel;
 
 namespace LegacyExplorer.Processors
 {
@@ -8,7 +9,7 @@ namespace LegacyExplorer.Processors
         #region variable declartion
         private string id;
         #endregion
-        [Export]
+        [Export, Description("Id")]
         public string Id
         {
             get
@@ -24,12 +25,15 @@ namespace LegacyExplorer.Processors
                 this.id = value;
             }
         }
-        [Export]
+        [Export, Description("Type Id")]
         public string TypeId { get; set; }
-        [Export]
+        [Export, Description("Name")]
         public string Name { get; set; }
         [Export]
         public string LineCount { get; set; }
+        [Export, Description("Type Name")]
+        public string TypeName { get; set; }
+
     }
 
 
