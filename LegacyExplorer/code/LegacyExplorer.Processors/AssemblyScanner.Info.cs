@@ -13,16 +13,23 @@ using System.Reflection;
 using System.Windows.Forms;
 using LegacyExplorer.Processors.Interfaces;
 using System.Runtime.Remoting;
+using NLog;
+using ICSharpCode.Decompiler.CSharp.Syntax;
 
 namespace LegacyExplorer.Processors
 {
     public partial class AssemblyScanner : IScanner<ScannerInput, ScannerOutput>
     {
         private ILineCount<MethodInfo, int> iLineCount = null;
-         
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private IConfiguration iconfiguration = null;
+
         public AssemblyScanner(ILineCount<MethodInfo,int> iLineCount)
         {
             this.iLineCount = iLineCount;
+
+            iconfiguration = new ConfigurationUtility("NLog.config");
+            iconfiguration.LoadNLogConfiguration();
         }
         public IEnumerable<Type> GetAssemblyTypes(Assembly assembly)
         {
@@ -45,40 +52,55 @@ namespace LegacyExplorer.Processors
 
         public NetAssembly GetAssemblyInfo(Assembly assembly)
         {
+            string className = "AssemblyScanner.Info";
+            string methodName = "GetAssemblyInfo(Assembly)";
+            
+            logger.Info($"Class:{className},method:{methodName} Starts");
+
             NetAssembly netAssembly = new NetAssembly();
-            netAssembly.Name = assembly.FullName;
-            netAssembly.FileName = (assembly.Location.Split('\\')[assembly.Location.Split('\\').Length - 1]).Split(',')[0];
-            netAssembly.Location = assembly.Location;
-            netAssembly.Type = !String.IsNullOrEmpty(assembly.GetType().BaseType.AssemblyQualifiedName) ?
-                assembly.GetType().BaseType.AssemblyQualifiedName : string.Empty;
-            netAssembly.Version = assembly.GetName().Version.ToString();
-
-
-            object[] targetFrameworks = assembly.GetCustomAttributes(typeof(System.Runtime.Versioning.TargetFrameworkAttribute), false);
-
-            if (targetFrameworks.Length > 0)
+            try
             {
-                netAssembly.Framework = ((System.Runtime.Versioning.TargetFrameworkAttribute)targetFrameworks[0]).FrameworkName;
-            }
-            object[] assemblyTitles = assembly.GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
+                
+                netAssembly.Name = assembly.FullName;
+                netAssembly.FileName = (assembly.Location.Split('\\')[assembly.Location.Split('\\').Length - 1]).Split(',')[0];
+                netAssembly.Location = assembly.Location;
+                netAssembly.Type = !String.IsNullOrEmpty(assembly.GetType().BaseType.AssemblyQualifiedName) ?
+                    assembly.GetType().BaseType.AssemblyQualifiedName : string.Empty;
+                netAssembly.Version = assembly.GetName().Version.ToString();
 
-            if (assemblyTitles.Length > 0)
+
+                object[] targetFrameworks = assembly.GetCustomAttributes(typeof(System.Runtime.Versioning.TargetFrameworkAttribute), false);
+                //targetFrameworks = null;
+                if (targetFrameworks.Length > 0)
+                {
+                    netAssembly.Framework = ((System.Runtime.Versioning.TargetFrameworkAttribute)targetFrameworks[0]).FrameworkName;
+                }
+                object[] assemblyTitles = assembly.GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
+
+                if (assemblyTitles.Length > 0)
+                {
+                    netAssembly.Title = ((AssemblyTitleAttribute)assemblyTitles[0]).Title;
+                }
+
+                object[] assemblyCompanys = assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
+                if (assemblyCompanys.Length > 0)
+                {
+                    netAssembly.Company = ((AssemblyCompanyAttribute)assemblyCompanys[0]).Company;
+                }
+
+
+                object[] assemblyCopyrights = assembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
+                if (assemblyCopyrights.Length > 0)
+                {
+                    netAssembly.Copyright = ((AssemblyCopyrightAttribute)assemblyCopyrights[0]).Copyright;
+                }
+            }
+            catch (Exception ex)
             {
-                netAssembly.Title = ((AssemblyTitleAttribute)assemblyTitles[0]).Title;
+                logger.Error(ex, $"Class:{className}, Method:{methodName},Error Message:{ex.Message}");
             }
-
-            object[] assemblyCompanys = assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
-            if (assemblyCompanys.Length > 0)
-            { 
-                netAssembly.Company = ((AssemblyCompanyAttribute)assemblyCompanys[0]).Company;
-            }
-
-
-            object[] assemblyCopyrights = assembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
-            if (assemblyCopyrights.Length > 0)
-            {
-                netAssembly.Copyright = ((AssemblyCopyrightAttribute)assemblyCopyrights[0]).Copyright;
-            }
+            logger.Info($"Class:{className},method:{methodName} Ends");
+          
 
             return netAssembly;
         }
