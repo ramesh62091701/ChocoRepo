@@ -23,7 +23,7 @@ namespace LegacyExplorer.Processors
         private ILineCount<MethodInfo, int> iLineCount = null;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private IConfiguration iconfiguration = null;
-        private string className = "AssemblyScanner.Info";
+        private string className = "AssemblyScanner";
 
         public AssemblyScanner(ILineCount<MethodInfo,int> iLineCount)
         {
