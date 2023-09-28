@@ -18,10 +18,10 @@ namespace LegacyExplorer.Processors
             if (methodBody != null)
             {
                 byte[] instructionByteArray = methodBody.GetILAsByteArray();
-
+                //Console.WriteLine($"\n\nmethod name{method.Name}\n");
                 for (int i = 0; i <= methodBody.GetILAsByteArray().Length - 1; i++)
                 {
-
+                    //Console.WriteLine($"Byte value : {instructionByteArray[i]}, equal char: {(((char)instructionByteArray[i]).ToString())}\n");
                     if (instructionByteArray[i] == (byte)'\n')
                         lineCount++;
 
