@@ -114,7 +114,11 @@ namespace LegacyExplorer.Processors
             NetReference netRef = new NetReference();
             try
             {
-                netRef.Name = assemblyName.Name;
+                netRef.Name                 = assemblyName.Name;
+                netRef.Version              = assemblyName.Version.ToString();
+                netRef.VersionCompatibility = assemblyName.VersionCompatibility.ToString();
+                netRef.NameSpace            = assemblyName.GetType().Namespace;
+                netRef.TypeOfType           = assemblyName.GetType().GetTypeInfo().AssemblyQualifiedName;
             }
             catch (Exception ex)
             {
