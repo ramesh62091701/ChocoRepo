@@ -14,9 +14,9 @@ namespace LegacyExplorer.ConsoleApp
     {
         static void Main(string[] args)
         {
-            TestProgram1(args);
+            //TestProgram1(args);
 
-            //TestProgram3.Test(args);
+            TestProgram3.Test(args);
             //TestProgram2(args);
 
             Console.ReadKey();
