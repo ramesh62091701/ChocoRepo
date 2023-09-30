@@ -34,6 +34,7 @@ namespace LegacyExplorer.Processors
         }
         public IEnumerable<Type> GetAssemblyTypes(Assembly assembly)
         {
+            string methodName = "GetAssemblyTypes(Assembly assembly)";
             //IEnumerable<Type> allTypes = assembly.GetTypes().Where(type => type.IsClass).ToList();
 
             //var allTypes = assembly.GetTypes()
@@ -42,11 +43,24 @@ namespace LegacyExplorer.Processors
             //                               && !type.IsGenericType 
             //                               && !type.IsDefined(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), false))
             //                           .ToList();
+            List<Type> allTypes = new List<Type>();
+            try
+            {
+                allTypes = assembly.GetTypes()
+                                 .Where(type => type.IsClass
+                                     && !type.IsDefined(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), false))
+                                 .ToList();
+            }
+            catch (ReflectionTypeLoadException loadEx)
+            {
+                Console.WriteLine($" This type of {assembly.FullName} assembly is a invalid and does not have Defined Types");
+                logger.Error(loadEx, $"Class:{className}, Method:{methodName},Error Message:{loadEx.Message}");
+            }
+            catch (Exception ex) {
+                logger.Error(ex, $"Class:{className}, Method:{methodName},Error Message:{ex.Message}");
+            }
 
-            var allTypes = assembly.GetTypes()
-                                      .Where(type => type.IsClass
-                                          && !type.IsDefined(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), false))
-                                      .ToList();
+
 
             return allTypes;
         }
