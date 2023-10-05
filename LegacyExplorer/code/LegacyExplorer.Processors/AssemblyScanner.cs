@@ -8,6 +8,8 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using NLog;
+using System.Threading;
+using System.Reflection.Emit;
 
 namespace LegacyExplorer.Processors
 {
@@ -44,6 +46,9 @@ namespace LegacyExplorer.Processors
                             Console.WriteLine($"{assemblyFile} file path found and scanning started...");
                             // Load the assembly from the DLL file.
                             Assembly assembly = Assembly.LoadFrom(assemblyFile);
+
+                            AppDomain.CurrentDomain.AssemblyResolve += MyAssemblyResolveHandler;
+
                             ScanAssemebly(assembly, output);
                         }
                         else
@@ -65,6 +70,21 @@ namespace LegacyExplorer.Processors
             logger.Info($"Class:{className},method:{methodName} Ends");
 
             return output;
+        }
+
+        private static Assembly MyAssemblyResolveHandler(object sender, ResolveEventArgs args)
+        {
+            AssemblyName assemblyName = new AssemblyName(args.Name);
+            AppDomain appDomain = Thread.GetDomain();
+            //AssemblyBuilder builder = appDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndSave);
+            // Provide logic to load and return the assembly if it's available.
+            //Assembly assembly = builder.GetSatelliteAssembly(System.Globalization.CultureInfo.CurrentCulture);
+            Console.WriteLine($"Missing reference assembilies / libraries : {args.Name}\n");
+            //Assembly assembly = Assembly.LoadFrom(@"D:\Projects\Input\" + assemblyName.Name + ".dll");
+            Assembly assembly = Assembly.LoadFrom(AppDomain.CurrentDomain.BaseDirectory + assemblyName.Name + ".dll");
+            // If the assembly is not found, return null.
+
+            return assembly;
         }
 
     }
