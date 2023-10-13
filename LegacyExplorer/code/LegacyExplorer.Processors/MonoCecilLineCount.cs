@@ -202,7 +202,7 @@ namespace LegacyExplorer.Processors
             {
                 logger.Error($"Class Name:{className},\nMethod Name:{methodName}, \nMessage:{ex.Message}");
             }
-            Console.WriteLine(methodBodyText);
+            //Console.WriteLine(methodBodyText);
 
             try
             {

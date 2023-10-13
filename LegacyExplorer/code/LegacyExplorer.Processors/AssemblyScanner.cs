@@ -48,7 +48,8 @@ namespace LegacyExplorer.Processors
                             Assembly assembly = Assembly.LoadFrom(assemblyFile);
 
                             AppDomain.CurrentDomain.AssemblyResolve += MyAssemblyResolveHandler;
-
+                            //MonoCecilLineCount monoCecilLineCount = new MonoCecilLineCount();
+                            //monoCecilLineCount.ReadAllDecompiledCodeFromAssembly(assembly);
                             ScanAssemebly(assembly, output);
                         }
                         else
@@ -80,12 +81,13 @@ namespace LegacyExplorer.Processors
             // Provide logic to load and return the assembly if it's available.
             //Assembly assembly = builder.GetSatelliteAssembly(System.Globalization.CultureInfo.CurrentCulture);
             Console.WriteLine($"Missing reference assembilies / libraries : {args.Name}\n");
-            //Assembly assembly = Assembly.LoadFrom(@"D:\Projects\Input\" + assemblyName.Name + ".dll");
-            Assembly assembly = Assembly.LoadFrom(AppDomain.CurrentDomain.BaseDirectory + assemblyName.Name + ".dll");
+            Assembly assembly = Assembly.LoadFrom(@"D:\Projects\Input\" + assemblyName.Name + ".dll");
+            //Assembly assembly = Assembly.LoadFrom(AppDomain.CurrentDomain.BaseDirectory + assemblyName.Name + ".dll");
             // If the assembly is not found, return null.
 
             return assembly;
         }
+        
 
     }
 }

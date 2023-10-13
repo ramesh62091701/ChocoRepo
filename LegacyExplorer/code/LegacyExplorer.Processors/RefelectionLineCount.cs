@@ -27,7 +27,8 @@ namespace LegacyExplorer.Processors
 
                 }
             }
-            Console.WriteLine($"Method Name: {method.Name}, Line Count: {lineCount}");
+            if(lineCount > 0)
+                Console.WriteLine($"Method Name: {method.Name}, Line Count: {lineCount}");
 
             return lineCount;
         }

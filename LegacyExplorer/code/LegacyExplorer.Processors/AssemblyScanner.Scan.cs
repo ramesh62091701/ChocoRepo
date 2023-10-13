@@ -50,7 +50,9 @@ namespace LegacyExplorer.Processors
                     {
                         NetBaseClass netBaseClass = GetBaseTypeInfo(baseClass);
                         netBaseClass.TypeId = netType.Id;
-                        output.BaseClasses.Add(netBaseClass);
+                        netBaseClass.TypeName = netType.Name;
+                        if(netBaseClass.Name != "Object")
+                            output.BaseClasses.Add(netBaseClass);
                     }
 
 
