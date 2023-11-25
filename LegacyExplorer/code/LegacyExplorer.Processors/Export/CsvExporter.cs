@@ -28,7 +28,7 @@ namespace LegacyExplorer.Processors.Export
             OutputDirectory = outputDirectory;
         }
 
-        public void ExportToCsv<TCollection>(IEnumerable<TCollection> collection)
+        public void ExportToCsv<TCollection>(IEnumerable<TCollection> collection, bool isDynamicCollection = false)
         {
             var directoryPath = Path.Combine(OutputDirectory, ExportId);
             Directory.CreateDirectory(directoryPath);
@@ -36,12 +36,26 @@ namespace LegacyExplorer.Processors.Export
             var objectType = typeof(TCollection);
 
 
-            var fileName = $"{objectType.Name}-{ExportId}.csv";
+            var fileName = string.Empty;
+
+            if (isDynamicCollection)
+                fileName = $"{objectType.Assembly.GetName().Name}-{ExportId}.csv";
+            else
+                fileName = $"{objectType.Name}-{ExportId}.csv";
 
             using (var writer = new StreamWriter(Path.Combine(directoryPath, fileName)))
             using (var csv = new CsvWriter(writer, new CsvConfiguration(new CultureInfo("en-US"))))
             {
-                csv.WriteRecords(collection);
+                if (isDynamicCollection)
+                {
+                    foreach (IEnumerable<dynamic> item in collection)
+                    {
+                        csv.WriteRecords(item);
+                    }
+                }
+                else
+                    csv.WriteRecords(collection);
+
             }
 
         }

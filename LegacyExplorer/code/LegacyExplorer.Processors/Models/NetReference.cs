@@ -36,6 +36,14 @@ namespace LegacyExplorer.Processors.Models
 
         [Export]
         public string Location { get; set; }
+        [Export]
+        public string Version { get; set; }
+        [Export]
+        public string VersionCompatibility { get; set; }
+        [Export]
+        public string NameSpace { get; set; }
+        [Export]
+        public string TypeOfType { get; set; }
 
     }
 

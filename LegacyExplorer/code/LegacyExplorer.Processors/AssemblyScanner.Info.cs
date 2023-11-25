@@ -23,6 +23,7 @@ namespace LegacyExplorer.Processors
         private ILineCount<MethodInfo, int> iLineCount = null;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private IConfiguration iconfiguration = null;
+        private string className = "AssemblyScanner";
 
         public AssemblyScanner(ILineCount<MethodInfo,int> iLineCount)
         {
@@ -33,6 +34,7 @@ namespace LegacyExplorer.Processors
         }
         public IEnumerable<Type> GetAssemblyTypes(Assembly assembly)
         {
+            string methodName = "GetAssemblyTypes(Assembly assembly)";
             //IEnumerable<Type> allTypes = assembly.GetTypes().Where(type => type.IsClass).ToList();
 
             //var allTypes = assembly.GetTypes()
@@ -41,18 +43,30 @@ namespace LegacyExplorer.Processors
             //                               && !type.IsGenericType 
             //                               && !type.IsDefined(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), false))
             //                           .ToList();
+            List<Type> allTypes = new List<Type>();
+            try
+            {
+                allTypes = assembly.GetTypes()
+                                 .Where(type => type.IsClass
+                                     && !type.IsDefined(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), false))
+                                 .ToList();
+            }
+            catch (ReflectionTypeLoadException loadEx)
+            {
+                Console.WriteLine($" This type of {assembly.FullName} assembly is a invalid and does not have Defined Types");
+                logger.Error(loadEx, $"Class:{className}, Method:{methodName},Error Message:{loadEx.Message}");
+            }
+            catch (Exception ex) {
+                logger.Error(ex, $"Class:{className}, Method:{methodName},Error Message:{ex.Message}");
+            }
 
-            var allTypes = assembly.GetTypes()
-                                      .Where(type => type.IsClass
-                                          && !type.IsDefined(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), false))
-                                      .ToList();
+
 
             return allTypes;
         }
 
         public NetAssembly GetAssemblyInfo(Assembly assembly)
         {
-            string className = "AssemblyScanner.Info";
             string methodName = "GetAssemblyInfo(Assembly)";
             
             logger.Info($"Class:{className},method:{methodName} Starts");
@@ -107,32 +121,72 @@ namespace LegacyExplorer.Processors
 
         public NetReference GetAssemblyReferenceInfo(AssemblyName assemblyName)
         {
+            string methodName = "GetAssemblyReferenceInfo(AssemblyName assemblyName)";
+
+            logger.Info($"Class:{className},method:{methodName} Starts");
+
             NetReference netRef = new NetReference();
-            netRef.Name = assemblyName.Name;
+            try
+            {
+                netRef.Name                 = assemblyName.Name;
+                netRef.Version              = assemblyName.Version.ToString();
+                netRef.VersionCompatibility = assemblyName.VersionCompatibility.ToString();
+                netRef.NameSpace            = assemblyName.GetType().Namespace;
+                netRef.TypeOfType           = assemblyName.GetType().GetTypeInfo().AssemblyQualifiedName;
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, $"Class:{className}, Method:{methodName},Error Message:{ex.Message}");
+            }
+            logger.Info($"Class:{className},method:{methodName} Ends");
 
             return netRef;
         }
 
         public NetType GetTypeInfo(Type typeClass)
         {
+            string methodName = "GetTypeInfo(Type typeClass)";
+
+            logger.Info($"Class:{className},method:{methodName} Starts");
 
             NetType netType = new NetType();
-            netType.Name = typeClass.Name;
-            netType.FullName = typeClass.FullName;
-            netType.Namespace = typeClass.Namespace;
-            netType.TypeOfType = typeClass.BaseType.FullName;
+            try
+            {
+                netType.Name = typeClass.Name;
+                netType.FullName = typeClass.FullName;
+                netType.Namespace = typeClass.Namespace;
+                netType.TypeOfType = typeClass.BaseType.FullName;
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, $"Class:{className}, Method:{methodName},Error Message:{ex.Message}");
+            }
+            logger.Info($"Class:{className},method:{methodName} Ends");
+
             return netType;
 
         }
 
         public NetBaseClass GetBaseTypeInfo(Type typeClass)
         {
+            string methodName = "GetBaseTypeInfo(Type typeClass)";
+
+            logger.Info($"Class:{className},method:{methodName} Starts");
 
             NetBaseClass netBaseClass = new NetBaseClass();
-            netBaseClass.Name = typeClass.Name;
-            netBaseClass.FullName = typeClass.FullName;
-            netBaseClass.Namespace = typeClass.Namespace;
-            netBaseClass.TypeOfType = typeClass.GetType().Name;
+
+            try
+            {
+                netBaseClass.Name = typeClass.Name;
+                netBaseClass.FullName = typeClass.FullName;
+                netBaseClass.Namespace = typeClass.Namespace;
+                netBaseClass.TypeOfType = typeClass.GetType().Name;
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, $"Class:{className}, Method:{methodName},Error Message:{ex.Message}");
+            }
+            logger.Info($"Class:{className},method:{methodName} Ends");
 
             return netBaseClass;
 
@@ -140,26 +194,56 @@ namespace LegacyExplorer.Processors
 
         public List<Type> GetBaseClasses(Type typeClass)
         {
+            string methodName = "GetBaseClasses(Type typeClass)";
 
-            List<Type> baseClasses = new List<Type>();
+            logger.Info($"Class:{className},method:{methodName} Starts");
 
-            Type currentType = typeClass.BaseType;
-            while (currentType != null)
+            List<Type> baseClasses = null;
+
+            try
             {
-                baseClasses.Add(currentType);
-                currentType = currentType.BaseType;
+                baseClasses = new List<Type>();
+
+                Type currentType = typeClass.BaseType;
+                while (currentType != null)
+                {
+                    baseClasses.Add(currentType);
+                    currentType = currentType.BaseType;
+                }
             }
+            catch (Exception ex)
+            {
+                logger.Error(ex, $"Class:{className}, Method:{methodName},Error Message:{ex.Message}");
+            }
+            logger.Info($"Class:{className},method:{methodName} Ends");
+
+           
 
             return baseClasses;
         }
 
         public NetField GetFieldInfo(FieldInfo field)
         {
+            string methodName = "GetFieldInfo(FieldInfo field)";
 
-            NetField netField = new NetField();
+            logger.Info($"Class:{className},method:{methodName} Starts");
 
-            netField.Name = field.Name;
-            netField.FieldType = field.GetType().Name;
+            NetField netField = null;
+
+            try
+            {
+                netField = new NetField();
+
+                netField.Name = field.Name;
+                netField.FieldType = field.GetType().Name;
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, $"Class:{className}, Method:{methodName},Error Message:{ex.Message}");
+            }
+            logger.Info($"Class:{className},method:{methodName} Ends");
+
+            
 
             return netField;
 
@@ -167,11 +251,23 @@ namespace LegacyExplorer.Processors
 
         public NetProperty GetPropertyInfo(PropertyInfo property)
         {
+            string methodName = "GetPropertyInfo(PropertyInfo property)";
 
-            NetProperty netProperty = new NetProperty();
+            logger.Info($"Class:{className},method:{methodName} Starts");
 
-            netProperty.Name = property.Name;
-            netProperty.PropertyType = property.PropertyType.Name;
+            NetProperty netProperty = null;
+
+            try
+            {
+                netProperty = new NetProperty();
+                netProperty.Name = property.Name;
+                netProperty.PropertyType = property.PropertyType.Name;
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, $"Class:{className}, Method:{methodName},Error Message:{ex.Message}");
+            }
+            logger.Info($"Class:{className},method:{methodName} Ends");
 
             return netProperty;
 

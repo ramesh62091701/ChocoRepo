@@ -1,27 +1,43 @@
-﻿using System;
+﻿using LegacyExplorer.Processors.Interfaces;
+using NLog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LegacyExplorer.Processors
 {
     public class FormsScanner
     {
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly IConfiguration iConfiguration = null;
+        private string className = "FormsScanner";
+        public FormsScanner() {
+
+            iConfiguration = new ConfigurationUtility("NLog.config");
+            iConfiguration.LoadNLogConfiguration();
+
+        }
+
         public List<string> ScanForms(string dllPath)
         {
-            List<string> infodllInfo = new List<string>();
+            string methodName = "ScanForms(string dllPath)";
+            logger.Info($"Class:{className},method:{methodName} Starts");
+
+            List<string> infodllInfo = null;
 
             try
             {
+                infodllInfo = new List<string>();
+
                 // Load the assembly from the DLL file.
                 Assembly assembly = Assembly.LoadFrom(dllPath);
                 IEnumerable<TypeInfo> tyInfo = assembly.DefinedTypes.ToArray();
                 //Type[] tyInfo = assembly.GetTypes();
-                foreach (Type t in tyInfo) {
-                    
+                foreach (Type t in tyInfo)
+                {
+
                     switch (t.BaseType.ToString())
                     {
                         case "System.Object":
@@ -51,18 +67,19 @@ namespace LegacyExplorer.Processors
                             infodllInfo.Add($"file Type:{t.BaseType}, file Name: {t.Name}");
                             break;
                         default:
-                            infodllInfo.Add($"file Type:{t.BaseType}, file Name: {t.Name}" );
+                            infodllInfo.Add($"file Type:{t.BaseType}, file Name: {t.Name}");
                             break;
                     }
                 }
 
-               
-             
+
+
             }
             catch (Exception ex)
             {
-                throw new Exception($"Exception while scanning {dllPath}", ex);
+                logger.Error(ex, $"Class:{className}, Method:{methodName},Error Message:{ex.Message}");
             }
+            logger.Info($"Class:{className},method:{methodName} Ends");
 
             return infodllInfo;
 

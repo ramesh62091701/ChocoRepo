@@ -26,6 +26,10 @@ namespace LegacyExplorer.Processors
         }
         [Export]
         public string TypeId { get; set; }
+        public string TypeName { get; set; }
+        [Export]
+        public string Namespace { get; set; }
+
         [Export]
         public string Name { get; set; }
         [Export]
@@ -33,8 +37,7 @@ namespace LegacyExplorer.Processors
         [Export]
         public string TypeOfType { get; set; }
 
-        [Export]
-        public string Namespace { get; set; }
+
     }
 
 

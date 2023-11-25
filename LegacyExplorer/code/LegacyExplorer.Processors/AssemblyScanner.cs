@@ -7,13 +7,24 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using NLog;
+using System.Threading;
+using System.Reflection.Emit;
 
 namespace LegacyExplorer.Processors
 {
     public partial class AssemblyScanner : IScanner<ScannerInput, ScannerOutput>
     {
+        //private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        
+
         public ScannerOutput Scan(ScannerInput input)
         {
+
+            string methodName = "Scan(ScannerInput input)";
+
+            logger.Info($"Class:{className},method:{methodName} Starts");
+
 
             ScannerInputValidator inputValidator = new ScannerInputValidator();
             var validator = inputValidator.Validate(input);
@@ -22,31 +33,61 @@ namespace LegacyExplorer.Processors
             //    throw new Exception(string.Join("\n", validator.Errors));
 
             ScannerOutput output = new ScannerOutput();
-
-            foreach (var assemblyFile in input.AssemblyPaths)
+            try
             {
-                try
+
+
+                foreach (var assemblyFile in input.AssemblyPaths)
                 {
-                    if (File.Exists(assemblyFile))
+                    try
                     {
-                        Console.WriteLine($"{assemblyFile} file path found and scanning started...");
-                        // Load the assembly from the DLL file.
-                        Assembly assembly = Assembly.LoadFrom(assemblyFile);
-                        ScanAssemebly(assembly, output);
+                        if (File.Exists(assemblyFile))
+                        {
+                            Console.WriteLine($"{assemblyFile} file path found and scanning started...");
+                            // Load the assembly from the DLL file.
+                            Assembly assembly = Assembly.LoadFrom(assemblyFile);
+
+                            AppDomain.CurrentDomain.AssemblyResolve += MyAssemblyResolveHandler;
+                            //MonoCecilLineCount monoCecilLineCount = new MonoCecilLineCount();
+                            //monoCecilLineCount.ReadAllDecompiledCodeFromAssembly(assembly);
+                            ScanAssemebly(assembly, output);
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{assemblyFile} file path not found");
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        Console.WriteLine($"{assemblyFile} file path not found");
+                        logger.Error(ex, $"Class:{className}, Method:{methodName},Error Message:{ex.Message}");
                     }
                 }
-                catch (Exception ex)
-                {
-                    throw new Exception($"Exception while scanning", ex);
-                }
+
             }
+            catch (Exception ex)
+            {
+                logger.Error(ex, $"Class:{className}, Method:{methodName},Error Message:{ex.Message}");
+            }
+            logger.Info($"Class:{className},method:{methodName} Ends");
 
             return output;
         }
+
+        private static Assembly MyAssemblyResolveHandler(object sender, ResolveEventArgs args)
+        {
+            AssemblyName assemblyName = new AssemblyName(args.Name);
+            AppDomain appDomain = Thread.GetDomain();
+            //AssemblyBuilder builder = appDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndSave);
+            // Provide logic to load and return the assembly if it's available.
+            //Assembly assembly = builder.GetSatelliteAssembly(System.Globalization.CultureInfo.CurrentCulture);
+            Console.WriteLine($"Missing reference assembilies / libraries : {args.Name}\n");
+            Assembly assembly = Assembly.LoadFrom(@"D:\Projects\Input\" + assemblyName.Name + ".dll");
+            //Assembly assembly = Assembly.LoadFrom(AppDomain.CurrentDomain.BaseDirectory + assemblyName.Name + ".dll");
+            // If the assembly is not found, return null.
+
+            return assembly;
+        }
+        
 
     }
 }
