@@ -11,9 +11,10 @@ namespace FrontEndCodeGenerator
         static void Main(string[] args)
         {
             Console.WriteLine("Please enter Designer.cs file path");
-            Console.WriteLine(@"For example : D:\Test\Test.Designer.cs");
-            Console.Write("Enter :");
-            string FilePath = "D:\\test\\student.designer.cs";   // Console.ReadLine();
+            Console.WriteLine(@"For example : D:\\test\\student.designer.cs");
+            Console.Write("Enter :\n");
+            Console.Write("=============================================\n");
+            string FilePath = "D:\\student.designer.cs";   // Console.ReadLine();
             if (FilePath.ToLower().Contains("designer.cs"))
             {                
                 ParserGenerator parser = new ParserGenerator();

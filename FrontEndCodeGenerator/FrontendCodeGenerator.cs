@@ -8,7 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Text.Json;
- 
+
+using Newtonsoft.Json;
+using Formatting = Newtonsoft.Json.Formatting;
+
 
 namespace FrontEndCodeGenerator
 {
@@ -203,16 +206,16 @@ namespace FrontEndCodeGenerator
         private static void GenerateJson(string formName, List<UIControl> controls)
         {
             controls = controls.OrderBy(x => x.Top).ThenBy(y => y.Left).ToList();
-            controls = MergeTextBoxandLabel(controls);
-                    
-            string jsonString = JsonSerializer.Serialize(controls); 
-            Console.WriteLine(jsonString);       
+            controls = MergeTextBoxandLabel(controls);           
+         
+            string jsonString = string.Empty;
+            jsonString = JsonConvert.SerializeObject(controls, Formatting.Indented);
 
             string currentPath = Directory.GetCurrentDirectory();
-            File.WriteAllText(@"D:\" + formName + ".json", jsonString);           
-            
+             
+            File.WriteAllText(@"D:\" + formName + ".json", jsonString);
+            Console.WriteLine(jsonString);
         }
-
         private static void GenerateHtml(string formName, List<UIControl> controls)
         {
             List<string> html = new List<string>();
@@ -221,11 +224,11 @@ namespace FrontEndCodeGenerator
             controls = controls.OrderBy(x => x.Top).ThenBy(y => y.Left).ToList();
             controls = MergeTextBoxandLabel(controls);
 
-            string jsonString = JsonSerializer.Serialize(controls);
-            Console.WriteLine(jsonString);
+            //string jsonString = JsonSerializer.Serialize(controls);
+            //Console.WriteLine(jsonString);
 
-            string json = JsonSerializer.Serialize(controls);
-            File.WriteAllText(@"D:\path.json", json);            
+           // string json = JsonSerializer.Serialize(controls);
+           // File.WriteAllText(@"D:\path.json", json);            
 
             string fromType = "controls";
             if (formName.IndexOf("frm") == 0)

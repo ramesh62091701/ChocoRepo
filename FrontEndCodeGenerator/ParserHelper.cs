@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -70,7 +71,11 @@ namespace FrontEndCodeGenerator
         }
         public bool IsEditableDropdown = true;
 
-        
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
+        }
+
     }
  
     public enum WorkflowType
