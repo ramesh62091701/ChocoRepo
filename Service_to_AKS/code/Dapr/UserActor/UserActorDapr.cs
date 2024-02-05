@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace UserActor
 {
-    internal class UserActorDapr : Actor
+    public class UserActorDapr : Actor , IUserActorDapr
     {
         private const string StateNames = "StateNames";
         public UserActorDapr(ActorHost host) : base(host)
