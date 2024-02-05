@@ -6,10 +6,6 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-        builder.Services.AddDaprClient();
-        builder.Services.AddScoped<IUserActorDapr, UserActorDapr>();
-
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
@@ -30,6 +26,6 @@ internal class Program
 
         app.MapControllers();
 
-        app.Run("http://localhost:5000");
+        app.Run();
     }
 }

@@ -53,7 +53,7 @@ namespace ECommerce.API.Controllers
 
         private IUserActorDapr GetActor(string userId)
         {
-            return ActorProxy.Create<IUserActorDapr>(new ActorId(userId) , "UserActor");
+            return ActorProxy.Create<IUserActorDapr>(new ActorId(userId) , "UserActorDapr");
         }
     }
 }
