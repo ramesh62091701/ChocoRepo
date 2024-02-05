@@ -3,21 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "ECommerce", "ECommerce\ECommerce.sfproj", "{64A5510C-DC40-4B9B-91E9-E728D397F1C6}"
+Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "ECommerce", "Service_Fabric\ECommerce\ECommerce.sfproj", "{64A5510C-DC40-4B9B-91E9-E728D397F1C6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.ProductCatalog", "ECommerce.ProductCatalog\ECommerce.ProductCatalog.csproj", "{87B164F1-B1EA-4E0A-8676-3BDCD5015715}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.ProductCatalog", "Service_Fabric\ECommerce.ProductCatalog\ECommerce.ProductCatalog.csproj", "{87B164F1-B1EA-4E0A-8676-3BDCD5015715}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.ProductCatalog.Model", "ECommerce.ProductCatalog.Model\ECommerce.ProductCatalog.Model.csproj", "{F9012191-28BA-46F5-91F8-A5F6C4B7D778}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.ProductCatalog.Model", "Service_Fabric\ECommerce.ProductCatalog.Model\ECommerce.ProductCatalog.Model.csproj", "{F9012191-28BA-46F5-91F8-A5F6C4B7D778}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.API", "ECommerce.API\ECommerce.API.csproj", "{2653D1BB-7CFF-4B5F-9FDE-A69A5F007A39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.API", "Service_Fabric\ECommerce.API\ECommerce.API.csproj", "{2653D1BB-7CFF-4B5F-9FDE-A69A5F007A39}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserActor", "UserActor\UserActor.csproj", "{CD343D87-A916-40AE-BFE2-01A73AD98FA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserActor", "Service_Fabric\UserActor\UserActor.csproj", "{CD343D87-A916-40AE-BFE2-01A73AD98FA5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserActor.Interfaces", "UserActor.Interfaces\UserActor.Interfaces.csproj", "{610AB316-BD99-4368-8C5E-C02EF591F4DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserActor.Interfaces", "Service_Fabric\UserActor.Interfaces\UserActor.Interfaces.csproj", "{610AB316-BD99-4368-8C5E-C02EF591F4DE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.CheckoutService", "ECommerce.CheckoutService\ECommerce.CheckoutService.csproj", "{023901BA-4739-4F7A-91E9-E73176602765}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.CheckoutService", "Service_Fabric\ECommerce.CheckoutService\ECommerce.CheckoutService.csproj", "{023901BA-4739-4F7A-91E9-E73176602765}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.CheckoutService.Model", "ECommerce.CheckoutService.Model\ECommerce.CheckoutService.Model.csproj", "{6DBBCFC9-056F-4086-B9E4-D451D212F63A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.CheckoutService.Model", "Service_Fabric\ECommerce.CheckoutService.Model\ECommerce.CheckoutService.Model.csproj", "{6DBBCFC9-056F-4086-B9E4-D451D212F63A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
