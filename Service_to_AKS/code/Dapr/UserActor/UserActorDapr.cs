@@ -9,12 +9,14 @@ namespace UserActor
 {
     internal class UserActorDapr : Actor
     {
+        private const string StateNames = "StateNames";
         public UserActorDapr(ActorHost host) : base(host)
         {
         }
 
         public async Task AddToBasket(Guid productId, int quantity)
         {
+            await StateManager.AddOrUpdateStateAsync(StateNames, productId.ToString(), (id, products) => $"{products},{productId.ToString()}");
             await StateManager.AddOrUpdateStateAsync(productId.ToString(),
                quantity,
                (id, oldQuantity) => oldQuantity + quantity);
@@ -22,10 +24,11 @@ namespace UserActor
 
         public async Task ClearBasket()
         {
-            IEnumerable<string> productIDs = await StateManager.GetStateAsync();
+            var products = await StateManager.GetStateAsync<string>(StateNames);
 
-            foreach (string productId in productIDs)
+            foreach (string productId in products.Split(","))
             {
+                if (string.IsNullOrEmpty(productId)) continue;
                 await StateManager.RemoveStateAsync(productId);
             }
         }
