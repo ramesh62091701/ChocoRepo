@@ -1,4 +1,4 @@
-﻿using ECommerce.Services.Model;
+﻿using Services.Model;
 using System.Threading.Tasks;
 
 

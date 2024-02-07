@@ -3,10 +3,8 @@ using Dapr.Actors.Client;
 using Dapr.Client;
 using ECommerce.CheckoutService.Model;
 using ECommerce.Service.Interface;
-using ECommerce.Services.Model;
+using Services.Model;
 using Shared;
-using System.Data;
-using System.Threading;
 using UserActor;
 
 
@@ -78,7 +76,6 @@ namespace Services
             var result = _daprClient.CreateInvokeMethodRequest(HttpMethod.Get, "ProductCatalog", "");
 
             _daprClient.InvokeMethodAsync(result);
-
             return null;
 
             //var proxyFactory = new ServiceProxyFactory(
