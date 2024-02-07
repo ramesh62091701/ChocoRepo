@@ -62,11 +62,11 @@ namespace ECommerce.API.Controllers
         {
             long key = LongRandom();
 
-            var response = _daprClient.InvokeMethodAsync("target-service-id", "method-name", request);
+            var result = _daprClient.CreateInvokeMethodRequest(HttpMethod.Get, "checkoutservice", "checkoutasync/{userId}");
 
-            return proxyFactory.CreateServiceProxy<ICheckoutService>(
-            new Uri("fabric:/ECommerce/ECommerce.CheckoutService"),
-            new ServicePartitionKey(key));
+            _daprClient.InvokeMethodAsync(result);
+
+            return null;
         }
 
         private long LongRandom()

@@ -75,7 +75,7 @@ namespace Services
 
         private IProductCatalogService GetProductCatalogService()
         {
-            var result = _daprClient.CreateInvokeMethodRequest(HttpMethod.Get, "checkoutservice", "checkoutasync/{userId}");
+            var result = _daprClient.CreateInvokeMethodRequest(HttpMethod.Get, "ProductCatalog", "");
 
             _daprClient.InvokeMethodAsync(result);
 
