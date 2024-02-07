@@ -10,71 +10,71 @@ using static Google.Rpc.Context.AttributeContext.Types;
 
 namespace ECommerce.API.Controllers
 {
-    //[Route("api/[controller]")]
-    //[ApiController]
-    //public class CheckoutController : ControllerBase
-    //{
-    //    private static readonly Random rnd = new Random(DateTime.UtcNow.Second);
-    //    DaprClient _daprClient;
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CheckoutController : ControllerBase
+    {
+        private static readonly Random rnd = new Random(DateTime.UtcNow.Second);
+        DaprClient _daprClient;
 
-    //    public CheckoutController(DaprClient daprClient)
-    //    {
-    //        _daprClient = daprClient;
-    //    }
+        public CheckoutController(DaprClient daprClient)
+        {
+            _daprClient = daprClient;
+        }
 
-    //    [Route("{userId}")]
-    //    public async Task<ApiCheckoutSummary> CheckoutAsync(string userId)
-    //    {
-    //        CheckoutSummary summary =
-    //           await GetCheckoutService().CheckoutAsync(userId);
+        [Route("{userId}")]
+        public async Task<ApiCheckoutSummary> CheckoutAsync(string userId)
+        {
+            CheckoutSummary summary =
+               await GetCheckoutService().CheckoutAsync(userId);
 
-    //        return ToApiCheckoutSummary(summary);
-    //    }
+            return ToApiCheckoutSummary(summary);
+        }
 
-    //    [Route("history/{userId}")]
-    //    public async Task<IEnumerable<ApiCheckoutSummary>> GetHistoryAsync(
-    //       string userId)
-    //    {
-    //        IEnumerable<CheckoutSummary> history =
-    //           await GetCheckoutService().GetOrderHitoryAsync(userId);
+        [Route("history/{userId}")]
+        public async Task<IEnumerable<ApiCheckoutSummary>> GetHistoryAsync(
+           string userId)
+        {
+            IEnumerable<CheckoutSummary> history =
+               await GetCheckoutService().GetOrderHitoryAsync(userId);
 
-    //        return history.Select(ToApiCheckoutSummary);
-    //    }
+            return history.Select(ToApiCheckoutSummary);
+        }
 
 
-    //    private ApiCheckoutSummary ToApiCheckoutSummary(CheckoutSummary model)
-    //    {
-    //        return new ApiCheckoutSummary
-    //        {
-    //            Products = model.Products.Select(p => new ApiCheckoutProduct
-    //            {
-    //                ProductId = p.Product.Id,
-    //                ProductName = p.Product.Name,
-    //                Price = p.Price,
-    //                Quantity = p.Quantity
-    //            }).ToList(),
-    //            Date = model.Date,
-    //            TotalPrice = model.TotalPrice
-    //        };
-    //    }
+        private ApiCheckoutSummary ToApiCheckoutSummary(CheckoutSummary model)
+        {
+            return new ApiCheckoutSummary
+            {
+                Products = model.Products.Select(p => new ApiCheckoutProduct
+                {
+                    ProductId = p.Product.Id,
+                    ProductName = p.Product.Name,
+                    Price = p.Price,
+                    Quantity = p.Quantity
+                }).ToList(),
+                Date = model.Date,
+                TotalPrice = model.TotalPrice
+            };
+        }
 
-    //    private ICheckoutService GetCheckoutService()
-    //    {
-    //        long key = LongRandom();
+        private ICheckoutService GetCheckoutService()
+        {
+            long key = LongRandom();
 
-    //        var response = _daprClient.InvokeMethodAsync("target-service-id", "method-name", request);
+            var response = _daprClient.InvokeMethodAsync("target-service-id", "method-name", request);
 
-    //        return proxyFactory.CreateServiceProxy<ICheckoutService>(
-    //        new Uri("fabric:/ECommerce/ECommerce.CheckoutService"),
-    //        new ServicePartitionKey(key));
-    //    }
+            return proxyFactory.CreateServiceProxy<ICheckoutService>(
+            new Uri("fabric:/ECommerce/ECommerce.CheckoutService"),
+            new ServicePartitionKey(key));
+        }
 
-    //    private long LongRandom()
-    //    {
-    //        byte[] buf = new byte[8];
-    //        rnd.NextBytes(buf);
-    //        long longRand = BitConverter.ToInt64(buf, 0);
-    //        return longRand;
-    //    }
-    //}
+        private long LongRandom()
+        {
+            byte[] buf = new byte[8];
+            rnd.NextBytes(buf);
+            long longRand = BitConverter.ToInt64(buf, 0);
+            return longRand;
+        }
+    }
 }
