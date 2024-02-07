@@ -1,0 +1,6 @@
+version: 1
+apps:
+  - appDirPath: ../
+    appID: daprapp
+    appPort: 3500
+    containerImage: dapr_image_name2:tag
