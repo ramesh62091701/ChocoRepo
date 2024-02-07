@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ECommerce.Services.Model
+namespace Services.Model
 {
    public class CheckoutSummary
    {

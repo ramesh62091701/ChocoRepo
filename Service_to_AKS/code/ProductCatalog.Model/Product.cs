@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Services.Model
+namespace ProductCatalog.Model
 {
    public class Product
    {

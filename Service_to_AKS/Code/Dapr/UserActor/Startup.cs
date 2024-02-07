@@ -25,7 +25,7 @@ namespace UserActor
             services.AddActors(options =>
             {
                 options.Actors.RegisterActor<UserActorDapr>();
-
+               
                 options.ActorIdleTimeout = TimeSpan.FromSeconds(60);
                 options.RemindersStoragePartitions = 7;
             });

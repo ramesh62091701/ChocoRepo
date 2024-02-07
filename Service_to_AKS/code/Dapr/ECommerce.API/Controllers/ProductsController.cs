@@ -2,59 +2,58 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapr.Client;
 using ECommerce.API.Model;
-using ECommerce.ProductCatalog.Model;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.ServiceFabric.Services.Client;
-using Microsoft.ServiceFabric.Services.Remoting.Client;
-using Microsoft.ServiceFabric.Services.Remoting.V2.FabricTransport.Client;
+using Newtonsoft.Json;
+using ProductCatalog.Model;
 
 namespace ECommerce.API.Controllers
 {
-   //[Route("api/[controller]")]
-   //[ApiController]
-   //public class ProductsController : ControllerBase
-   //{
-   //   private readonly IProductCatalogService _service;
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ProductsController : ControllerBase
+    {
+        DaprClient _daprClient;
 
-   //   public ProductsController()
-   //   {
-   //      var proxyFactory = new ServiceProxyFactory(
-   //         c => new FabricTransportServiceRemotingClientFactory());
+        public ProductsController(DaprClient daprClient)
+        {
+            _daprClient = daprClient;
+        }
 
-   //      _service = proxyFactory.CreateServiceProxy<IProductCatalogService>(
-   //         new Uri("fabric:/ECommerce/ECommerce.ProductCatalog"),
-   //         new ServicePartitionKey(0));
-   //   }
+        [HttpGet]
+        public async Task<IEnumerable<ApiProduct>> GetAsync()
+        {
+            var response = _daprClient.CreateInvokeMethodRequest(HttpMethod.Get, "productcatalog", "GetAllProductAsync");
 
-   //   [HttpGet]
-   //   public async Task<IEnumerable<ApiProduct>> GetAsync()
-   //   {
-   //      IEnumerable<Product> allProducts = await _service.GetAllProductsAsync();
+            IEnumerable<Product> allProducts = await _daprClient.InvokeMethodAsync<Product[]>(response);
 
-   //      return allProducts.Select(p => new ApiProduct
-   //      {
-   //         Id = p.Id,
-   //         Name = p.Name,
-   //         Description = p.Description,
-   //         Price = p.Price,
-   //         IsAvailable = p.Availability > 0
-   //      });
-   //   }
+            return allProducts.Select(p => new ApiProduct
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                IsAvailable = p.Availability > 0
+            });
+        }
 
-   //   [HttpPost]
-   //   public async Task PostAsync([FromBody] ApiProduct product)
-   //   {
-   //      var newProduct = new Product()
-   //      {
-   //         Id = Guid.NewGuid(),
-   //         Name = product.Name,
-   //         Description = product.Description,
-   //         Price = product.Price,
-   //         Availability = 100
-   //      };
+        [HttpPost]
+        public async Task PostAsync([FromBody] ApiProduct product)
+        {
+            var newProduct = new Product()
+            {
+                Id = Guid.NewGuid(),
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                Availability = 100
+            };
+            string jsonNewProduct = JsonConvert.SerializeObject(newProduct);
+            var response = _daprClient.CreateInvokeMethodRequest(HttpMethod.Get, "productcatalog", "AddProductAsync", jsonNewProduct);
 
-   //      await _service.AddProductAsync(newProduct);
-   //   }
-   //}
+            await _daprClient.InvokeMethodAsync(response);
+
+        }
+    }
 }

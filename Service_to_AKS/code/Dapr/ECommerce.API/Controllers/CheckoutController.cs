@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapr.Client;
-using ECommerce.API.Model;
-using ECommerce.CheckoutService.Model;
 using Microsoft.AspNetCore.Mvc;
-using static Google.Rpc.Context.AttributeContext.Types;
+using Newtonsoft.Json;
+using ECommerce.CheckoutService.Model;
+using ECommerce.API.Model;
 
 namespace ECommerce.API.Controllers
 {
@@ -62,7 +62,9 @@ namespace ECommerce.API.Controllers
         {
             long key = LongRandom();
 
-            var result = _daprClient.CreateInvokeMethodRequest(HttpMethod.Get, "checkoutservice", "checkoutasync/{userId}");
+            var userid = new { userId = 123 };
+            string jsonUserId = JsonConvert.SerializeObject(userid);
+            var result = _daprClient.CreateInvokeMethodRequest(HttpMethod.Get, "checkoutservice", "checkoutasync", jsonUserId);
 
             _daprClient.InvokeMethodAsync(result);
 
