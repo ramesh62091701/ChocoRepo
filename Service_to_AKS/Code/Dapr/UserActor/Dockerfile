@@ -18,7 +18,7 @@ WORKDIR /App
 COPY --from=build-env /app/out .
 
 # Expose the port used by your Dapr actor application
-EXPOSE 5000
+EXPOSE 3500
 
 
 # Run your Dapr actor application
