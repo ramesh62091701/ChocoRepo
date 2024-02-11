@@ -13,4 +13,5 @@ FROM mcr.microsoft.com/dotnet/aspnet:7.0
 WORKDIR /App
 COPY --from=build-env /App/out .
 EXPOSE 3000
-ENTRYPOINT ["dotnet", "Sample_DockerHub.dll"]
+ENV ASPNETCORE_URLS http://*:3000
+ENTRYPOINT ["dotnet", "MVC.dll"]
