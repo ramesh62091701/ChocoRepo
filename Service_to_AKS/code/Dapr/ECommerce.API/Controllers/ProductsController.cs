@@ -4,9 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapr.Client;
 using ECommerce.API.Model;
+using ECommerce.ProductCatalog.Model;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using ProductCatalog.Model;
+
 
 namespace ECommerce.API.Controllers
 {

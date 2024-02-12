@@ -6,12 +6,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-
 builder.Services.AddActors(options =>
 {
     // Register actor types and configure actor settings
-    options.Actors.RegisterActor<MVC.Actors.ControllerActor>();
-    options.Actors.RegisterActor<MVC.Actors.SmokeDetectorActor>();
+    options.Actors.RegisterActor<ECommerce_Dapr.UserActorDapr>();
     options.ReentrancyConfig = new Dapr.Actors.ActorReentrancyConfig()
     {
         Enabled = true,
@@ -21,12 +19,9 @@ builder.Services.AddActors(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-
-//app.UseAuthorization();
-
 app.MapControllers();
 app.MapActorsHandlers();
 
 
 app.Run();
+
