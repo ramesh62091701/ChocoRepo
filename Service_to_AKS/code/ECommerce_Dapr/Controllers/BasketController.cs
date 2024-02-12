@@ -17,7 +17,7 @@ namespace ECommerce.API.Controllers
       [HttpGet("{userId}")]
       public async Task<ApiBasket> GetAsync(string userId)
       {
-         IUserActor actor = GetActor(userId);
+         IUserActorDapr actor = GetActor(userId);
 
          BasketItem[] products = await actor.GetBasket();
 
@@ -39,7 +39,7 @@ namespace ECommerce.API.Controllers
          string userId,
          [FromBody] ApiBasketAddRequest request)
       {
-         IUserActor actor = GetActor(userId);
+         IUserActorDapr actor = GetActor(userId);
 
          await actor.AddToBasket(request.ProductId, request.Quantity);
       }
@@ -47,14 +47,14 @@ namespace ECommerce.API.Controllers
       [HttpDelete("{userId}")]
       public async Task DeleteAsync(string userId)
       {
-         IUserActor actor = GetActor(userId);
+         IUserActorDapr actor = GetActor(userId);
 
          await actor.ClearBasket();
       }
 
-      private IUserActor GetActor(string userId)
+      private IUserActorDapr GetActor(string userId)
       {
-            return ActorProxy.Create<IUserActor>(new ActorId(userId), "UserActorDapr");
+            return ActorProxy.Create<IUserActorDapr>(new ActorId(userId), "UserActorDapr");
       }
    }
 }
