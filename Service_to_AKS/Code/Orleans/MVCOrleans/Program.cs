@@ -9,10 +9,16 @@ internal class Program
 
         builder.Host.UseOrleans(siloBuilder =>
         {
-            siloBuilder
-                .UseLocalhostClustering()
-                .AddMemoryGrainStorageAsDefault()
-                .UseTransactions();
+            siloBuilder.UseKubernetesHosting();
+
+            var redisConnectionString = $"redis-master.default.svc.cluster.local:6379";
+            siloBuilder.UseRedisClustering(options => options.ConnectionString = redisConnectionString);
+            siloBuilder.AddRedisGrainStorage("statestore", options => options.ConnectionString = redisConnectionString);
+            
+            //siloBuilder
+            //    .UseLocalhostClustering()
+            //    .AddMemoryGrainStorage("statestore")
+            //    .UseTransactions();
         });
 
         // Add services to the container.
