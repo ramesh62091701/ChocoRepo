@@ -14,13 +14,7 @@ internal class Program
             var redisConnectionString = $"redis-master.default.svc.cluster.local:6379";
             siloBuilder.UseRedisClustering(options => options.ConnectionString = redisConnectionString);
             siloBuilder.AddRedisGrainStorage("statestore", options => options.ConnectionString = redisConnectionString);
-
-            siloBuilder
-                    .UseLocalhostClustering()
-                    .AddMemoryGrainStorage("statestore")
-                    .UseTransactions();
         });
-
         // Add services to the container.
 
         builder.Services.AddControllers();
