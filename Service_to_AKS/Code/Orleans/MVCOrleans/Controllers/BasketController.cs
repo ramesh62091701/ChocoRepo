@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MVCOrleans.Interface;
 using MVCOrleans.Model;
-using Orleans.Configuration;
-using Orleans.ApplicationParts;
-using Orleans.Hosting;
 
 
 namespace MVCOrleans.Controllers

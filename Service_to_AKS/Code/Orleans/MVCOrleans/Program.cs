@@ -19,7 +19,6 @@ internal class Program
                     .UseLocalhostClustering()
                     .AddMemoryGrainStorage("statestore")
                     .UseTransactions();
-
         });
 
         // Add services to the container.
