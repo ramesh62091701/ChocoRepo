@@ -18,19 +18,19 @@ internal class Program
             })
             .UseConsoleLifetime();
 
-        using IHost host = Host.CreateDefaultBuilder(args)
-        .UseOrleansClient(client =>
-        {
-            client.UseLocalhostClustering()
-                .UseTransactions();
-        })
-        .UseConsoleLifetime()
-        .Build();
+        //using IHost host = Host.CreateDefaultBuilder(args)
+        //.UseOrleansClient(client =>
+        //{
+        //    client.UseLocalhostClustering()
+        //        .UseTransactions();
+        //})
+        //.UseConsoleLifetime()
+        //.Build();
 
-        await host.StartAsync();
-        var client = host.Services.GetRequiredService<IClusterClient>();
-        var fromAccount = client.GetGrain<IUserGrain>(1);
-        Console.WriteLine(fromAccount);
+        //await host.StartAsync();
+        //var client = host.Services.GetRequiredService<IClusterClient>();
+        //var fromAccount = client.GetGrain<IUserGrain>(1);
+        //Console.WriteLine(fromAccount);
 
 
         // Add services to the container.
