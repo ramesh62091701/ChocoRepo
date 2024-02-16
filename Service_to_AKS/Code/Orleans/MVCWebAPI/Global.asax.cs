@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Hosting;
 using MVCWebAPI.Grains;
 using MVCWebAPI.Interface;
 using Orleans;
@@ -20,20 +21,6 @@ namespace MVCWebAPI
     {
         protected async void Application_Start()
         {
-            var client = new HostBuilder()
-            .UseOrleansClient((context, clientBuilder) =>
-            {
-                clientBuilder.Configure<ClusterOptions>(options =>
-        {
-            options.ClusterId = "my-first-cluster";
-            options.ServiceId = "MyOrleansService";
-        })
-        .UseAzureStorageClustering(
-            options => options.ConfigureTableServiceClient(
-                context.Configuration["ORLEANS_AZURE_STORAGE_CONNECTION_STRING"]));
-    })
-    .Build();
-
             GlobalConfiguration.Configure(WebApiConfig.Register);
             var host = new SiloHostBuilder()
             .UseLocalhostClustering()
