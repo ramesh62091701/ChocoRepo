@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnet
+  labels:
+    app: dotnet
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dotnet
+  template:
+    metadata:
+      labels:
+        app: dotnet
+    spec:
+      containers:
+      - name: dotnet
+        image: abhishekm1359/sf_image
+        env:
+        - name: APP_PORT
+          value: "3000"
+        ports:
+        - containerPort: 3511
+        imagePullPolicy: Always

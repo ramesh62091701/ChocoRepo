@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnet
+  labels:
+    app: dotnet
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: dotnet
+      labels:
+        app: dotnet
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": windows
+      containers:
+      - name: sfcontainer
+        image: abhishekm1359/sf_image:latest
+        resources:
+          limits:
+            cpu: 1
+            memory: 800M
+        ports:
+          - containerPort: 80
+  selector:
+    matchLabels:
+      app: dotnet
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sfcontainer
+spec:
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+  selector:
+    app: sfcontainer
