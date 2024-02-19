@@ -83,25 +83,29 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedFiles", "SharedFiles\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{5E1DC247-BE56-4110-8E6F-92A418EE5118}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoAPI", "Demo\DemoAPI\DemoAPI.csproj", "{0EF3C1E5-541F-449B-9A45-935305BDC882}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoAPI", "Demo\DemoAPI\DemoAPI.csproj", "{0EF3C1E5-541F-449B-9A45-935305BDC882}"
 	ProjectSection(ProjectDependencies) = postProject
 		{58A13E12-E994-4AB4-9F20-79FC36387E38} = {58A13E12-E994-4AB4-9F20-79FC36387E38}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoServer", "DemoServer\DemoServer.csproj", "{A9A4AD4A-0BB9-4EB4-A0A1-3446297D8D33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoServer", "DemoServer\DemoServer.csproj", "{A9A4AD4A-0BB9-4EB4-A0A1-3446297D8D33}"
 	ProjectSection(ProjectDependencies) = postProject
 		{58A13E12-E994-4AB4-9F20-79FC36387E38} = {58A13E12-E994-4AB4-9F20-79FC36387E38}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Required", "Required\Required.csproj", "{58A13E12-E994-4AB4-9F20-79FC36387E38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Required", "Required\Required.csproj", "{58A13E12-E994-4AB4-9F20-79FC36387E38}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServiceFabric", "ServiceFabric", "{760719F9-A276-4018-B186-D6467067B6F1}"
 EndProject
 Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "Testing", "ServiceFabric\Testing\Testing.sfproj", "{989C4B45-EF3E-4A1A-8C98-87B3D46C55E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stateless1", "ServiceFabric\Stateless1\Stateless1.csproj", "{A41415C6-3435-4C22-A4C7-24BE2C9A3ABE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stateless1", "ServiceFabric\Stateless1\Stateless1.csproj", "{A41415C6-3435-4C22-A4C7-24BE2C9A3ABE}"
 EndProject
 Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "DeploySF", "ServiceFabric\DeploySF\DeploySF.sfproj", "{5EA47CF3-E0B9-4954-A4DA-8B9FB6CEC462}"
+EndProject
+Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "Application1", "Application1\Application1.sfproj", "{3C109526-48BC-4229-93F4-8F22BC5BF445}"
+EndProject
+Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "Application2", "Application2\Application2.sfproj", "{2A0DC17F-A10D-4BCC-BDFA-C6E9C5C8DA8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -383,6 +387,30 @@ Global
 		{5EA47CF3-E0B9-4954-A4DA-8B9FB6CEC462}.Release|x64.ActiveCfg = Release|x64
 		{5EA47CF3-E0B9-4954-A4DA-8B9FB6CEC462}.Release|x64.Build.0 = Release|x64
 		{5EA47CF3-E0B9-4954-A4DA-8B9FB6CEC462}.Release|x64.Deploy.0 = Release|x64
+		{3C109526-48BC-4229-93F4-8F22BC5BF445}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{3C109526-48BC-4229-93F4-8F22BC5BF445}.Debug|Any CPU.Build.0 = Debug|x64
+		{3C109526-48BC-4229-93F4-8F22BC5BF445}.Debug|Any CPU.Deploy.0 = Debug|x64
+		{3C109526-48BC-4229-93F4-8F22BC5BF445}.Debug|x64.ActiveCfg = Debug|x64
+		{3C109526-48BC-4229-93F4-8F22BC5BF445}.Debug|x64.Build.0 = Debug|x64
+		{3C109526-48BC-4229-93F4-8F22BC5BF445}.Debug|x64.Deploy.0 = Debug|x64
+		{3C109526-48BC-4229-93F4-8F22BC5BF445}.Release|Any CPU.ActiveCfg = Release|x64
+		{3C109526-48BC-4229-93F4-8F22BC5BF445}.Release|Any CPU.Build.0 = Release|x64
+		{3C109526-48BC-4229-93F4-8F22BC5BF445}.Release|Any CPU.Deploy.0 = Release|x64
+		{3C109526-48BC-4229-93F4-8F22BC5BF445}.Release|x64.ActiveCfg = Release|x64
+		{3C109526-48BC-4229-93F4-8F22BC5BF445}.Release|x64.Build.0 = Release|x64
+		{3C109526-48BC-4229-93F4-8F22BC5BF445}.Release|x64.Deploy.0 = Release|x64
+		{2A0DC17F-A10D-4BCC-BDFA-C6E9C5C8DA8E}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{2A0DC17F-A10D-4BCC-BDFA-C6E9C5C8DA8E}.Debug|Any CPU.Build.0 = Debug|x64
+		{2A0DC17F-A10D-4BCC-BDFA-C6E9C5C8DA8E}.Debug|Any CPU.Deploy.0 = Debug|x64
+		{2A0DC17F-A10D-4BCC-BDFA-C6E9C5C8DA8E}.Debug|x64.ActiveCfg = Debug|x64
+		{2A0DC17F-A10D-4BCC-BDFA-C6E9C5C8DA8E}.Debug|x64.Build.0 = Debug|x64
+		{2A0DC17F-A10D-4BCC-BDFA-C6E9C5C8DA8E}.Debug|x64.Deploy.0 = Debug|x64
+		{2A0DC17F-A10D-4BCC-BDFA-C6E9C5C8DA8E}.Release|Any CPU.ActiveCfg = Release|x64
+		{2A0DC17F-A10D-4BCC-BDFA-C6E9C5C8DA8E}.Release|Any CPU.Build.0 = Release|x64
+		{2A0DC17F-A10D-4BCC-BDFA-C6E9C5C8DA8E}.Release|Any CPU.Deploy.0 = Release|x64
+		{2A0DC17F-A10D-4BCC-BDFA-C6E9C5C8DA8E}.Release|x64.ActiveCfg = Release|x64
+		{2A0DC17F-A10D-4BCC-BDFA-C6E9C5C8DA8E}.Release|x64.Build.0 = Release|x64
+		{2A0DC17F-A10D-4BCC-BDFA-C6E9C5C8DA8E}.Release|x64.Deploy.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

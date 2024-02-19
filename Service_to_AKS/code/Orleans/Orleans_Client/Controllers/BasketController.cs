@@ -28,8 +28,8 @@ namespace Orleans_Client.Controllers
         public async Task<string> Get(int id)
         {
             var userAgentGrain = _grainFactory.GetGrain<IUserGrain>(id);
-            await userAgentGrain.GetBasket();
-            return id.ToString();
+            
+            return await userAgentGrain.GetBasket();
         }
 
         // POST api/<BasketController>

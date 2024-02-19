@@ -1,11 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ApplicationManifest ApplicationTypeName="DeploySFType"
+<ApplicationManifest ApplicationTypeName="Application1Type"
                      ApplicationTypeVersion="1.0.0"
                      xmlns="http://schemas.microsoft.com/2011/01/fabric"
                      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Parameters>
-	  <Parameter Name="SF_InstanceCount" DefaultValue="-1" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
@@ -14,9 +13,10 @@
     <ServiceManifestRef ServiceManifestName="Guest_Container1Pkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides />
     <Policies>
-      <ContainerHostPolicies CodePackageRef="Code" Isolation="process">
-		<PortBinding ContainerPort="0" EndpointRef="ServiceEndpoint"/>
-		<PortBinding ContainerPort="0" EndpointRef="ReplicatorEndpoint"/>
+      <ContainerHostPolicies CodePackageRef="Code">
+        <!-- See https://aka.ms/I7z0p9 for how to encrypt your repository password -->
+        <RepositoryCredentials AccountName="shar1497" Password="" PasswordEncrypted="true" />
+        <PortBinding ContainerPort="8080" EndpointRef="Guest_Container1TypeEndpoint" />
       </ContainerHostPolicies>
     </Policies>
   </ServiceManifestImport>
