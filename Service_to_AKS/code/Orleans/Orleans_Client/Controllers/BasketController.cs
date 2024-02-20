@@ -29,7 +29,7 @@ namespace Orleans_Client.Controllers
         {
             var userAgentGrain = _grainFactory.GetGrain<IUserGrain>(id);
             
-            return await userAgentGrain.GetBasket();
+            return await userAgentGrain.GetBasket(id.ToString());
         }
 
         // POST api/<BasketController>

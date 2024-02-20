@@ -1,6 +1,8 @@
 ﻿using Orleans;
+using System;
+using System.Threading.Tasks;
 
-namespace SharedFiles.Interface
+namespace Shared.Interface
 {
     public interface IUserGrain : IGrainWithIntegerKey
     {

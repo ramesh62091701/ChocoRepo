@@ -24,10 +24,7 @@ namespace MVCWebAPI.Grains
 
         private readonly ILogger logger;
 
-        public UserGrain(ILogger<UserGrain> logger)
-        {
-            this.logger = logger;
-        }
+      
 
 
         public async Task AddToBasket(Guid productId, int quantity)
