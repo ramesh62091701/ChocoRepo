@@ -8,7 +8,7 @@ using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Functions.Interfaces;
 
-namespace PubSub
+namespace Functions
 {
     public class TopicFunctions
     {
