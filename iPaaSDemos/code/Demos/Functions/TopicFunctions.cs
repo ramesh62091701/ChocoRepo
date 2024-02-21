@@ -33,7 +33,7 @@ namespace PubSub
                 var message = new ServiceBusMessage(Encoding.UTF8.GetBytes(messageBody));
 
                 // Send the message to the topic
-                //await s_sender.SendMessageAsync(message);
+                await s_sender.SendMessageAsync(message);
                 log.LogInformation($"Message published: {messageBody}");
             }
             catch (Exception ex)
@@ -48,7 +48,7 @@ namespace PubSub
 
 
         [FunctionName("ReceiveOrders")]
-        public void Run([ServiceBusTrigger($"%{SettingPropertyNames.OrderTopic}%", $"%{SettingPropertyNames.AzureSubscription}%", Connection = SettingPropertyNames.AzureServiceBusConnection)] string mySbMsg, ILogger log)
+        public void Run([ServiceBusTrigger($"%{SettingPropertyNames.OrderTopic}%", $"%{SettingPropertyNames.OrderSubscription1}%", Connection = SettingPropertyNames.AzureServiceBusConnection)] string mySbMsg, ILogger log)
         { 
             log.LogInformation($"C# ServiceBus topic trigger function processed message: {mySbMsg}");
         }

@@ -9,7 +9,7 @@ namespace Functions.Models
     public static class SettingPropertyNames
     {
         public const string OrderTopic = "OrderTopic";
-        public const string AzureSubscription = "AzureSubscription";
+        public const string OrderSubscription1 = "OrderSubscription1";
         public const string AzureWebJobsStorage = "AzureWebJobsStorage";
         public const string AzureServiceBusConnection = "AzureServiceBusConnection";
     }
