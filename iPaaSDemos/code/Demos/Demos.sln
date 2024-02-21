@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Messaging", "Messaging", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TopicFilters", "Messaging\TopicFilters\TopicFilters.csproj", "{BB5A5437-31F7-4B1E-B6E2-80841121B902}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeadLetterQueue", "Messaging\DeadLetterQueue\DeadLetterQueue.csproj", "{2AF0B937-B341-4C2B-A5EA-82C32A449250}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,12 +25,17 @@ Global
 		{BB5A5437-31F7-4B1E-B6E2-80841121B902}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB5A5437-31F7-4B1E-B6E2-80841121B902}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB5A5437-31F7-4B1E-B6E2-80841121B902}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AF0B937-B341-4C2B-A5EA-82C32A449250}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AF0B937-B341-4C2B-A5EA-82C32A449250}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AF0B937-B341-4C2B-A5EA-82C32A449250}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AF0B937-B341-4C2B-A5EA-82C32A449250}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BB5A5437-31F7-4B1E-B6E2-80841121B902} = {BF994FA1-4B0F-4AA6-973A-8C70D34A082F}
+		{2AF0B937-B341-4C2B-A5EA-82C32A449250} = {BF994FA1-4B0F-4AA6-973A-8C70D34A082F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1D51CE22-C140-44D1-AF85-9044C93D3796}

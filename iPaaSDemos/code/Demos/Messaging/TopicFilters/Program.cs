@@ -196,6 +196,8 @@ namespace TopicSubscriptionWithRuleOperationsSample
 
         private static async Task ReceiveMessagesAsync(string subscriptionName)
         {
+            
+
             await using ServiceBusReceiver subscriptionReceiver = s_client.CreateReceiver(
                 TopicName,
                 subscriptionName,
