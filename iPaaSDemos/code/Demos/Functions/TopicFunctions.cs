@@ -4,18 +4,22 @@ using System.Text;
 using System.Threading.Tasks;
 using Functions.Models;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Functions.Interfaces;
+using Newtonsoft.Json;
 
 namespace Functions
 {
     public class TopicFunctions
     {
         private readonly ISettingService _settingService;
-        public TopicFunctions(ISettingService settingService)
+        private readonly IOrderService _orderService;
+        private Random random = null;
+        public TopicFunctions(ISettingService settingService, IOrderService orderService)
         {
             _settingService = settingService;
+            _orderService = orderService;
+            random = new Random();
         }
 
         [FunctionName("PlaceOrders")]
@@ -29,7 +33,7 @@ namespace Functions
             try
             {
                 // Generate a new order message
-                string messageBody = "New order received. Order ID: 12345";
+                string messageBody = JsonConvert.SerializeObject(await _orderService.GetOrder(random.Next()));
                 var message = new ServiceBusMessage(Encoding.UTF8.GetBytes(messageBody));
 
                 // Send the message to the topic

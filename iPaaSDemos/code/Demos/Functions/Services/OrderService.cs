@@ -25,7 +25,7 @@ namespace Functions.Services
             return order.OrderId;
         }
 
-        public async Task<bool> UpdateOrder(string orderId, OrderModel order)
+        public async Task<bool> UpdateOrder(int orderId, OrderModel order)
         {
             return true;
         }
