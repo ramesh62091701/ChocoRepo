@@ -1,5 +1,5 @@
-﻿using Microsoft.Azure.Amqp.Framing;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace Functions.Models
@@ -42,7 +42,7 @@ namespace Functions.Models
         [JsonProperty("items")]
         public List<ProductModel> Items { get; set; }
 
-        [JsonProperty("data")]
-        public Data Date { get; set; }
+        [JsonProperty("date")]
+        public DateTime Date { get; set; }
     }
 }

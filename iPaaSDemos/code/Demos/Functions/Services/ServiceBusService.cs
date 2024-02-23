@@ -12,9 +12,9 @@ namespace Functions.Services
 {
     public class ServiceBusService : IServiceBusService
     {
-        private ServiceBusClient s_client;
-        private ServiceBusAdministrationClient s_adminClient;
-        private ServiceBusSender s_sender;
+        private static ServiceBusClient s_client;
+        private static ServiceBusAdministrationClient s_adminClient;
+        private static ServiceBusSender s_sender;
         private readonly ISettingService _settingService;
 
         public ServiceBusService(ISettingService settingService)
@@ -24,6 +24,7 @@ namespace Functions.Services
 
         public async Task Send<T>(T obj, Dictionary<string, object> properties) where T : class
         {
+            await Initialize(_settingService);
             var messageBody = JsonConvert.SerializeObject(obj);
             var serviceBusMessage = new ServiceBusMessage(Encoding.UTF8.GetBytes(messageBody));
             if(properties != null)
@@ -36,27 +37,26 @@ namespace Functions.Services
             await s_sender.SendMessageAsync(serviceBusMessage);
         }
 
-        private async Task Connect()
+        public static async Task Initialize(ISettingService settingService)
         {
             if (s_client != null) return;
-            var connection = await _settingService.GetAsync(SettingPropertyNames.AzureServiceBusConnection);
-            var topic = await _settingService.GetAsync(SettingPropertyNames.OrderTopic);
+            var connection = await settingService.GetAsync(SettingPropertyNames.AzureServiceBusConnection);
+            var topic = await settingService.GetAsync(SettingPropertyNames.OrderTopic);
 
 
-            var fraudDetectionSubscriptionName = await _settingService.GetAsync(SettingPropertyNames.FraudDetectionSubscriptionName);
-            var highValueSubscriptionName = await _settingService.GetAsync(SettingPropertyNames.HighValueSubscriptionName);
-            var shippingCostSubscriptionName = await _settingService.GetAsync(SettingPropertyNames.ShippingCostSubscriptionName);
+            var fraudDetectionSubscriptionName = await settingService.GetAsync(SettingPropertyNames.FraudDetectionSubscriptionName);
+            var highValueSubscriptionName = await settingService.GetAsync(SettingPropertyNames.HighValueSubscriptionName);
+            var shippingCostSubscriptionName = await settingService.GetAsync(SettingPropertyNames.ShippingCostSubscriptionName);
 
 
             s_client = new ServiceBusClient(connection);
-            s_adminClient = new ServiceBusAdministrationClient(Environment.GetEnvironmentVariable(connection));
+            s_sender = s_client.CreateSender(topic);
+            s_adminClient = new ServiceBusAdministrationClient(connection);
 
             if (!await s_adminClient.TopicExistsAsync(topic))
             {
                 await s_adminClient.CreateTopicAsync(topic);
             }
-            s_sender = s_client.CreateSender(topic);
-
             if (!await s_adminClient.SubscriptionExistsAsync(topic, fraudDetectionSubscriptionName))
             {
                 await s_adminClient.CreateSubscriptionAsync(topic, fraudDetectionSubscriptionName);

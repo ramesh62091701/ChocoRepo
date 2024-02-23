@@ -20,7 +20,6 @@ public class Startup : FunctionsStartup
         builder.Services.AddTransient<IOrderService, OrderService>();
         builder.Services.AddTransient(provider =>
         {
-
             return new Func<ITableStorageService<OrderEntity>>(
                 () =>
                 {
@@ -30,5 +29,18 @@ public class Startup : FunctionsStartup
                 }
             );
         });
+
+        builder.Services.AddTransient(provider =>
+        {
+            return new Func<ITableStorageService<OrderEnrichedEntity>>(
+                () =>
+                {
+                    var config = provider.GetRequiredService<IConfiguration>();
+                    var serviceClient = new TableServiceClient(config[SettingPropertyNames.AzureWebJobsStorage]);
+                    return new TableStorageService<OrderEnrichedEntity>(serviceClient, config[SettingPropertyNames.AzureStorageEnrichedTableName], new Microsoft.Extensions.Logging.LoggerFactory());
+                }
+            );
+        });
+
     }
 }

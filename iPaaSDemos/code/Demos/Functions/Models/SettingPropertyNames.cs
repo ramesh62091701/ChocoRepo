@@ -13,6 +13,7 @@ namespace Functions.Models
         public const string AzureWebJobsStorage = "AzureWebJobsStorage";
         public const string AzureServiceBusConnection = "AzureServiceBusConnection";
         public const string AzureStorageTableName = "AzureStorageTableName";
+        public const string AzureStorageEnrichedTableName = "AzureStorageEnrichedTableName";
 
         public const string FraudDetectionSubscriptionName = "FraudDetectionSubscriptionName";
         public const string HighValueSubscriptionName = "HighValueSubscriptionName";

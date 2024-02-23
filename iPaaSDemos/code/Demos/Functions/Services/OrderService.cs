@@ -40,6 +40,7 @@ namespace Functions.Services
 
         public async Task<string> CreateOrder(OrderModel order)
         {
+            order.Date = DateTime.Now;
             var orderEntity = new OrderEntity();
             orderEntity.PartitionKey = order.AccountId;
             orderEntity.RowKey = order.OrderId;
