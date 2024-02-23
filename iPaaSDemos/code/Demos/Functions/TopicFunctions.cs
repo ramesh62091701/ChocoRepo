@@ -22,34 +22,6 @@ namespace Functions
             random = new Random();
         }
 
-        [FunctionName("PlaceOrders")]
-        public async Task PlaceOrders([TimerTrigger("0 */5 * * * *")] TimerInfo myTimer, ILogger log)
-        {
-            var connectionString = await _settingService.GetAsync(SettingPropertyNames.AzureServiceBusConnection);
-            var s_client = new ServiceBusClient(connectionString);
-            var topic = await _settingService.GetAsync(SettingPropertyNames.OrderTopic);
-            var s_sender = s_client.CreateSender(topic);
-
-            try
-            {
-                // Generate a new order message
-                string messageBody = JsonConvert.SerializeObject(await _orderService.GetOrder(random.Next()));
-                var message = new ServiceBusMessage(Encoding.UTF8.GetBytes(messageBody));
-
-                // Send the message to the topic
-                await s_sender.SendMessageAsync(message);
-                log.LogInformation($"Message published: {messageBody}");
-            }
-            catch (Exception ex)
-            {
-                log.LogError($"An error occurred: {ex.Message}");
-            }
-            finally
-            {
-                await s_client.DisposeAsync();
-            }
-        }
-
 
         [FunctionName("ReceiveOrders")]
         public void Run([ServiceBusTrigger($"%{SettingPropertyNames.OrderTopic}%", $"%{SettingPropertyNames.OrderSubscription1}%", Connection = SettingPropertyNames.AzureServiceBusConnection)] string mySbMsg, ILogger log)

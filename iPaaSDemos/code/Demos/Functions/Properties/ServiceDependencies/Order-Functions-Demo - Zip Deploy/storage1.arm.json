@@ -4,7 +4,7 @@
   "parameters": {
     "resourceGroupName": {
       "type": "string",
-      "defaultValue": "cloud-shell-storage-centralindia",
+      "defaultValue": "sharad",
       "metadata": {
         "_parameterType": "resourceGroup",
         "description": "Name of the resource group for the resource. It is recommended to put resources under same resource group for better tracking."
@@ -36,7 +36,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "name": "[concat(parameters('resourceGroupName'), 'Deployment', uniqueString(concat('csg100320014c3e6a57', subscription().subscriptionId)))]",
+      "name": "[concat(parameters('resourceGroupName'), 'Deployment', uniqueString(concat('sonatademostorage', subscription().subscriptionId)))]",
       "resourceGroup": "[parameters('resourceGroupName')]",
       "apiVersion": "2019-10-01",
       "dependsOn": [
@@ -53,8 +53,8 @@
                 "name": "Standard_LRS",
                 "tier": "Standard"
               },
-              "kind": "StorageV2",
-              "name": "csg100320014c3e6a57",
+              "kind": "Storage",
+              "name": "sonatademostorage",
               "type": "Microsoft.Storage/storageAccounts",
               "location": "[parameters('resourceLocation')]",
               "apiVersion": "2017-10-01"

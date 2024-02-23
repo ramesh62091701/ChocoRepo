@@ -12,7 +12,7 @@
     },
     "resourceGroupLocation": {
       "type": "string",
-      "defaultValue": "southindia",
+      "defaultValue": "centralindia",
       "metadata": {
         "_parameterType": "location",
         "description": "Location of the resource group. Resource groups could have different location than resources."
@@ -36,7 +36,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "name": "[concat(parameters('resourceGroupName'), 'Deployment', uniqueString(concat('Functions', subscription().subscriptionId)))]",
+      "name": "[concat(parameters('resourceGroupName'), 'Deployment', uniqueString(concat('Order-APIs', subscription().subscriptionId)))]",
       "resourceGroup": "[parameters('resourceGroupName')]",
       "apiVersion": "2019-10-01",
       "dependsOn": [
@@ -49,17 +49,17 @@
           "contentVersion": "1.0.0.0",
           "resources": [
             {
-              "name": "sharad",
+              "name": "Orders-Demo",
               "type": "Microsoft.ApiManagement/service",
               "location": "[parameters('resourceLocation')]",
               "properties": {
                 "publisherEmail": "Sharad.k@sonata-software.com",
-                "publisherName": "ssl",
+                "publisherName": "sonata software limited",
                 "notificationSenderEmail": "apimgmt-noreply@mail.windowsazure.com",
                 "hostnameConfigurations": [
                   {
                     "type": "Proxy",
-                    "hostName": "sharad.azure-api.net",
+                    "hostName": "orders-demo.azure-api.net",
                     "encodedCertificate": null,
                     "keyVaultId": null,
                     "certificatePassword": null,
@@ -69,7 +69,7 @@
                   }
                 ],
                 "publicIPAddresses": [
-                  "20.41.224.2"
+                  "4.224.164.192"
                 ],
                 "privateIPAddresses": null,
                 "additionalLocations": null,
@@ -99,9 +99,9 @@
             },
             {
               "type": "Microsoft.ApiManagement/service/apis",
-              "name": "sharad/Functions",
+              "name": "Orders-Demo/Order-APIs",
               "properties": {
-                "displayName": "Functions",
+                "displayName": "Order-APIs",
                 "apiRevision": "1",
                 "description": null,
                 "subscriptionRequired": true,
@@ -122,7 +122,7 @@
               },
               "apiVersion": "2019-12-01",
               "dependsOn": [
-                "sharad"
+                "Orders-Demo"
               ]
             }
           ]

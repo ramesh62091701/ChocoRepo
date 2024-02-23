@@ -39,10 +39,10 @@ namespace Functions
 
         [FunctionName("GetOrder")]
         [OpenApiOperation(operationId: "GetOrder", tags: new[] { "order" })]
-        [OpenApiParameter(name: "orderId", In = ParameterLocation.Path, Required = true, Type = typeof(int), Description = "The **OrderId** parameter")]
+        [OpenApiParameter(name: "orderId", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The **OrderId** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(OrderModel), Description = "The OK response")]
         public async Task<IActionResult> GetOrder(
-          [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "orders/{orderId}")] HttpRequest req, int orderId)
+          [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "orders/{orderId}")] HttpRequest req, string orderId)
         {
             _logger.LogInformation($"C# HTTP trigger function processed a request to get order {orderId}.");
             return new OkObjectResult(await _orderService.GetOrder(orderId));
@@ -51,7 +51,7 @@ namespace Functions
         [FunctionName("CreateOrder")]
         [OpenApiOperation(operationId: "OrderCreate", tags: new[] { "order" }, Description ="Create a new order", Visibility = OpenApiVisibilityType.Important)]
         [OpenApiRequestBody("application/json", typeof(OrderModel), Description = "Order Id must be defined", Required = true)]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(int), Description = "The OK response")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "The OK response")]
         public async Task<IActionResult> CreateOrder(
            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "orders")] HttpRequest req)
         {
@@ -65,11 +65,11 @@ namespace Functions
 
         [FunctionName("UpdateOrder")]
         [OpenApiOperation(operationId: "OrderUpdate", tags: new[] { "order" }, Description = "Update order", Visibility = OpenApiVisibilityType.Important)]
-        [OpenApiParameter(name: "orderId", In = ParameterLocation.Path, Required = true, Type = typeof(int), Description = "The **OrderId** parameter")]
+        [OpenApiParameter(name: "orderId", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The **OrderId** parameter")]
         [OpenApiRequestBody("application/json", typeof(OrderModel), Description = "Order Id must be defined", Required = true)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(bool), Description = "The OK response")]
         public async Task<IActionResult> UpdateOrder(
-         [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "orders/{orderId}")] HttpRequest req, int orderId)
+         [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "orders/{orderId}")] HttpRequest req, string orderId)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request to update order.");
 
@@ -81,10 +81,10 @@ namespace Functions
 
         [FunctionName("DeleteOrder")]
         [OpenApiOperation(operationId: "OrderDelete", tags: new[] { "order" }, Description = "Delete order", Visibility = OpenApiVisibilityType.Important)]
-        [OpenApiParameter(name: "orderId", In = ParameterLocation.Path, Required = true, Type = typeof(int), Description = "The **OrderId** parameter")]
+        [OpenApiParameter(name: "orderId", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The **OrderId** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(bool), Description = "The OK response")]
         public async Task<IActionResult> DeleteOrder(
-         [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "orders/{orderId}")] HttpRequest req, int orderId)
+         [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "orders/{orderId}")] HttpRequest req, string orderId)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request to delete order.");
 
