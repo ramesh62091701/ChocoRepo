@@ -28,7 +28,7 @@ namespace Functions.Services
             request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             request.Headers.Add("Ocp-Apim-Subscription-Key", await _settingService.GetAsync(SettingPropertyNames.SubKey));
             request.Content = requestContent;
-            await _client.SendAsync(request);
+            var response = await _client.SendAsync(request);
         }
     }
 }

@@ -12,6 +12,9 @@ namespace Functions.Models
         [JsonProperty("accountId")]
         public string AccountId { get; set; }
 
+        [JsonProperty("approver")]
+        public string Approver { get; set; }
+
         [JsonProperty("orderType")]
         public string OrderType { get; set; }
 
