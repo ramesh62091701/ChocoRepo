@@ -12,14 +12,17 @@ namespace Functions.Services
         private readonly ITableStorageService<OrderEntity> _repo;
         private readonly ITableStorageService<OrderEnrichedEntity> _repoEnriched;
         private readonly IServiceBusService _serviceBusService;
+        private readonly ILogicAppService _logicAppService;
 
         public OrderService(Func<ITableStorageService<OrderEntity>> repo,
             Func<ITableStorageService<OrderEnrichedEntity>> repoEnriched,
-            IServiceBusService serviceBusService)
+            IServiceBusService serviceBusService,
+            ILogicAppService logicAppService)
         {
             _repo = repo.Invoke();
             _repoEnriched = repoEnriched.Invoke();
             _serviceBusService = serviceBusService;
+            _logicAppService = logicAppService;
         }
         public async Task<List<OrderModel>> GetOrders()
         {
@@ -77,6 +80,12 @@ namespace Functions.Services
             entity.PartitionKey = accountId;
             entity.RowKey = $"{orderId}_{property}";
             await _repoEnriched.UpsertAsync(entity);
+            return true;
+        }
+
+        public async Task<bool> SendToLogicApp(OrderModel order)
+        {
+            await _logicAppService.Send(order);
             return true;
         }
 

@@ -30,6 +30,9 @@ namespace Functions.Models
         [JsonProperty("sellerLastName")]
         public string SellerLastName { get; set; }
 
+        [JsonProperty("sellerEmail")]
+        public string SellerEmail { get; set; }
+
         [JsonProperty("approvalStatus")]
         public string ApprovalStatus { get; set; }
 

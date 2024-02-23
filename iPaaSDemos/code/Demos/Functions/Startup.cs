@@ -16,8 +16,10 @@ public class Startup : FunctionsStartup
     {
         builder.Services.AddSingleton<ISettingService, SettingService>();
         builder.Services.AddSingleton<IServiceBusService, ServiceBusService>();
-
+        builder.Services.AddSingleton<ILogicAppService, LogicAppService>();
+        builder.Services.AddHttpClient<LogicAppService>();
         builder.Services.AddTransient<IOrderService, OrderService>();
+
         builder.Services.AddTransient(provider =>
         {
             return new Func<ITableStorageService<OrderEntity>>(

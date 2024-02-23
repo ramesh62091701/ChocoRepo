@@ -34,6 +34,7 @@ namespace Functions
         {
             var order = JsonConvert.DeserializeObject<OrderModel>(mySbMsg);
             await _orderService.SaveEnrichedProperty(order.OrderId, "HighValue", "true", order.AccountId);
+            await _orderService.SendToLogicApp(order);
             log.LogInformation($"C# ServiceBus topic trigger function processed message: {mySbMsg}");
         }
 
