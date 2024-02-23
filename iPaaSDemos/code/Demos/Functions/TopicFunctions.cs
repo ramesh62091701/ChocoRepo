@@ -14,18 +14,34 @@ namespace Functions
     {
         private readonly ISettingService _settingService;
         private readonly IOrderService _orderService;
-        private Random random = null;
         public TopicFunctions(ISettingService settingService, IOrderService orderService)
         {
             _settingService = settingService;
             _orderService = orderService;
-            random = new Random();
         }
 
 
-        [FunctionName("ReceiveOrders")]
-        public void Run([ServiceBusTrigger($"%{SettingPropertyNames.OrderTopic}%", $"%{SettingPropertyNames.OrderSubscription1}%", Connection = SettingPropertyNames.AzureServiceBusConnection)] string mySbMsg, ILogger log)
+        [FunctionName("FraudDeduction")]
+        public async Task FraudDeduction([ServiceBusTrigger($"%{SettingPropertyNames.OrderTopic}%", $"%{SettingPropertyNames.FraudDetectionSubscriptionName}%", Connection = SettingPropertyNames.AzureServiceBusConnection)] string mySbMsg, ILogger log)
         { 
+            var order = JsonConvert.DeserializeObject<OrderModel>(mySbMsg);
+            await _orderService.SaveEnrichedProperty(order.OrderId, "FraudDeducted", "false", order.AccountId);
+            log.LogInformation($"C# ServiceBus topic trigger function processed message: {mySbMsg}");
+        }
+
+        [FunctionName("HighValueSubscription")]
+        public async Task HighValueSubscription([ServiceBusTrigger($"%{SettingPropertyNames.OrderTopic}%", $"%{SettingPropertyNames.HighValueSubscriptionName}%", Connection = SettingPropertyNames.AzureServiceBusConnection)] string mySbMsg, ILogger log)
+        {
+            var order = JsonConvert.DeserializeObject<OrderModel>(mySbMsg);
+            await _orderService.SaveEnrichedProperty(order.OrderId, "HighValue", "true", order.AccountId);
+            log.LogInformation($"C# ServiceBus topic trigger function processed message: {mySbMsg}");
+        }
+
+        [FunctionName("ShippingCostSubscription")]
+        public async Task ShippingCostSubscription([ServiceBusTrigger($"%{SettingPropertyNames.OrderTopic}%", $"%{SettingPropertyNames.ShippingCostSubscriptionName}%", Connection = SettingPropertyNames.AzureServiceBusConnection)] string mySbMsg, ILogger log)
+        {
+            var order = JsonConvert.DeserializeObject<OrderModel>(mySbMsg);
+            await _orderService.SaveEnrichedProperty(order.OrderId, "ShippingCost", "true", order.AccountId);
             log.LogInformation($"C# ServiceBus topic trigger function processed message: {mySbMsg}");
         }
     }

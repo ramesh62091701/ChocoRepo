@@ -15,8 +15,9 @@ public class Startup : FunctionsStartup
     public override void Configure(IFunctionsHostBuilder builder)
     {
         builder.Services.AddSingleton<ISettingService, SettingService>();
-        builder.Services.AddSingleton<IOrderService, OrderService>();
+        builder.Services.AddSingleton<IServiceBusService, ServiceBusService>();
 
+        builder.Services.AddTransient<IOrderService, OrderService>();
         builder.Services.AddTransient(provider =>
         {
 
@@ -25,8 +26,7 @@ public class Startup : FunctionsStartup
                 {
                     var config = provider.GetRequiredService<IConfiguration>();
                     var serviceClient = new TableServiceClient(config[SettingPropertyNames.AzureWebJobsStorage]);
-                    return new TableStorageService<OrderEntity>(serviceClient, "order", new Microsoft.Extensions.Logging.LoggerFactory());
-
+                    return new TableStorageService<OrderEntity>(serviceClient, config[SettingPropertyNames.AzureStorageTableName], new Microsoft.Extensions.Logging.LoggerFactory());
                 }
             );
         });

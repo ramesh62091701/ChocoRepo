@@ -12,5 +12,10 @@ namespace Functions.Models
         public const string OrderSubscription1 = "OrderSubscription1";
         public const string AzureWebJobsStorage = "AzureWebJobsStorage";
         public const string AzureServiceBusConnection = "AzureServiceBusConnection";
+        public const string AzureStorageTableName = "AzureStorageTableName";
+
+        public const string FraudDetectionSubscriptionName = "FraudDetectionSubscriptionName";
+        public const string HighValueSubscriptionName = "HighValueSubscriptionName";
+        public const string ShippingCostSubscriptionName = "ShippingCostSubscriptionName";
     }
 }

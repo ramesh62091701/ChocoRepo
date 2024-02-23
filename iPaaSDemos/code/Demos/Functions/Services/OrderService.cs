@@ -10,9 +10,16 @@ namespace Functions.Services
     public class OrderService : IOrderService
     {
         private readonly ITableStorageService<OrderEntity> _repo;
-        public OrderService(Func<ITableStorageService<OrderEntity>> repo)
+        private readonly ITableStorageService<OrderEnrichedEntity> _repoEnriched;
+        private readonly IServiceBusService _serviceBusService;
+
+        public OrderService(Func<ITableStorageService<OrderEntity>> repo,
+            Func<ITableStorageService<OrderEnrichedEntity>> repoEnriched,
+            IServiceBusService serviceBusService)
         {
             _repo = repo.Invoke();
+            _repoEnriched = repoEnriched.Invoke();
+            _serviceBusService = serviceBusService;
         }
         public async Task<List<OrderModel>> GetOrders()
         {
@@ -38,6 +45,7 @@ namespace Functions.Services
             orderEntity.RowKey = order.OrderId;
             orderEntity.Order = JsonConvert.SerializeObject(order);
             await _repo.UpsertAsync(orderEntity);
+            await Send(order);
             return order.OrderId;
         }
 
@@ -48,6 +56,26 @@ namespace Functions.Services
 
         public async Task<bool> DeleteOrder(string orderId, string accountId = "123'")
         {
+            return true;
+        }
+
+        public async Task<bool> Send(OrderModel order)
+        {
+            var props = new Dictionary<string, object>();
+            props.Add("amount", order.TotalAmount);
+            await _serviceBusService.Send(order, props);
+            return true;
+        }
+
+        public async Task<bool> SaveEnrichedProperty(string orderId, string property, string value, string accountId = "123")
+        {
+            var entity = new OrderEnrichedEntity();
+            entity.OrderId = orderId;
+            entity.Property = property;
+            entity.Value = value;
+            entity.PartitionKey = accountId;
+            entity.RowKey = $"{orderId}_{property}";
+            await _repoEnriched.UpsertAsync(entity);
             return true;
         }
 

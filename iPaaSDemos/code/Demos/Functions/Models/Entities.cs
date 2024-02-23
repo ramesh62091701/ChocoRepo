@@ -6,4 +6,13 @@ namespace Functions.Models
     {
         public string Order { get; set; }
     }
+
+    public class OrderEnrichedEntity : BaseEntity
+    {
+        public string OrderId { get; set; }
+
+        public string Property { get; set; }
+
+        public string Value { get; set; }
+    }
 }
