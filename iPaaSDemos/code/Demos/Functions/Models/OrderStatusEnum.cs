@@ -8,6 +8,7 @@ namespace Functions.Models
     public enum OrderStatusEnum
     {
         Pending,
+        Processing,
         Completed,
         Cancelled
     }

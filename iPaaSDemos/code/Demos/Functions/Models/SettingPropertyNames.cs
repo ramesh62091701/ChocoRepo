@@ -15,5 +15,9 @@
         public const string LogicAppsServerUrl = "LogicAppsServerUrl";
         public const string ReceiveOrderWorkflow = "ReceiveOrderWorkflow";
         public const string SubKey = "SubKey";
+
+        public const string LogicAppCreate = "LogicAppCreate";
+        public const string LogicAppProcessing = "LogicAppProcessing";
+        public const string LogicAppComplete = "LogicAppComplete";
     }
 }

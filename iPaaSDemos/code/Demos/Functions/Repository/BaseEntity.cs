@@ -16,7 +16,5 @@ namespace Functions.Repository
         [JsonIgnore]
         public ETag ETag { get; set; }
 
-        public virtual string Id { get { return $"{PartitionKey}_{RowKey}"; } }
-
     }
 }

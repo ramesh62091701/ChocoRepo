@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Functions.Interfaces;
+﻿using Functions.Interfaces;
 using Functions.Models;
 using Newtonsoft.Json;
 using System.Net.Http;
@@ -27,6 +26,17 @@ namespace Functions.Services
             request.Headers.Accept.Clear();
             request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             request.Headers.Add("Ocp-Apim-Subscription-Key", await _settingService.GetAsync(SettingPropertyNames.SubKey));
+            request.Content = requestContent;
+            var response = await _client.SendAsync(request);
+        }
+
+        public async Task Send(OrderModel order, string url)
+        {
+            var requestBodyJson = JsonConvert.SerializeObject(order);
+            StringContent requestContent = new StringContent(requestBodyJson, Encoding.UTF8, "application/json");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url);
+            request.Headers.Accept.Clear();
+            request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             request.Content = requestContent;
             var response = await _client.SendAsync(request);
         }

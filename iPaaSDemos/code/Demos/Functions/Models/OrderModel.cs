@@ -27,6 +27,9 @@ namespace Functions.Models
         [JsonProperty("currency")]
         public string Currency { get; set; }
 
+        [JsonProperty("sellerFullName")]
+        public string SellerFullName { get; set; }
+
         [JsonProperty("sellerFirstName")]
         public string SellerFirstName { get; set; }
 
