@@ -87,11 +87,30 @@ namespace Functions
          [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "orders/{orderId}")] HttpRequest req, string orderId)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request to delete order.");
-
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            var data = JsonConvert.DeserializeObject<OrderModel>(requestBody);
-
             return new OkObjectResult(await _orderService.DeleteOrder(orderId));
+        }
+
+        [FunctionName("ProcessOrder")]
+        [OpenApiOperation(operationId: "OrderProcess", tags: new[] { "order" }, Description = "Process order", Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiParameter(name: "orderId", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The **OrderId** parameter")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(bool), Description = "The OK response")]
+        public async Task<IActionResult> ProcessOrder(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "orders/{orderId}/process")] HttpRequest req, string orderId)
+        {
+            _logger.LogInformation("C# HTTP trigger function processed a request to process order.");
+            return new OkObjectResult(await _orderService.ProcessOrder(orderId));
+        }
+
+        [FunctionName("completeOrder")]
+        [OpenApiOperation(operationId: "OrderProcess", tags: new[] { "order" }, Description = "Process order", Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiParameter(name: "orderId", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The **OrderId** parameter")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(bool), Description = "The OK response")]
+        public async Task<IActionResult> CompleteOrder(
+       [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "orders/{orderId}/complete")] HttpRequest req, string orderId)
+        {
+            _logger.LogInformation("C# HTTP trigger function processed a request to complete order.");
+
+            return new OkObjectResult(await _orderService.CompleteOrder(orderId));
         }
     }
 }
