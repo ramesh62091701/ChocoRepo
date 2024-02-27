@@ -1,0 +1,337 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Compose": {
+                "inputs": "@setProperty(triggerBody(),'orderStatus',variables('orderStatus'))",
+                "runAfter": {
+                    "Switch": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "Compose"
+            },
+            "Initialize_orderStatus": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "orderStatus",
+                            "type": "string",
+                            "value": "Pending"
+                        }
+                    ]
+                },
+                "runAfter": {},
+                "type": "InitializeVariable"
+            },
+            "Initialize_variable": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "orderId",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_orderStatus": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "Set_variable": {
+                "inputs": {
+                    "name": "orderId",
+                    "value": "@triggerBody()?['orderId']"
+                },
+                "runAfter": {
+                    "Initialize_variable": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "SetVariable"
+            },
+            "Switch": {
+                "cases": {
+                    "Case_Approved": {
+                        "actions": {
+                            "Set_orderStatus_to_Complete": {
+                                "inputs": {
+                                    "name": "orderStatus",
+                                    "value": "Complete"
+                                },
+                                "type": "SetVariable"
+                            }
+                        },
+                        "case": "Approved"
+                    },
+                    "Case_Awaiting": {
+                        "actions": {
+                            "Delay_-_Wait_to_send_Reminder_Email": {
+                                "inputs": {
+                                    "interval": {
+                                        "count": 1,
+                                        "unit": "Minute"
+                                    }
+                                },
+                                "type": "Wait"
+                            },
+                            "Send_email": {
+                                "inputs": {
+                                    "body": {
+                                        "content": {
+                                            "html": "<p>An high value order of total: @{triggerBody()?['totalAmount']} is awaiting your approval to move forward.</p><br><p>You can act on it through Teams Workflow or log in to the CRM to complete the action.</p><br><p>Please note that the order will not go forward without your approval.</p><br><p>Order Details:</p><p>Order Description: @{triggerBody()?['orderDescription']}</p><p>Customer Name: @{triggerBody()?['accountName']}</p><p>Seller: @{triggerBody()?['sellerEmail']}</p><br><p>The order status has been set to Incomplete and will not be fullfilled until you approve. </p>",
+                                            "subject": "An high value order is awaiting your action"
+                                        },
+                                        "importance": "Normal",
+                                        "recipients": {
+                                            "CC": [
+                                                {
+                                                    "address": "@triggerBody()?['sellerEmail']"
+                                                }
+                                            ],
+                                            "to": [
+                                                {
+                                                    "address": "@triggerBody()?['approver']"
+                                                }
+                                            ]
+                                        },
+                                        "senderAddress": "DoNotReply@6e0573fa-0e53-46d6-9fec-9c84077712e3.azurecomm.net"
+                                    },
+                                    "host": {
+                                        "connection": {
+                                            "referenceName": "acsemail"
+                                        }
+                                    },
+                                    "method": "post",
+                                    "path": "/emails:sendGAVersion",
+                                    "queries": {
+                                        "api-version": "2023-03-31"
+                                    }
+                                },
+                                "runAfter": {
+                                    "Set_orderStatus_to_Incomplete": [
+                                        "SUCCEEDED"
+                                    ]
+                                },
+                                "type": "ApiConnection"
+                            },
+                            "Set_orderStatus_to_Incomplete": {
+                                "inputs": {
+                                    "name": "orderStatus",
+                                    "value": "Incomplete"
+                                },
+                                "runAfter": {
+                                    "Delay_-_Wait_to_send_Reminder_Email": [
+                                        "SUCCEEDED"
+                                    ]
+                                },
+                                "type": "SetVariable"
+                            }
+                        },
+                        "case": "Awaiting"
+                    },
+                    "Case_On_Hold": {
+                        "actions": {
+                            "Send_Reminder_Email": {
+                                "inputs": {
+                                    "body": {
+                                        "content": {
+                                            "html": "<p>An high value order of total: @{triggerBody()?['totalAmount']} was put On Hold</p><br><p>You can act on it through Teams Workflow or log in to the CRM to complete the action.</p><br><p>Please note that the order will be auto approved in 3 days.</p><br><p>Order Details:</p><p>Order Description: @{triggerBody()?['orderDescription']}</p><p>Customer Name: @{triggerBody()?['accountName']}</p><p>Seller: @{triggerBody()?['sellerEmail']}</p><br>",
+                                            "subject": "An high value order is awaiting your action"
+                                        },
+                                        "importance": "Normal",
+                                        "recipients": {
+                                            "CC": [
+                                                {
+                                                    "address": "@triggerBody()?['sellerEmail']"
+                                                }
+                                            ],
+                                            "to": [
+                                                {
+                                                    "address": "@triggerBody()?['approver']"
+                                                }
+                                            ]
+                                        },
+                                        "senderAddress": "DoNotReply@6e0573fa-0e53-46d6-9fec-9c84077712e3.azurecomm.net"
+                                    },
+                                    "host": {
+                                        "connection": {
+                                            "referenceName": "acsemail"
+                                        }
+                                    },
+                                    "method": "post",
+                                    "path": "/emails:sendGAVersion",
+                                    "queries": {
+                                        "api-version": "2023-03-31"
+                                    }
+                                },
+                                "runAfter": {
+                                    "Wait_to_send_Reminder_Email": [
+                                        "SUCCEEDED"
+                                    ]
+                                },
+                                "type": "ApiConnection"
+                            },
+                            "Set_orderStatus_to_Completed": {
+                                "inputs": {
+                                    "name": "orderStatus",
+                                    "value": "Complete"
+                                },
+                                "runAfter": {
+                                    "Wait_to_Send_Auto-approved_email": [
+                                        "SUCCEEDED"
+                                    ]
+                                },
+                                "type": "SetVariable"
+                            },
+                            "Wait_to_Send_Auto-approved_email": {
+                                "inputs": {
+                                    "interval": {
+                                        "count": 2,
+                                        "unit": "Minute"
+                                    }
+                                },
+                                "runAfter": {
+                                    "Send_Reminder_Email": [
+                                        "SUCCEEDED"
+                                    ]
+                                },
+                                "type": "Wait"
+                            },
+                            "Wait_to_send_Reminder_Email": {
+                                "inputs": {
+                                    "interval": {
+                                        "count": 1,
+                                        "unit": "Minute"
+                                    }
+                                },
+                                "type": "Wait"
+                            }
+                        },
+                        "case": "On Hold"
+                    },
+                    "Case_Rejected": {
+                        "actions": {
+                            "Set_orderStatus_to_Cancelled": {
+                                "inputs": {
+                                    "name": "orderStatus",
+                                    "value": "Cancelled"
+                                },
+                                "type": "SetVariable"
+                            }
+                        },
+                        "case": "Rejected"
+                    }
+                },
+                "default": {
+                    "actions": {}
+                },
+                "expression": "@triggerBody()?['approvalStatus']",
+                "runAfter": {
+                    "Set_variable": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "Switch"
+            },
+            "Update_Order_Status": {
+                "inputs": {
+                    "body": {
+                        "Order": "@{outputs('Compose')}"
+                    },
+                    "host": {
+                        "connection": {
+                            "referenceName": "azuretables"
+                        }
+                    },
+                    "method": "patch",
+                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/tables/@{encodeURIComponent('order')}/entities(PartitionKey='@{encodeURIComponent(triggerBody()?['accountID'])}',RowKey='@{encodeURIComponent(triggerBody()?['orderId'])}')"
+                },
+                "runAfter": {
+                    "Compose": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "ApiConnection"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "triggers": {
+            "When_a_HTTP_request_is_received": {
+                "inputs": {
+                    "schema": {
+                        "properties": {
+                            "accountID": {
+                                "type": "string"
+                            },
+                            "accountName": {
+                                "type": "string"
+                            },
+                            "approvalStatus": {
+                                "type": "string"
+                            },
+                            "approver": {
+                                "type": "string"
+                            },
+                            "currency": {
+                                "type": "string"
+                            },
+                            "date": {
+                                "type": "string"
+                            },
+                            "items": {
+                                "items": {
+                                    "properties": {
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "price": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "required": [
+                                        "name",
+                                        "price"
+                                    ],
+                                    "type": "object"
+                                },
+                                "type": "array"
+                            },
+                            "orderDescription": {
+                                "type": "string"
+                            },
+                            "orderId": {
+                                "type": "string"
+                            },
+                            "orderStatus": {
+                                "type": "string"
+                            },
+                            "orderType": {
+                                "type": "string"
+                            },
+                            "sellerEmail": {
+                                "type": "string"
+                            },
+                            "sellerFirstName": {
+                                "type": "string"
+                            },
+                            "sellerLastName": {
+                                "type": "string"
+                            },
+                            "totalAmount": {
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "kind": "Http",
+                "type": "Request"
+            }
+        }
+    },
+    "kind": "Stateful"
+}

@@ -1,0 +1,90 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Compose_Date": {
+                "inputs": "@setProperty(outputs('Compose_Status'),'date',utcNow())",
+                "runAfter": {
+                    "Compose_Status": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "Compose"
+            },
+            "Compose_Status": {
+                "inputs": "@setProperty(triggerOutputs()?['body/content'],'orderStatus','Pending')",
+                "runAfter": {
+                    "Initialize_variable": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "Compose"
+            },
+            "Initialize_variable": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "orderId",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "runAfter": {},
+                "type": "InitializeVariable"
+            },
+            "Insert_Entity_(V2)": {
+                "inputs": {
+                    "body": {
+                        "Order": "@{outputs('Compose_Date')}",
+                        "PartitionKey": "123",
+                        "RowKey": "@{variables('orderId')}"
+                    },
+                    "host": {
+                        "connection": {
+                            "referenceName": "azuretables"
+                        }
+                    },
+                    "method": "post",
+                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/tables/@{encodeURIComponent('order')}/entities"
+                },
+                "runAfter": {
+                    "Set_variable": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "ApiConnection"
+            },
+            "Set_variable": {
+                "inputs": {
+                    "name": "orderId",
+                    "value": "@{string(triggerOutputs()?['body/content/orderId'])}"
+                },
+                "runAfter": {
+                    "Compose_Date": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "SetVariable"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "triggers": {
+            "When_a_blob_is_added_or_updated": {
+                "conditions": [],
+                "inputs": {
+                    "parameters": {
+                        "path": "order"
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "AzureBlob",
+                        "operationId": "whenABlobIsAddedOrModified",
+                        "serviceProviderId": "/serviceProviders/AzureBlob"
+                    }
+                },
+                "type": "ServiceProvider"
+            }
+        }
+    },
+    "kind": "Stateful"
+}

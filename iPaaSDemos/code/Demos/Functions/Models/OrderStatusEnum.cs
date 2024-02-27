@@ -9,7 +9,9 @@ namespace Functions.Models
     {
         Pending,
         Processing,
+        Complete,
         Completed,
-        Cancelled
+        Cancelled,
+        Incomplete
     }
 }

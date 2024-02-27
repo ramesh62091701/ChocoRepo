@@ -1,0 +1,402 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Complete_Order": {
+                "inputs": {
+                    "body": "@string(outputs('Compose_Approval_Status'))",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "method": "POST",
+                    "uri": "https://order-management-approvals.azurewebsites.net:443/api/Complete-Orders/triggers/When_a_HTTP_request_is_received/invoke?api-version=2022-05-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=GhOAoSt9eyrNzotIljKUbQKaq36BNWk1PRnrU79GnYc"
+                },
+                "runAfter": {
+                    "Send_email": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "runtimeConfiguration": {
+                    "contentTransfer": {
+                        "transferMode": "Chunked"
+                    }
+                },
+                "type": "Http"
+            },
+            "Compose_Approval_Status": {
+                "inputs": "@setProperty(variables('order'),'approvalStatus',variables('ApprovalStatus'))",
+                "runAfter": {
+                    "Compose_Comments": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "Compose"
+            },
+            "Compose_Approval_Status_to_Requested": {
+                "inputs": "@setProperty(variables('order'),'approvalStatus',variables('ApprovalStatus'))",
+                "runAfter": {
+                    "Initialize_Approval_Status": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "Compose"
+            },
+            "Compose_Comments": {
+                "inputs": "@{setProperty(variables('order'),'approvalStatus',variables('ApprovalStatus'))}@{setProperty(variables('order'),'approverComments',body('Notify_approver_and_wait_for_action')?['comments'])}",
+                "runAfter": {
+                    "Condition": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "Compose"
+            },
+            "Condition": {
+                "actions": {
+                    "Approver_Actions": {
+                        "actions": {
+                            "Switch": {
+                                "cases": {
+                                    "Case_Approved": {
+                                        "actions": {
+                                            "Set_Approval_Status_to_Approved": {
+                                                "inputs": {
+                                                    "name": "ApprovalStatus",
+                                                    "value": "@{body('Notify_approver_and_wait_for_action')['selectedOption']}d"
+                                                },
+                                                "type": "SetVariable"
+                                            }
+                                        },
+                                        "case": "Approve"
+                                    },
+                                    "Case_On_Hold": {
+                                        "actions": {
+                                            "Set_Approval_Status_to_On_Hold": {
+                                                "inputs": {
+                                                    "name": "ApprovalStatus",
+                                                    "value": "@body('Notify_approver_and_wait_for_action')['selectedOption']"
+                                                },
+                                                "type": "SetVariable"
+                                            }
+                                        },
+                                        "case": "On Hold"
+                                    },
+                                    "Case_Rejected": {
+                                        "actions": {
+                                            "Set_Approval_Status_to_Rejected": {
+                                                "inputs": {
+                                                    "name": "ApprovalStatus",
+                                                    "value": "@{body('Notify_approver_and_wait_for_action')['selectedOption']}d"
+                                                },
+                                                "type": "SetVariable"
+                                            }
+                                        },
+                                        "case": "Reject"
+                                    }
+                                },
+                                "default": {
+                                    "actions": {
+                                        "Set_Approval_Status_to_Await": {
+                                            "inputs": {
+                                                "name": "ApprovalStatus",
+                                                "value": "Awaiting"
+                                            },
+                                            "type": "SetVariable"
+                                        }
+                                    }
+                                },
+                                "expression": "@body('Notify_approver_and_wait_for_action')['selectedOption']",
+                                "type": "Switch"
+                            }
+                        },
+                        "runAfter": {
+                            "Notify_approver_and_wait_for_action": [
+                                "SUCCEEDED"
+                            ]
+                        },
+                        "type": "Scope"
+                    },
+                    "Approver_doesn't_Action": {
+                        "actions": {
+                            "Set_Approval_Status_to_Awaiting": {
+                                "inputs": {
+                                    "name": "ApprovalStatus",
+                                    "value": "Awaiting"
+                                },
+                                "type": "SetVariable"
+                            }
+                        },
+                        "runAfter": {
+                            "Notify_approver_and_wait_for_action": [
+                                "FAILED",
+                                "TIMEDOUT"
+                            ]
+                        },
+                        "type": "Scope"
+                    },
+                    "Notify_approver_and_wait_for_action": {
+                        "inputs": {
+                            "body": {
+                                "body": {
+                                    "messageBody": "An order has been placed for @{triggerBody()?['totalAmount']} and needs your approval",
+                                    "messageTitle": "Order Approval Required",
+                                    "options": [
+                                        "Approve",
+                                        "Reject",
+                                        "On Hold"
+                                    ],
+                                    "recipient": {
+                                        "isAlert": true,
+                                        "summary": "You have an order approval pending",
+                                        "to": "@triggerBody()?['approver']"
+                                    }
+                                },
+                                "notificationUrl": "@{listCallbackUrl()}"
+                            },
+                            "host": {
+                                "connection": {
+                                    "referenceName": "teams"
+                                }
+                            },
+                            "path": "/flowbot/actions/messagewithoptions/recipienttypes/user/$subscriptions"
+                        },
+                        "type": "ApiConnectionWebhook"
+                    }
+                },
+                "else": {
+                    "actions": {}
+                },
+                "expression": {
+                    "and": [
+                        {
+                            "greaterOrEquals": [
+                                "@triggerBody()?['totalAmount']",
+                                10000
+                            ]
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Upsert_Order_Approval_Request": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "If"
+            },
+            "Initialize_Approval_Status": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "ApprovalStatus",
+                            "type": "string",
+                            "value": "Requested"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Setup_RowKey": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "Initialize_Order_JSON": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "order",
+                            "type": "object",
+                            "value": {
+                                "accountID": "@{triggerBody()?['accountID']}",
+                                "accountName": "@{triggerBody()?['accountName']}",
+                                "approver": "@{triggerBody()?['approver']}",
+                                "currency": "@{triggerBody()?['currency']}",
+                                "date": "@{triggerBody()?['date']}",
+                                "items": "@triggerBody()?['items']",
+                                "orderDescription": "@{triggerBody()?['orderDescription']}",
+                                "orderId": "@{triggerBody()?['orderId']}",
+                                "orderStatus": "Processing",
+                                "orderType": "@{triggerBody()?['orderType']}",
+                                "sellerEmail": "@{triggerBody()?['sellerEmail']}",
+                                "sellerFirstName": "@{triggerBody()?['sellerFirstName']}",
+                                "sellerLastName": "@{triggerBody()?['sellerLastName']}",
+                                "totalAmount": "@triggerBody()?['totalAmount']"
+                            }
+                        }
+                    ]
+                },
+                "runAfter": {},
+                "type": "InitializeVariable"
+            },
+            "Send_email": {
+                "inputs": {
+                    "body": {
+                        "content": {
+                            "html": "<p>Your recently placed high value order has been @{variables('ApprovalStatus')}.</p><br><p>Comments from Approver:</p><p>@{body('Notify_approver_and_wait_for_action')?['comments']}</p><br><p>Please contact @{triggerBody()?['approver']} for more details.</p>",
+                            "subject": "Your high value order has been '@{variables('ApprovalStatus')}'"
+                        },
+                        "importance": "Normal",
+                        "recipients": {
+                            "CC": [
+                                {
+                                    "address": "@triggerBody()?['approver']"
+                                }
+                            ],
+                            "to": [
+                                {
+                                    "address": "@triggerBody()?['sellerEmail']"
+                                }
+                            ]
+                        },
+                        "senderAddress": "DoNotReply@6e0573fa-0e53-46d6-9fec-9c84077712e3.azurecomm.net"
+                    },
+                    "host": {
+                        "connection": {
+                            "referenceName": "acsemail"
+                        }
+                    },
+                    "method": "post",
+                    "path": "/emails:sendGAVersion",
+                    "queries": {
+                        "api-version": "2023-03-31"
+                    }
+                },
+                "runAfter": {
+                    "Update_Approval_Status_to_Order": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "ApiConnection"
+            },
+            "Setup_RowKey": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "RowKey",
+                            "type": "string",
+                            "value": "@triggerBody()?['orderId']"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_Order_JSON": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "Update_Approval_Status_to_Order": {
+                "inputs": {
+                    "body": {
+                        "Order": "@{outputs('Compose_Approval_Status')} "
+                    },
+                    "host": {
+                        "connection": {
+                            "referenceName": "azuretables"
+                        }
+                    },
+                    "method": "patch",
+                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/tables/@{encodeURIComponent('order')}/entities(PartitionKey='@{encodeURIComponent(triggerBody()?['accountID'])}',RowKey='@{encodeURIComponent(variables('RowKey'))}')"
+                },
+                "runAfter": {
+                    "Compose_Approval_Status": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "ApiConnection"
+            },
+            "Upsert_Order_Approval_Request": {
+                "inputs": {
+                    "body": {
+                        "Order": " @{outputs('Compose_Approval_Status_to_Requested')}"
+                    },
+                    "host": {
+                        "connection": {
+                            "referenceName": "azuretables"
+                        }
+                    },
+                    "method": "patch",
+                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/tables/@{encodeURIComponent('order')}/entities(PartitionKey='@{encodeURIComponent(triggerBody()?['accountID'])}',RowKey='@{encodeURIComponent(variables('RowKey'))}')"
+                },
+                "runAfter": {
+                    "Compose_Approval_Status_to_Requested": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "ApiConnection"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "triggers": {
+            "Receive_Order_Approval_request": {
+                "inputs": {
+                    "schema": {
+                        "properties": {
+                            "accountID": {
+                                "type": "string"
+                            },
+                            "accountName": {
+                                "type": "string"
+                            },
+                            "approver": {
+                                "type": "string"
+                            },
+                            "currency": {
+                                "type": "string"
+                            },
+                            "date": {
+                                "type": "string"
+                            },
+                            "items": {
+                                "items": {
+                                    "properties": {
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "price": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "required": [
+                                        "name",
+                                        "price"
+                                    ],
+                                    "type": "object"
+                                },
+                                "type": "array"
+                            },
+                            "orderDescription": {
+                                "type": "string"
+                            },
+                            "orderId": {
+                                "type": "string"
+                            },
+                            "orderStatus": {
+                                "type": "string"
+                            },
+                            "orderType": {
+                                "type": "string"
+                            },
+                            "sellerEmail": {
+                                "type": "string"
+                            },
+                            "sellerFirstName": {
+                                "type": "string"
+                            },
+                            "sellerLastName": {
+                                "type": "string"
+                            },
+                            "totalAmount": {
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "kind": "Http",
+                "type": "Request"
+            }
+        }
+    },
+    "kind": "Stateful"
+}
