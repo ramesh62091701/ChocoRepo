@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Fabric;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.ServiceFabric.Actors.Client;
+using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Services.Runtime;
 
 namespace Stateless1
@@ -16,8 +18,13 @@ namespace Stateless1
         /// <summary>
         /// This is the entry point of the service host process.
         /// </summary>
-        private static void Main()
+        private static async Task Main()
         {
+            var actorId = ActorId.CreateRandom();
+            var actor = ActorProxy.Create<IMyactor>(actorId, new Uri("fabric:/Stateless1/Stateless1Type"));
+
+            var result = await actor.GetNameAsync();
+            Console.WriteLine(result);
             try
             {
                 // The ServiceManifest.XML file defines one or more service type names.

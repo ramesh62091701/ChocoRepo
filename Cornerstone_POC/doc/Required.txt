@@ -1,0 +1,3 @@
+React component files with grid or table, where there are not more changes are done which is one to one equivalent to aspx code.
+Need some Compileable aspx code
+Need bin folders for all dll
