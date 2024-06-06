@@ -34,9 +34,10 @@ namespace ASP_to_React_Migration.Service
                 model = model,
                 messages = new[]
                 {
-                new { role = "system", content = systemPrompt },
-                new { role = "user", content = prompt }
-            }
+                    new { role = "system", content = systemPrompt },
+                    new { role = "user", content = prompt }
+                },
+                temperature = 0
             };
 
             var jsonRequestBody = JsonConvert.SerializeObject(requestBody);
