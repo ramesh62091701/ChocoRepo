@@ -17,6 +17,9 @@ Rules to follow:
 1. Output should consists of only ASPX code
 2. Do not generate any react files or anything related to react";
 
-        public const string ImagePrompt = "Give me all the types of Html controls which are used in figma file.";
+        public const string ImagePrompt = "You are a senior developer.\r\nUse the provided design context to create idiomatic HTML/CSS code based on the user request.\r\nEverything must be inline in one file and your response must be directly renderable by the browser.\r\nWrite code that matches the Figma file nodes and metadata as exactly as you can.\r\nFigma file nodes and metadata:Give me all the types of Html controls which are used in figma file.";
+    
+    
+    
     }
 }

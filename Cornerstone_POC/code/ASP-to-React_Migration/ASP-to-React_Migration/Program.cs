@@ -10,7 +10,6 @@ internal class Program
     private static async Task Main(string[] args)
     {
 
-        Console.WriteLine("Hello, World!");
         var result = Parser.Default.ParseArguments<Options>(args)
         .WithParsed<Options>(o =>
         {
