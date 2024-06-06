@@ -19,6 +19,7 @@ internal class Program
             Console.ForegroundColor = fgColor;
         });
 
+
         var response = await Extractor.MigrateToReact(result.Value.ImagePath , result.Value.PathForNewProject);
 
 
