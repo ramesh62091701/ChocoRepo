@@ -1,0 +1,34 @@
+﻿{
+  "items": [
+    {
+      "to": "/",
+      "label": "Home",
+      "disable": false
+    },
+    {
+      "to": "/Breadcrumb1",
+      "label": "Breadcrumb 1",
+      "disable": false
+    },
+    {
+      "to": "/Breadcrumb2",
+      "label": "Breadcrumb 2",
+      "disable": false
+    },
+    {
+      "to": "/Breadcrumb3",
+      "label": "Breadcrumb 3",
+      "disable": false
+    },
+    {
+      "to": "/Breadcrumb4",
+      "label": "Breadcrumb 4",
+      "disable": false
+    },
+    {
+      "to": "/Breadcrumb5",
+      "label": "Breadcrumb 5",
+      "disable": false
+    }
+  ]
+}

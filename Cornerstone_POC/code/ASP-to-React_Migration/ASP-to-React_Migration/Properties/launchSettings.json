@@ -1,8 +1,7 @@
 {
   "profiles": {
     "ASP-to-React_Migration": {
-      "commandName": "Project",
-      "commandLineArgs": "-i \"C:\\Users\\m.abhishek.SONATA\\Downloads\\Figma\\Desktop - 96assign-training.png\" -n \"D:\\Generated-React-Files\""
+      "commandName": "Project"
     }
   }
 }
