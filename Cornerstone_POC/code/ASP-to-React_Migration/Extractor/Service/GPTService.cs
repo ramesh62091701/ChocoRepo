@@ -27,7 +27,7 @@ namespace Extractor.Service
         public async Task<(string Message, string Id)> GetAiResponse(string prompt, string systemPrompt, string model, bool logResponse)
         {
 
-
+            Logger.Log("Getting AI Response");
             var requestBody = new
             {
                 model = model,
@@ -77,7 +77,7 @@ namespace Extractor.Service
 
         public async Task<(string Message, string Id)> GetAiResponseForImage(string prompt, string systemPrompt, string model, bool logResponse ,string imagePath)
         {
-
+            Logger.Log("Reading Image");
             string base64Image = EncodeImage(imagePath);
 
             var requestBody = new
@@ -143,19 +143,6 @@ namespace Extractor.Service
         {
             byte[] imageArray = File.ReadAllBytes(imagePath);
             return Convert.ToBase64String(imageArray);
-        }
-
-
-        private void Log(string message)
-        {
-            //Local debugging
-            var path = Environment.GetEnvironmentVariable("logPath");
-            if (!string.IsNullOrEmpty(path))
-            {
-                string logFileName = $"log_{DateTime.Now:yyyyMMddHHmmssfff}.txt";
-                string logFilePath = Path.Combine(path, logFileName);
-                File.AppendAllText(logFilePath, message);
-            }
         }
     }
 }

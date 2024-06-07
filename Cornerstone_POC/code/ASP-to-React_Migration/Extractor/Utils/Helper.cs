@@ -26,6 +26,13 @@ namespace Extractor.Utils
             return new Tuple<string, string>(keys[0], keys[1]);
         }
 
-        
+        public static void CreateFile(string destinationPath, string filename, string content)
+        {
+            string filePath = Path.Combine(destinationPath, filename);
+            File.WriteAllText(filePath, content);
+            Logger.Log("File Created in path :" + filePath);
+        }
+
+
     }
 }

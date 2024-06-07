@@ -1,0 +1,92 @@
+﻿[
+  {
+    "type": "Dropdown",
+    "label": "Training purpose",
+    "options": [ "Select Purpose" ]
+  },
+  {
+    "type": "DatePicker",
+    "label": "Due date",
+    "placeholder": "MM/DD/YYYY"
+  },
+  {
+    "type": "TextArea",
+    "label": "Add comments",
+    "placeholder": "Enter comment"
+  },
+  {
+    "type": "Checkbox",
+    "label": "Automatically register users"
+  },
+  {
+    "type": "DataGrid",
+    "table-name": "Pending users",
+    "total-rows": 6,
+    "column-names": [ "Employees", "User ID", "Division", "Position", "Direct Manager", "Assignment History", "Current Status" ],
+    "rows": [
+      {
+        "Employees": "Abigail Barrister",
+        "User ID": "csodadmin",
+        "Division": "D12345",
+        "Position": "Manager",
+        "Direct Manager": "Terry Pratchett",
+        "Assignment History": "0",
+        "Current Status": "None"
+      },
+      {
+        "Employees": "Jason Bloehm",
+        "User ID": "csodadmin",
+        "Division": "D12345",
+        "Position": "System Administrator",
+        "Direct Manager": "Terry Pratchett",
+        "Assignment History": "1",
+        "Current Status": "Registered"
+      },
+      {
+        "Employees": "Colleen Daniels",
+        "User ID": "csodadmin",
+        "Division": "D12345",
+        "Position": "Consultant",
+        "Direct Manager": "Terry Pratchett",
+        "Assignment History": "0",
+        "Current Status": "None"
+      },
+      {
+        "Employees": "Christian Darwin",
+        "User ID": "csodadmin",
+        "Division": "D12345",
+        "Position": "Consultant",
+        "Direct Manager": "Terry Pratchett",
+        "Assignment History": "0",
+        "Current Status": "None"
+      },
+      {
+        "Employees": "Daphne Dupont",
+        "User ID": "csodadmin",
+        "Division": "D12345",
+        "Position": "Manager",
+        "Direct Manager": "David Eddings",
+        "Assignment History": "0",
+        "Current Status": "None"
+      },
+      {
+        "Employees": "Andrew Feyrnes",
+        "User ID": "csodadmin",
+        "Division": "D12345",
+        "Position": "Assistant Manager",
+        "Direct Manager": "David Eddings",
+        "Assignment History": "1",
+        "Current Status": "In Progress"
+      }
+    ],
+    "pages": "1 of 6"
+  },
+  {
+    "type": "Button",
+    "label": "Cancel"
+  },
+  {
+    "type": "Button",
+    "label": "Submit"
+  }
+]

@@ -12,7 +12,7 @@ namespace Extractor.Model
 
         public const string SysPrompt= "You are expert in understanding the aspx files. Your job is to convert aspx frontend file to its equivalent React files";
 
-        public const string ReactSysPrompt = "You are expert in converting plain HTML / CSS to react.\r\nRules to follow while converting HTML to CSS:\r\n1.Use React UI for all the components";
+        public const string ReactSysPrompt = "You are expert in converting plain HTML / CSS to react.\r\nRules to follow while converting HTML to CSS:\r\n1.Use MUI components for all the controls";
 
         public const string AspxPrompt = $@"Understand the above ASPX-File and divide it into multiple parts which would be easier to later convert it to react code. 
 Rules to follow:

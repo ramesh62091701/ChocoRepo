@@ -1,5 +1,6 @@
 using Extractor;
 using Extractor.Model;
+using Extractor.Service;
 using Extractor.Utils;
 
 namespace Aspx_To_React
@@ -29,8 +30,9 @@ namespace Aspx_To_React
                 AspxPagePath = txtAspxPath.Text,
                 ImagePath = txtFigmaPath.Text,
                 OutputPath = txtOutput.Text,
+                IsCSOD = radioButton2.Checked
             };
-            await Processor.MigrateToReact(request);
+            await Processor.Migrate(request);
         }
 
         private void button1_Click(object sender, EventArgs e)

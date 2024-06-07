@@ -8,7 +8,7 @@ namespace Extractor.Model
 {
     public class FileContent
     {
-        public string file { get; set; }
+        public string filename { get; set; }
         public string content { get; set; }
     }
 }

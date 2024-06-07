@@ -27,7 +27,7 @@ namespace ASP_to_React_Migration.Service
 
         public async Task<(string Message, string Id)> GetAiResponse(string prompt, string systemPrompt, string model, bool logResponse)
         {
-
+            Console.WriteLine("Calling AI");
 
             var requestBody = new
             {
@@ -78,7 +78,7 @@ namespace ASP_to_React_Migration.Service
 
         public async Task<(string Message, string Id)> GetAiResponseForImage(string prompt, string systemPrompt, string model, bool logResponse ,string imagePath)
         {
-
+            Console.WriteLine("Reading Image");
             string base64Image = EncodeImage(imagePath);
 
             var requestBody = new

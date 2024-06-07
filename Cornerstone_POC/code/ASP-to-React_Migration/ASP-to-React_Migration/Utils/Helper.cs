@@ -33,6 +33,13 @@ namespace ASP_to_React_Migration.Utils
             return config["key"];
         }
 
-        
+        public static void CreateFile(string destinationPath, string filename, string content)
+        {
+            string filePath = Path.Combine(destinationPath, filename);
+            File.WriteAllText(filePath, content);
+            Console.WriteLine("File Created in path :"+filePath);
+        }
+
+
     }
 }

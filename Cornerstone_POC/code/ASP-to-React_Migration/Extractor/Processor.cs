@@ -22,14 +22,36 @@ namespace Extractor
             var reactResponse = await gptService.GetAiResponse(reactPrompt, Constants.ReactSysPrompt, Constants.Model, true);
 
             //Get Separate controls  
-            var separatePrompt = $"<React-Code>\n{reactResponse.Message}\n</React-Code>" + "\n\nFrom above React-Code separate all the components like Grid,Breadcrumb etc and call those components from index file and use .jsx file to create a components";
+            var separatePrompt = @$"
+<React-Code>
+{reactResponse.Message}
+</React-Code>
+From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from the provided React code and convert them into JSON data following these rules:
+1.Generate only JSON data without any explanation.
+2.Call all components in the App.js file.
+3.Remember to write all CSS styles for the react component in a 'App.css' file.
+4.Use 'src/component/filename' for components in the JSON response filename.
+5.Use the specified JSON format for the response.
+[
+	{{
+		""filename"" : ""src/App.js"",
+		""content"" : ""its code""
+	}},
+	{{
+		""filename"" : ""src/components/Grid.jsx"",
+		""content"" : ""its code""
+	}},
+	{{
+		""filename"" : ""src/components/component.css"",
+		""content"" : ""css style code""
+	}},
+]";
+            
+            
             var reactSeparateResponse = await gptService.GetAiResponse(separatePrompt, Constants.ReactSysPrompt, Constants.Model, true);
 
-            var separate2Prompt = $"<React-Code> {reactSeparateResponse.Message} </React-Code>\n\nConvert the React code in Json in below format.\nRules to follow:\n1.Strictly generate only json data do not give explanation before or after json. \n[\r\n\t{{\r\n\t\t\"file\" : \"app.jsx\",\r\n\t\t\"content\" : \"its code\"\r\n\t}},\r\n\t{{\r\n\t\t\"file\" : \"src/components/grid.jsx\",\r\n\t\t\"content\" : \"its code\"\r\n\t}},\r\n]";
-            var separate2Response = await gptService.GetAiResponse(separate2Prompt, Constants.ReactSysPrompt, Constants.Model, true);
-
             string pattern = @"\[[\s\S]*\]";
-            Match match = Regex.Match(separate2Response.Message, pattern);
+            Match match = Regex.Match(reactSeparateResponse.Message, pattern);
 
             if (!match.Success)
             {
@@ -50,7 +72,7 @@ namespace Extractor
             {
                 foreach (var rootObject in rootObjects)
                 {
-                    string filePath = Path.Combine(request.OutputPath, rootObject.file);
+                    string filePath = Path.Combine(request.OutputPath, rootObject.filename);
                     string directoryPath = Path.GetDirectoryName(filePath);
                     if (!Directory.Exists(directoryPath))
                         Directory.CreateDirectory(directoryPath);
@@ -61,6 +83,22 @@ namespace Extractor
             }
 
             return true;
+        }
+
+        public async static Task<bool> MigrateToCSODReact(Request request)
+        {
+            await DataGridProcessor.Process(request);
+            return true;
+        }
+
+        public async static Task<bool> Migrate(Request request)
+        {
+            if (request.IsCSOD)
+            {
+                await MigrateToCSODReact(request);
+                return true;
+            }
+            return await MigrateToReact(request);
         }
     }
 }
