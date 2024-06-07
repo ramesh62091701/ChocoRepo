@@ -93,7 +93,10 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
 
         public async static Task<bool> MigrateWithFigma(Request request)
         {
-            await FigmaHelper.GetContents(request.ImagePath);
+            var htmlContent = await FigmaHelper.GetContents(request.ImagePath);
+
+            Helper.CreateFile(request.OutputPath, "index.html", htmlContent);
+
             return true;
         }
 

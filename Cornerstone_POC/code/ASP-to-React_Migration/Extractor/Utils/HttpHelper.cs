@@ -10,7 +10,7 @@ namespace Extractor.Utils
 {
     public class HttpHelper
     {
-        public static HttpClient httpClient = new HttpClient();
+        public static HttpClient httpClient = new HttpClient() { Timeout=TimeSpan.FromSeconds(300)};
 
         public static async Task<string> Execute<TReq, TRes>(TReq input, HttpMethod method, string contentType, string token, string url)
         {

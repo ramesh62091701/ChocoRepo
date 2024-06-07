@@ -1,4 +1,5 @@
 ﻿using Extractor.Model;
+using Extractor.Service;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -11,7 +12,7 @@ namespace Extractor.Utils
 {
     public static class FigmaHelper
     {
-        private static List<string> ContentsToRemove = new List<string>{ "id", "scrollBehavior" , "imageRef", "blendMode" , "layoutAlign" , "layoutGrow", "scaleMode" , "exportSettings", "letterSpacing", "clipsContent" , "itemSpacing", "layoutWrap" , "lineIndentations", "lineTypes", "characterStyleOverrides" };
+        private static List<string> ContentsToRemove = new List<string>{ "id", "scrollBehavior" , "imageRef", "blendMode" , "layoutAlign" , "layoutGrow", "scaleMode" , "exportSettings", "letterSpacing", "clipsContent" , "itemSpacing", "layoutWrap" , "lineIndentations", "lineTypes", "characterStyleOverrides", "visible" , "x" ,"y" , "key"};
         public async static Task<string> GetContents(string fileUrl)
         {
             var contents = await HttpHelper.ExecuteGet("application/json", "X-Figma-Token", Configuration.FigmaToken, fileUrl);
@@ -22,16 +23,15 @@ namespace Extractor.Utils
 
             string filteredJsonString = JsonConvert.SerializeObject(json, Formatting.Indented);
 
-            var lines = contents.Split(Environment.NewLine);
-            var builder = new StringBuilder();
+            var gptService = new GPTService();
+            var prompt = $@"<Figma-json>{filteredJsonString}</Figma-json>
 
-            foreach (var line in lines)
-            {
-                if (!KeyExists(line))
-                    builder.AppendLine(line);
-            }
+From above Figma json create a HTML and CSS in single file.
+Remember generate only HTML markup with CSS, do not give any explanation.";
+            var response = await gptService.GetAiResponse(prompt, String.Empty, Constants.Model, true);
 
-            return builder.ToString();
+            return response.Message;
+            
         }
 
         private static bool KeyExists(string key)
@@ -61,6 +61,10 @@ namespace Extractor.Utils
                     }
                     else
                     {
+                        if(prop.Value.Type == JTokenType.Float)
+                        {
+                            prop.Value = Math.Round(prop.Value.Value<float>(), 2);
+                        }
                         RemoveKeys(prop.Value, keysToRemove);
                     }
                 }

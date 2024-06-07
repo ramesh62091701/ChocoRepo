@@ -14,7 +14,7 @@ namespace Extractor.Service
     public class GPTService
     {
 
-        private static readonly HttpClient client = new HttpClient();
+        private static readonly HttpClient client = new HttpClient() {Timeout= TimeSpan.FromSeconds(300)};
         private readonly string apiKey;
         private readonly string apiUrl;
 
