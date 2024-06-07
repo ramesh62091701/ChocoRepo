@@ -10,6 +10,7 @@ namespace Extractor.Utils
     {
         public const string GptApiKey = "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";
         public const string GptUrl = "https://api.openai.com/v1/chat/completions";
+        public const string FigmaToken = "figd_SnGSVtDwY72khK4UaD1WjM4DQKjrLG9nfDdCTZgh";
 
     }
 }

@@ -30,7 +30,8 @@ namespace Aspx_To_React
                 AspxPagePath = txtAspxPath.Text,
                 ImagePath = txtFigmaPath.Text,
                 OutputPath = txtOutput.Text,
-                IsCSOD = radioButton2.Checked
+                IsCSOD = radioButton2.Checked,
+                IsFigmaUrl = txtFigmaPath.Text?.StartsWith("http") ?? false
             };
             await Processor.Migrate(request);
         }

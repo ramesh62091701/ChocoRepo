@@ -30,7 +30,7 @@ namespace Extractor.Utils
             return responseString;
         }
 
-        public static async Task<TRes> ExecuteGet<TRes>(string contentType, string token, string url)
+        public static async Task<TRes> ExecuteGet<TRes>(string contentType, string tokenName, string token, string url)
         {
             var message = new HttpRequestMessage();
             message.Method = HttpMethod.Get;
@@ -38,7 +38,7 @@ namespace Extractor.Utils
             message.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(contentType));
             if (!string.IsNullOrEmpty(token))
             {
-                message.Headers.Add("X-TOKEN", token);
+                message.Headers.Add(tokenName, token);
             }
             message.RequestUri = new Uri(url);
             var response = await httpClient.SendAsync(message);
@@ -46,7 +46,7 @@ namespace Extractor.Utils
             return JsonConvert.DeserializeObject<TRes>(responseString);
         }
 
-        public static async Task<string> ExecuteGet(string contentType, string token, string url)
+        public static async Task<string> ExecuteGet(string contentType, string tokenName, string token, string url)
         {
             var message = new HttpRequestMessage();
             message.Method = HttpMethod.Get;
@@ -54,7 +54,7 @@ namespace Extractor.Utils
             message.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(contentType));
             if (!string.IsNullOrEmpty(token))
             {
-                message.Headers.Add("X-TOKEN", token);
+                message.Headers.Add(tokenName, token);
             }
             message.RequestUri = new Uri(url);
             var response = await httpClient.SendAsync(message);
