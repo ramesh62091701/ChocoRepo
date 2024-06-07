@@ -91,11 +91,22 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
             return true;
         }
 
+        public async static Task<bool> MigrateWithFigma(Request request)
+        {
+            await FigmaHelper.GetContents(request.ImagePath);
+            return true;
+        }
+
         public async static Task<bool> Migrate(Request request)
         {
             if (request.IsCSOD)
             {
                 await MigrateToCSODReact(request);
+                return true;
+            }
+            if (request.IsFigmaUrl)
+            {
+                await MigrateWithFigma(request);
                 return true;
             }
             return await MigrateToReact(request);
