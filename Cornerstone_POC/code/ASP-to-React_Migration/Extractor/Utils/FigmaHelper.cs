@@ -22,11 +22,6 @@ namespace Extractor.Utils
 
             string filteredJsonString = JsonConvert.SerializeObject(json, Formatting.Indented);
 
-
-
-
-
-
             var lines = contents.Split(Environment.NewLine);
             var builder = new StringBuilder();
 
@@ -57,8 +52,10 @@ namespace Extractor.Utils
 
                 foreach (var prop in properties)
                 {
-                    if(prop.Value.Type == JTokenType.String && prop.Value.Value<string>()  )
-                    if (keysToRemove.Contains(prop.Name))
+                    if (keysToRemove.Contains(prop.Name)
+                      || prop.Value.Type == JTokenType.String && string.IsNullOrEmpty(prop.Value.Value<string>())
+                      || prop.Value.Type == JTokenType.Integer && prop.Value.Value<int>() == 0
+                        )
                     {
                         prop.Remove();
                     }
@@ -71,6 +68,11 @@ namespace Extractor.Utils
             else if (token.Type == JTokenType.Array)
             {
                 var array = (JArray)token;
+                if (!array.HasValues)
+                {
+                    array.Parent?.Remove();
+                    return;
+                }
                 foreach (var item in array)
                 {
                     RemoveKeys(item, keysToRemove);
