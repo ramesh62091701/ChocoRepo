@@ -20,13 +20,15 @@ namespace Extractor
             return await FigmaHelper.GetContents(request.FigmaUrl);
         }
 
-        public async static Task<bool> MigrateToReact(Request request)
+        private async static Task<bool> MigrateToReactInternal(Request request)
         {
             var gptService = new GPTService();
 
             //Get HTML for Figma
-            var htmlResponse = await gptService.GetAiResponseForImage(Constants.FigmaImageToHTMLPrompt, Constants.SysPrompt, Constants.Model, true, request.ImagePath);
-            var reactPrompt = $"<HTML-Code>\n{htmlResponse.Message}\n</HTML-Code>" + "\n\nConvert above HTML Code to react code.\nCreate one single react page.";
+            var htmlResponse = await GetHTMLFromFigma(request);
+            var reactPrompt = @$"<HTML-Code>\n{htmlResponse}\n</HTML-Code>
+Convert above HTML Code to react code.
+Create one single react page.";
 
             //Get React 
             var reactResponse = await gptService.GetAiResponse(reactPrompt, Constants.ReactSysPrompt, Constants.Model, true);
@@ -56,10 +58,7 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
 		""content"" : ""css style code""
 	}},
 ]";
-            
-            
             var reactSeparateResponse = await gptService.GetAiResponse(separatePrompt, Constants.ReactSysPrompt, Constants.Model, true);
-
             string pattern = @"\[[\s\S]*\]";
             Match match = Regex.Match(reactSeparateResponse.Message, pattern);
 
@@ -70,14 +69,12 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
             }
 
             string jsonArray = match.Value;
-
             List<FileContent> rootObjects = JsonSerializer.Deserialize<List<FileContent>>(jsonArray)!;
             if (rootObjects == null)
             {
                 Logger.Log("Deserialization failed or the JSON response is empty.");
                 return false;
             }
-
             if (rootObjects != null)
             {
                 foreach (var rootObject in rootObjects)
@@ -87,11 +84,9 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
                     if (!Directory.Exists(directoryPath))
                         Directory.CreateDirectory(directoryPath);
                     await File.WriteAllTextAsync(filePath, rootObject.content);
-
                     Logger.Log($"File created: {filePath}");
                 }
             }
-
             return true;
         }
 
@@ -100,16 +95,6 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
             await DataGridProcessor.Process(request);
             return true;
         }
-
-        public async static Task<bool> MigrateWithFigma(Request request)
-        {
-            var htmlContent = await FigmaHelper.GetContents(request.ImagePath);
-
-            Helper.CreateFile(request.OutputPath, "index.html", htmlContent);
-
-            return true;
-        }
-
 
         public async static Task<bool> MigrateToHtml(Request request)
         {
@@ -128,19 +113,20 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
             return true;
         }
 
-        public async static Task<bool> Migrate(Request request)
+        public async static Task<bool> MigrateToReact(Request request)
         {
+            Logger.Log("Started processing...");
             if (request.IsCustom)
             {
                 await MigrateToCSODReact(request);
-                return true;
             }
-            if (request.IsFigmaUrl)
+            else
             {
-                await MigrateWithFigma(request);
-                return true;
+                // First convert to html then convert html to react.
+                await MigrateToReactInternal(request);
             }
-            return await MigrateToReact(request);
+            Logger.Log("Completed.");
+            return true;
         }
     }
 }

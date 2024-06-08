@@ -65,6 +65,7 @@
             txtFigmaPath.Name = "txtFigmaPath";
             txtFigmaPath.Size = new Size(612, 31);
             txtFigmaPath.TabIndex = 0;
+            txtFigmaPath.Text = "D:\\Demo\\CSOD\\image.png";
             // 
             // btnConvert
             // 
@@ -119,6 +120,7 @@
             txtOutput.Name = "txtOutput";
             txtOutput.Size = new Size(612, 31);
             txtOutput.TabIndex = 6;
+            txtOutput.Text = "D:\\Demo\\CSOD\\output";
             // 
             // lblOutput
             // 

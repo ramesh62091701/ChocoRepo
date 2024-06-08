@@ -30,7 +30,7 @@ namespace Extractor.Utils
         {
             string filePath = Path.Combine(destinationPath, filename);
             File.WriteAllText(filePath, content);
-            Logger.Log("File Created in path :" + filePath);
+            Logger.Log("File Created in path: " + filePath);
         }
 
 
