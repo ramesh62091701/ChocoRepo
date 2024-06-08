@@ -90,7 +90,7 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
             return true;
         }
 
-        public async static Task<bool> MigrateToCSODReact(Request request)
+        private async static Task<bool> MigrateToCSODReact(Request request)
         {
             await DataGridProcessor.Process(request);
             return true;

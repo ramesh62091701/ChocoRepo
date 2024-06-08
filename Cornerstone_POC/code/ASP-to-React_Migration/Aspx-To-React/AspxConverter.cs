@@ -16,7 +16,14 @@ namespace Aspx_To_React
 
         private void UpdateLog(string message)
         {
-            txtLogs.AppendText($"\r\n{message}");
+            if (string.IsNullOrEmpty(txtLogs.Text))
+            {
+                txtLogs.AppendText($"\r\n{message}");
+            }
+            else
+            {
+                txtLogs.AppendText($"\r\n{message}");
+            }
         }
 
         private void ClearLog()
