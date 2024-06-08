@@ -77,9 +77,8 @@ namespace Extractor.Service
 
         public async Task<(string Message, string Id)> GetAiResponseForImage(string prompt, string systemPrompt, string model, bool logResponse ,string imagePath)
         {
-            Logger.Log("Reading Image");
+            Logger.Log("Proessing Image...");
             string base64Image = EncodeImage(imagePath);
-
             var requestBody = new
             {
                 model = "gpt-4o",
@@ -112,28 +111,24 @@ namespace Extractor.Service
             }
 
             HttpResponseMessage response = await client.PostAsync(apiUrl, content);
+            Logger.Log("Processing Image completed...");
             string responseBody = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
             {
-
                 var parsedResponse = (JObject)JsonConvert.DeserializeObject(responseBody);
-
                 var message = parsedResponse["choices"][0]["message"]["content"].ToString();
                 var id = parsedResponse["id"]?.ToString();
                 var logMessage = "\n\nSystem Prompt = " + systemPrompt + "\n\n\nUser Prompt = " + prompt + "\n\n\nAssistant Response = " + message;
                 if (logResponse)
                 {
-                    Console.WriteLine("Response:");
-                    Console.WriteLine(message);
-
+                    Console.WriteLine($"Response: {message}");
                 }
                 return (Message: message, Id: id);
             }
             else
             {
-                Console.WriteLine($"Error: {response.StatusCode}");
-                Console.WriteLine(responseBody);
+                Console.WriteLine($"Error: {response.StatusCode}, {responseBody}");
                 var errorMessage = $"Error: {response.StatusCode}. Response Body: {responseBody}";
                 return (Message: errorMessage, Id: string.Empty);
             }

@@ -19,9 +19,18 @@ Rules to follow:
 1. Output should consists of only ASPX code
 2. Do not generate any react files or anything related to react";
 
-        public const string ImagePrompt = "You are a senior developer.\r\nUse the provided design context to create idiomatic HTML/CSS code based on the user request.\r\nEverything must be inline in one file and your response must be directly renderable by the browser.\r\nWrite code that matches the Figma file nodes and metadata as exactly as you can.";
-    
-    
-    
+        public const string FigmaImageToHTMLPrompt = @"You are a senior developer.
+Use the provided design context to create idiomatic HTML/CSS code based on the user request. Create responsive UI.
+Everything must be inline in one file and your response must be directly renderable by the browser.
+Write code that matches the Figma file nodes and metadata as exactly as you can.";
+
+        public const string FigmaUrlToHTMLPrompt = @"From above Figma json create a HTML and CSS in single file.
+Use the provided design context to create idiomatic HTML/CSS code based on the user request. Create responsive UI.
+Everything must be inline in one file and your response must be directly renderable by the browser.
+Remember generate only HTML markup with CSS, do not give any explanation.";
+
+
+
+
     }
 }

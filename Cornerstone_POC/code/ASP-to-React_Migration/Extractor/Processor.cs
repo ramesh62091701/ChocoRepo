@@ -9,13 +9,23 @@ namespace Extractor
 
     public static class Processor
     {
+        private async static Task<string> GetHTMLFromFigma(Request request)
+        {
+            if (!request.IsFigmaUrl)
+            {
+                var gptService = new GPTService();
+                var htmlResponse = await gptService.GetAiResponseForImage(Constants.FigmaImageToHTMLPrompt, string.Empty, Constants.Model, true, request.ImagePath);
+                return htmlResponse.Message;
+            }
+            return await FigmaHelper.GetContents(request.FigmaUrl);
+        }
 
         public async static Task<bool> MigrateToReact(Request request)
         {
             var gptService = new GPTService();
 
             //Get HTML for Figma
-            var htmlResponse = await gptService.GetAiResponseForImage(Constants.ImagePrompt, Constants.SysPrompt, Constants.Model, true, request.ImagePath);
+            var htmlResponse = await gptService.GetAiResponseForImage(Constants.FigmaImageToHTMLPrompt, Constants.SysPrompt, Constants.Model, true, request.ImagePath);
             var reactPrompt = $"<HTML-Code>\n{htmlResponse.Message}\n</HTML-Code>" + "\n\nConvert above HTML Code to react code.\nCreate one single react page.";
 
             //Get React 
@@ -100,9 +110,27 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
             return true;
         }
 
+
+        public async static Task<bool> MigrateToHtml(Request request)
+        {
+            Logger.Log("Started processing...");
+            var htmlContent = await GetHTMLFromFigma(request);
+            if (htmlContent.StartsWith("```html"))
+            {
+                htmlContent = htmlContent.Substring(7);
+            }
+            if (htmlContent.EndsWith("```"))
+            {
+                htmlContent = htmlContent.Substring(0, htmlContent.Length - 3);
+            }
+            Helper.CreateFile(request.OutputPath, "index.html", htmlContent);
+            Logger.Log("Completed.");
+            return true;
+        }
+
         public async static Task<bool> Migrate(Request request)
         {
-            if (request.IsCSOD)
+            if (request.IsCustom)
             {
                 await MigrateToCSODReact(request);
                 return true;

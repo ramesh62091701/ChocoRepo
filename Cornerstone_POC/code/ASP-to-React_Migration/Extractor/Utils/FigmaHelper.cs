@@ -16,20 +16,13 @@ namespace Extractor.Utils
         public async static Task<string> GetContents(string fileUrl)
         {
             var contents = await HttpHelper.ExecuteGet("application/json", "X-Figma-Token", Configuration.FigmaToken, fileUrl);
-
             JObject json = JObject.Parse(contents);
-
             RemoveKeys(json, ContentsToRemove);
-
             string filteredJsonString = JsonConvert.SerializeObject(json, Formatting.Indented);
-
             var gptService = new GPTService();
             var prompt = $@"<Figma-json>{filteredJsonString}</Figma-json>
-
-From above Figma json create a HTML and CSS in single file.
-Remember generate only HTML markup with CSS, do not give any explanation.";
+{Constants.FigmaUrlToHTMLPrompt}";
             var response = await gptService.GetAiResponse(prompt, String.Empty, Constants.Model, true);
-
             return response.Message;
             
         }

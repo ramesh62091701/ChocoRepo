@@ -37,7 +37,7 @@
             txtLogs = new TextBox();
             txtOutput = new TextBox();
             lblOutput = new Label();
-            button1 = new Button();
+            btnImage = new Button();
             button2 = new Button();
             button3 = new Button();
             radioButton1 = new RadioButton();
@@ -48,7 +48,7 @@
             openFileDialog1 = new OpenFileDialog();
             label2 = new Label();
             lblFigmaUrl = new Label();
-            textBox1 = new TextBox();
+            txtFigmaUrl = new TextBox();
             rdbImage = new RadioButton();
             rdbFileUrl = new RadioButton();
             panel1 = new Panel();
@@ -129,15 +129,15 @@
             lblOutput.TabIndex = 7;
             lblOutput.Text = "Output:";
             // 
-            // button1
+            // btnImage
             // 
-            button1.Location = new Point(722, 127);
-            button1.Name = "button1";
-            button1.Size = new Size(42, 34);
-            button1.TabIndex = 8;
-            button1.Text = "...";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            btnImage.Location = new Point(722, 127);
+            btnImage.Name = "btnImage";
+            btnImage.Size = new Size(42, 34);
+            btnImage.TabIndex = 8;
+            btnImage.Text = "...";
+            btnImage.UseVisualStyleBackColor = true;
+            btnImage.Click += button1_Click;
             // 
             // button2
             // 
@@ -234,12 +234,12 @@
             lblFigmaUrl.TabIndex = 18;
             lblFigmaUrl.Text = "Url:";
             // 
-            // textBox1
+            // txtFigmaUrl
             // 
-            textBox1.Location = new Point(79, 105);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(612, 31);
-            textBox1.TabIndex = 18;
+            txtFigmaUrl.Location = new Point(79, 105);
+            txtFigmaUrl.Name = "txtFigmaUrl";
+            txtFigmaUrl.Size = new Size(612, 31);
+            txtFigmaUrl.TabIndex = 18;
             // 
             // rdbImage
             // 
@@ -252,6 +252,7 @@
             rdbImage.TabStop = true;
             rdbImage.Text = "Use Image";
             rdbImage.UseVisualStyleBackColor = true;
+            rdbImage.CheckedChanged += rdbImage_CheckedChanged;
             // 
             // rdbFileUrl
             // 
@@ -270,7 +271,7 @@
             panel1.Controls.Add(label3);
             panel1.Controls.Add(rdbFileUrl);
             panel1.Controls.Add(lblFigmaUrl);
-            panel1.Controls.Add(textBox1);
+            panel1.Controls.Add(txtFigmaUrl);
             panel1.Controls.Add(rdbImage);
             panel1.Location = new Point(28, 59);
             panel1.Name = "panel1";
@@ -297,6 +298,7 @@
             btnConvertToReact.TabIndex = 22;
             btnConvertToReact.Text = "Convert to React";
             btnConvertToReact.UseVisualStyleBackColor = false;
+            btnConvertToReact.Click += btnConvertToReact_Click;
             // 
             // AspxConverter
             // 
@@ -312,7 +314,7 @@
             Controls.Add(radioButton1);
             Controls.Add(button3);
             Controls.Add(button2);
-            Controls.Add(button1);
+            Controls.Add(btnImage);
             Controls.Add(lblOutput);
             Controls.Add(txtOutput);
             Controls.Add(txtLogs);
@@ -343,7 +345,7 @@
         private TextBox txtLogs;
         private TextBox txtOutput;
         private Label lblOutput;
-        private Button button1;
+        private Button btnImage;
         private Button button2;
         private Button button3;
         private RadioButton radioButton1;
@@ -354,7 +356,7 @@
         private OpenFileDialog openFileDialog1;
         private Label label2;
         private Label lblFigmaUrl;
-        private TextBox textBox1;
+        private TextBox txtFigmaUrl;
         private RadioButton rdbImage;
         private RadioButton rdbFileUrl;
         private Panel panel1;

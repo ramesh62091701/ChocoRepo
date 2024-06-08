@@ -10,6 +10,7 @@ namespace Aspx_To_React
         public AspxConverter()
         {
             InitializeComponent();
+            SetFigmaControls();
             Logger.LogCreated += UpdateLog;
         }
 
@@ -25,15 +26,17 @@ namespace Aspx_To_React
 
         private async void btnConvert_Click(object sender, EventArgs e)
         {
+            ClearLog();
             var request = new Request()
             {
                 AspxPagePath = txtAspxPath.Text,
                 ImagePath = txtFigmaPath.Text,
                 OutputPath = txtOutput.Text,
-                IsCSOD = radioButton2.Checked,
-                IsFigmaUrl = txtFigmaPath.Text?.StartsWith("http") ?? false
+                IsCustom = radioButton2.Checked,
+                IsFigmaUrl = rdbFileUrl.Checked,
+                FigmaUrl = txtFigmaUrl.Text,
             };
-            await Processor.Migrate(request);
+            await Processor.MigrateToHtml(request);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -63,5 +66,29 @@ namespace Aspx_To_React
             }
         }
 
+        private void rdbImage_CheckedChanged(object sender, EventArgs e)
+        {
+            SetFigmaControls();
+        }
+
+        private void SetFigmaControls()
+        {
+            txtFigmaPath.Enabled = rdbImage.Checked;
+            btnImage.Enabled = rdbImage.Checked;
+            if (rdbImage.Checked)
+            {
+                txtFigmaPath.Text = string.Empty;
+            }
+            else
+            {
+                txtFigmaUrl.Text = string.Empty;
+            }
+            txtFigmaUrl.Enabled = !rdbImage.Checked;
+        }
+
+        private void btnConvertToReact_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
