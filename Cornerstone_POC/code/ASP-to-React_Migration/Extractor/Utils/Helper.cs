@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Security.AccessControl;
 using System.Security.Cryptography;
 using System.Text;
@@ -33,6 +34,20 @@ namespace Extractor.Utils
             Logger.Log("File Created in path: " + filePath);
         }
 
+
+        public static string RemoveMarkupCode(string content, string codeToRemove)
+        {
+            var stringToRemove = "```" + codeToRemove;
+            if (content.StartsWith(stringToRemove))
+            {
+                content = content.Substring(stringToRemove.Length);
+            }
+            if (content.EndsWith("```"))
+            {
+                content = content.Substring(0, content.Length - 3);
+            }
+            return content;
+        }
 
     }
 }

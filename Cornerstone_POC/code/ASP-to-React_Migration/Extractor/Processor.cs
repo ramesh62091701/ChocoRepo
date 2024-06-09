@@ -1,6 +1,7 @@
 ﻿using Extractor.Model;
 using Extractor.Service;
 using Extractor.Utils;
+using System.Net.Http;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -18,6 +19,20 @@ namespace Extractor
                 return htmlResponse.Message;
             }
             return await FigmaHelper.GetContents(request.FigmaUrl);
+        }
+
+        private async static Task<AspControls> GetControlsFromAspx(Request request)
+        {
+            if (string.IsNullOrEmpty(request.AspxPagePath))
+            {
+                return new AspControls();
+            }
+            var aspxContent = File.ReadAllText(request.AspxPagePath);
+            var gptService = new GPTService();
+            var jsonResponse = await gptService.GetAiResponseForImage($"<aspx-code>{aspxContent}</aspx-code>/n${Constants.AspxCodeToJson}", string.Empty, Constants.Model, true, request.ImagePath);
+            var jsonContent = Helper.RemoveMarkupCode(jsonResponse.Message, "json");
+            var controls = JsonSerializer.Deserialize<AspControls>(jsonContent);
+            return controls;
         }
 
         private async static Task<bool> MigrateToReactInternal(Request request)
@@ -100,14 +115,7 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
         {
             Logger.Log("Started processing...");
             var htmlContent = await GetHTMLFromFigma(request);
-            if (htmlContent.StartsWith("```html"))
-            {
-                htmlContent = htmlContent.Substring(7);
-            }
-            if (htmlContent.EndsWith("```"))
-            {
-                htmlContent = htmlContent.Substring(0, htmlContent.Length - 3);
-            }
+            htmlContent = Helper.RemoveMarkupCode(htmlContent, "html");
             Helper.CreateFile(request.OutputPath, "index.html", htmlContent);
             Logger.Log("Completed.");
             return true;
@@ -118,6 +126,7 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
             Logger.Log("Started processing...");
             if (request.IsCustom)
             {
+                var aspxControls = await GetControlsFromAspx(request);
                 await MigrateToCSODReact(request);
             }
             else

@@ -85,6 +85,7 @@
             txtAspxPath.Name = "txtAspxPath";
             txtAspxPath.Size = new Size(612, 31);
             txtAspxPath.TabIndex = 2;
+            txtAspxPath.Text = "D:\\Demo\\CSOD\\Assign.aspx";
             // 
             // lblFigma
             // 
