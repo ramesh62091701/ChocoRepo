@@ -80,10 +80,10 @@ namespace Extractor.Service
                         JArray rowsArray = (JArray)jsonObject["rows"];
                         var rows = rowsArray.Select(row => row.ToObject<JObject>());
 
-                        string templateFilePath = "./Files/Grid.txt";
+                        string templateFilePath = "./Templates/Grid.template";
                         string template = File.ReadAllText(templateFilePath);
 
-                        string userGridTemplate = GenerateUserGrid(template, tableName, columnNames, rows);
+                        string userGridTemplate = GenerateGrid(template, tableName, columnNames, rows);
 
                         Logger.Log(userGridTemplate);
 
@@ -95,7 +95,7 @@ namespace Extractor.Service
             return true;
         }
 
-        public static string GenerateUserGrid(string template, string tableName, string[] columnNames, IEnumerable<JObject> rows)
+        public static string GenerateGrid(string template, string tableName, string[] columnNames, IEnumerable<JObject> rows)
         {
             string columnsString = string.Join(",\n", columnNames.Select(columnName =>
                 $"  {{ accessorKey: \"{columnName.ToLower()}\", header: \"{columnName}\" }}"));
@@ -107,8 +107,8 @@ namespace Extractor.Service
                 return $"  {{ {string.Join(", ", rowProperties)} }}";
             }));
 
-            template = template.Replace("{{table-name}}", tableName)
-                           .Replace("{{columns}}", columnsString)
+            template = template.Replace("$$Entity$$", tableName)
+                           .Replace("$$Columns$$", columnsString)
                            .Replace("{{rows}}", rowsString);
 
             return template;

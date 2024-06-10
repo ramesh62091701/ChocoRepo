@@ -43,6 +43,7 @@ namespace Aspx_To_React
                 IsFigmaUrl = rdbFileUrl.Checked,
                 FigmaUrl = txtFigmaUrl.Text,
             };
+            
             await Processor.MigrateToHtml(request);
         }
 

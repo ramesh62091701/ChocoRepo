@@ -14,15 +14,15 @@ import $$Entity$$GridToolBar from "./$$Entity$$GridToolBar";
 
 // Todo: Define Properties.
 interface Props {
-  selected: Record<number, {{Entity}}Detail>;
-  setSelected: (value: Record<number, {{Entity}}Detail>) => void;
+  selected: Record<number, $$Entity$$Detail>;
+  setSelected: (value: Record<number, $$Entity$$Detail>) => void;
 }
 
 const {{Entity}}GridContainer: React.FC<Props> = ({
   selected,
   setSelected,
 }):JSX.Element => {
-const tempData = React.useRef<{{Entity}}Detail[]>([]);
+const tempData = React.useRef<$$Entity$$Detail[]>([]);
 
 // Todo: Define localized strings.
 
