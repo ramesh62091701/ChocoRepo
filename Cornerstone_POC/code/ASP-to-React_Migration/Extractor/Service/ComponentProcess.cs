@@ -78,7 +78,7 @@ namespace Extractor.Service
                     {
                         var template = GenerateGrid(jsonObject);
 
-                        Logger.Log(template.Content);
+                        //Logger.Log(template.Content);
 
                         Helper.CreateFile(request.OutputPath, template.FileName , template.Content);
                         
@@ -87,7 +87,7 @@ namespace Extractor.Service
                     {
                         var template = GenerateTextArea(jsonObject);
 
-                        Logger.Log(template.Content);
+                        //Logger.Log(template.Content);
 
                         Helper.CreateFile(request.OutputPath, template.FileName, template.Content);
 
@@ -96,7 +96,7 @@ namespace Extractor.Service
                     {
                         var template = GenerateDatePicker(jsonObject);
 
-                        Logger.Log(template.Content);
+                        //Logger.Log(template.Content);
 
                         Helper.CreateFile(request.OutputPath, template.FileName, template.Content);
 
