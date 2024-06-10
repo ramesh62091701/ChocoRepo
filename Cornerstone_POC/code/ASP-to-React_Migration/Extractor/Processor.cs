@@ -126,6 +126,7 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
             Logger.Log("Started processing...");
             if (request.IsCustom)
             {
+                // First convert to Json then convert Json to react.
                 var aspxControls = await GetControlsFromAspx(request);
                 await MigrateToCSODReact(request);
             }

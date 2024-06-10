@@ -1,0 +1,101 @@
+﻿//Variables
+//  Entity: User
+//  Columns
+
+
+import React, { useEffect } from "react";
+import {
+  DataGrid,
+  DataGridColumnDef,
+  DataGridRow,
+} from "@flare/primitives/data-grid";
+import "style/style.less";
+import $$Entity$$GridToolBar from "./$$Entity$$GridToolBar";
+
+// Todo: Define Properties.
+interface Props {
+  selected: Record<number, {{Entity}}Detail>;
+  setSelected: (value: Record<number, {{Entity}}Detail>) => void;
+}
+
+const {{Entity}}GridContainer: React.FC<Props> = ({
+  selected,
+  setSelected,
+}):JSX.Element => {
+const tempData = React.useRef<{{Entity}}Detail[]>([]);
+
+// Todo: Define localized strings.
+
+// store pagination state in your own state
+const [pagination, setPagination] = React.useState({
+pageIndex: 0,
+pageSize: 25, // customize the default page size
+});
+
+const $$Entity$$GridColumns: DataGridColumnDef<$$Entity$$Detail>[] = [
+$$Columns$$
+];
+
+// Todo: Define state
+const [data1, setData1] = React.useState<$$Entity$$Detail[]>([]);
+const [TotalRows, setTotalRows] = React.useState<number>(0);
+const [searchText, setSearchText] = React.useState<string>("");
+const [selectedKey, setselectedKey] = React.useState<Record<number, $$Entity$$Detail>>(selected);
+const [columns, setColumns] = React.useState<DataGridColumnDef<$$Entity$$Detail>[]>($$Entity$$GridColumns);
+const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
+const [isDataLoaded, setIsDataLoaded] = React.useState<boolean>(false);
+const [showSelected, setShowSelected] = React.useState<boolean>(false);
+  
+
+// Define useeffect
+useEffect(() => {
+    const t: RowSelectionState = {};
+    Object.keys(selectedUsers).forEach((key) => {
+      t[key] = true;
+    });
+    setRowSelection(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+ return (
+    <div id="$$ComponentName$$GridContainer">
+      <DataGrid
+       enableRowSelection={(row: DataGridRow<$$Entity$$>) =>
+          isRecurrenceEnabled ||
+          row.original.currentStatusId === null ||
+          row.original.currentStatusId <= 0
+        }
+        manualPagination
+        columns={$$Entity$$Columns}
+        data={$$Entity$$Rows}
+        getRowId={(orgRow: Entity) => `${orgRow.entityId}`}
+        renderTopToolbar={({ table }) => {
+          return (
+            <$$ComponentName$$ToolBar
+              selectedRows={Object.keys(rowSelection).length}
+              totalRows={TotalRows}
+              toggleSwitch={ToggleShowSelected}
+              setSearchText={setSearchText}
+              handleKeyDown={handleKeyDown}
+            />
+          );
+        }}
+        rowCount={totalRows}
+        state={{ pagination, rowSelection, loading: !isDataLoaded }}
+        onPaginationChange={setPagination}
+        onRowSelectionChange={setRowSelection}
+        enableSorting={false}
+        enableColumnFilters={false}
+        enableGlobalFilter={false}
+        enableColumnActions={false}
+        defaultColumn={{
+          maxSize: 20,
+          minSize: 10,
+          size: 20,
+        }}
+      />
+    </div>
+  );
+};
+
+export default $$Entity$$GridContainer;
