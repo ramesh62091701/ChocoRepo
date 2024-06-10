@@ -1,9 +1,4 @@
-﻿//Variables
-//  Entity: User
-//  Columns
-
-
-import React, { useEffect } from "react";
+﻿import React, { useEffect } from "react";
 import {
   DataGrid,
   DataGridColumnDef,

@@ -1,25 +1,21 @@
-﻿/* istanbul ignore file */
-
-import {
+﻿import {
     SingleDatePicker,
     SingleDateValue,
     usePlayerGlobalizationI18n,
     defaultPlayerGlobalizationI18nContext,
 } from "@flare/primitives/date-picker";
-import { Actions } from "actions/Actions";
 import moment from "moment";
 import { Culture } from "player-globalization";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useLocalizationsDefaults } from "@flare/primitives/core-ui";
-import { TrainingDetails } from "localizations";
 
 interface Props {
     dateValue: SingleDateValue;
-    // setSelectedDate: (
-    //     field: keyof DetailsState,
-    //     value: string | SingleDateValue | null
-    // ) => void;
+     setSelectedDate: (
+         field: keyof DetailsState,
+         value: string | SingleDateValue | null
+     ) => void;
 }
 
 const DatePicker: React.FC<Props> = ({ dateValue }) => {
@@ -27,12 +23,12 @@ const DatePicker: React.FC<Props> = ({ dateValue }) => {
         Culture,
         defaultPlayerGlobalizationI18nContext
     );
-    const DueDateLabel = useLocalizationsDefaults(`${TrainingDetails.DueDate}`);
+    const DueDateLabel = useLocalizationsDefaults(`${TrainingDetails.DueDate}`); // change TrainingDetails
     const DueDateInvalidDate = useLocalizationsDefaults(
-        `${TrainingDetails.DueDateInvalidDate}`
+        `${TrainingDetails.DueDateInvalidDate}` // change TrainingDetails
     );
     const DueDatePastDate = useLocalizationsDefaults(
-        `${TrainingDetails.DueDatePastDate}`
+        `${TrainingDetails.DueDatePastDate}` // change TrainingDetails
     );
     const [DateValue, setDateValue] = React.useState<SingleDateValue>(dateValue);
     const [hasError, setHasError] = React.useState<boolean>(false);
@@ -63,82 +59,6 @@ const DatePicker: React.FC<Props> = ({ dateValue }) => {
         }
         return completeDate;
     };
-    const GetValidation = (date: string, isValid: boolean) => {
-        let isError = false;
-        setHasError(false);
-        setErrorMessage("");
-        if (date !== "") {
-            let localIsValid = isValid;
-            let parsedDate = "";
-            if (localIsValid) {
-                parsedDate = parseDate(date, Culture.dateFormats.short);
-                if (parsedDate === "") {
-                    localIsValid = false;
-                }
-            }
-
-            if (localIsValid && dateValue !== new Date(parsedDate)) {
-                const startDate = moment
-                    .utc(moment(parsedDate).startOf("day"))
-                    .format("YYYY-MM-DDTHH:mm:ss");
-
-                if (startDate === "Invalid date") {
-                    isError = true;
-                    setHasError(true);
-                    setErrorMessage("Enter a valid date in m/d/yy");
-                } else {
-                    setDateValue(new Date(parsedDate));
-                }
-            }
-            if (!localIsValid) {
-                isError = true;
-                setHasError(true);
-                setErrorMessage(DueDateInvalidDate);
-            }
-            dispatch({
-                type: Actions.SET_DUE_DATE_ERROR,
-                payload: { value: "", hasError: isError },
-            });
-        } else {
-            setDateValue(null);
-            dispatch({
-                type: Actions.SET_DUE_DATE_ERROR,
-                payload: { value: "", hasError: isError },
-            });
-        }
-    };
-    const GetValidationForFuture = (date: SingleDateValue) => {
-        if (date !== null) {
-            const startDateVal = moment
-                .utc(moment(date).startOf("day"))
-                .format("YYYY-MM-DDTHH:mm:ss");
-            const currentDate = moment
-                .utc(moment(new Date().setHours(0, 0, 0, 0)).startOf("day"))
-                .format("YYYY-MM-DDTHH:mm:ss");
-            if (startDateVal < currentDate) {
-                setHasError(true);
-                // setError(true);
-                setErrorMessage(DueDatePastDate);
-                dispatch({
-                    type: Actions.SET_DUE_DATE_ERROR,
-                    payload: { UTCvalue: startDateVal, value: date, hasError: true },
-                });
-            } else {
-                dispatch({
-                    type: Actions.SET_DUE_DATE,
-                    payload: { UTCvalue: startDateVal, value: date, hasError: false },
-                });
-            }
-            setDateValue(date);
-        } else {
-            dispatch({
-                type: Actions.SET_DUE_DATE,
-                payload: { UTCvalue: "", value: undefined, hasError: false },
-            });
-        }
-
-        // setSelectedDate("dueDate", date);
-    };
     const today = new Date();
     return (
         <SingleDatePicker
@@ -146,12 +66,6 @@ const DatePicker: React.FC<Props> = ({ dateValue }) => {
             size="medium"
             label={DueDateLabel}
             value={DateValue}
-            onTextChange={(date, isValid) => {
-                GetValidation(date, isValid);
-            }}
-            onChange={(date) => {
-                GetValidationForFuture(date);
-            }}
             disabledDays={{
                 before: new Date(new Date().setDate(today.getDate())),
             }}

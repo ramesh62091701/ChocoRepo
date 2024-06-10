@@ -107,7 +107,7 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
 
         private async static Task<bool> MigrateToCSODReact(Request request)
         {
-            await DataGridProcessor.Process(request);
+            await ComponentProcess.Process(request);
             return true;
         }
 
@@ -127,7 +127,7 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
             if (request.IsCustom)
             {
                 // First convert to Json then convert Json to react.
-                var aspxControls = await GetControlsFromAspx(request);
+                //var aspxControls = await GetControlsFromAspx(request);
                 await MigrateToCSODReact(request);
             }
             else

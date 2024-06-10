@@ -1,0 +1,31 @@
+﻿import { TextField } from "@flare/primitives/textbox";
+import React from "react";
+import { useLocalizationsDefaults } from "@flare/primitives/core-ui";
+
+interface Props {
+    inputComment: string | undefined;
+    setInputComment: (
+        field: keyof $$Interface$$, // add your interface here
+        value: string | Date | null
+    ) => void;
+}
+
+const Comments: React.FC<Props> = ({ inputComment, setInputComment }) => {
+    const $$PropertyName$$ = useLocalizationsDefaults(`object.$$PropertyName$$`); //change object with appropriate class name
+    return (
+        <TextField
+            errorMessage="Please enter valid details"
+            id="adaptive-width-textfield"
+            label={$$PropertyName$$}
+            labelSize="small"
+            placeholder={$$PropertyName$$}
+            size="medium"
+            onChange={(comment) => {
+                setInputComment("comments", comment.target.value);
+            }}
+            value={inputComment}
+        />
+    );
+};
+
+export default Comments;
