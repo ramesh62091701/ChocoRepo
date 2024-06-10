@@ -17,9 +17,12 @@ namespace Extractor.Utils
         {
             var contents = await HttpHelper.ExecuteGet("application/json", "X-Figma-Token", Configuration.FigmaToken, fileUrl);
             JObject json = JObject.Parse(contents);
-            RemoveKeys(json, ContentsToRemove);
+            //RemoveKeys(json, ContentsToRemove);
             string filteredJsonString = JsonConvert.SerializeObject(json, Formatting.Indented);
             var gptService = new GPTService();
+            filteredJsonString = string.Join("", filteredJsonString.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+
+            filteredJsonString = filteredJsonString.Replace(" ", "");
             var prompt = $@"<Figma-json>{filteredJsonString}</Figma-json>
 {Constants.FigmaUrlToHTMLPrompt}";
             var response = await gptService.GetAiResponse(prompt, String.Empty, Constants.Model, true);
