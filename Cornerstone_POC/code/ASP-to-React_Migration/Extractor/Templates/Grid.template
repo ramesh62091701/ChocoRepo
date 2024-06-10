@@ -37,7 +37,7 @@ $$Columns$$
 ];
 
 // Todo: Define state
-const [data1, setData1] = React.useState<$$Entity$$Detail[]>([]);
+const [data1, setData] = React.useState<$$Entity$$Detail[]>([]);
 const [TotalRows, setTotalRows] = React.useState<number>(0);
 const [searchText, setSearchText] = React.useState<string>("");
 const [selectedKey, setselectedKey] = React.useState<Record<number, $$Entity$$Detail>>(selected);
@@ -68,7 +68,7 @@ useEffect(() => {
         manualPagination
         columns={$$Entity$$Columns}
         data={$$Entity$$Rows}
-        getRowId={(orgRow: Entity) => `${orgRow.entityId}`}
+        getRowId={(orgRow: Entity) => `${orgRow.entityId}`} //Replace the entity id.
         renderTopToolbar={({ table }) => {
           return (
             <$$ComponentName$$ToolBar
