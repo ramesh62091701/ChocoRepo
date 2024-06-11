@@ -128,12 +128,17 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
             if (request.IsCustom)
             {
                 // First convert to Json then convert Json to react.
-                var aspxControls = await GetControlsFromAspx(request);
-                string aspxControlsString = JsonConvert.SerializeObject(aspxControls, Formatting.Indented);
-                Helper.CreateFile(request.OutputPath, "aspxcs.json", aspxControlsString);
-                
+                //var aspxControls = await GetControlsFromAspx(request);
+                //string aspxControlsString = JsonConvert.SerializeObject(aspxControls, Formatting.Indented);
+                //Helper.CreateFile(request.OutputPath, "aspxcs.json", aspxControlsString);
                 
                 //await MigrateToCSODReact(request);
+
+                var mainFileContent =await ComponentProcess.GenerateMainFile(request);
+                mainFileContent = Helper.RemoveMarkupCode(mainFileContent, "typescript");
+                Helper.CreateFile(request.OutputPath, "App.tsx", mainFileContent);
+
+                
             }
             else
             {

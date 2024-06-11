@@ -9,6 +9,7 @@ using Extractor.Utils;
 using Extractor.Model;
 using System.Text.RegularExpressions;
 using System.Text.Json.Nodes;
+using System.Net.NetworkInformation;
 
 namespace Extractor.Service
 {
@@ -220,6 +221,41 @@ namespace Extractor.Service
                 .Replace("$$ComponentName$$", type);
 
             return (Content: template, FileName: type + "Container.tsx");
+        }
+
+        public static async Task<string> GenerateMainFile(Request request)
+        {
+            var allComponentContent = ReadFiles(request.OutputPath);
+            var gptService = new GPTService();
+            var prompt = $"{allComponentContent}\nAbove are the component files in the React. Generate a main file as App.tsx which calls all the component the code should be in details.Just generate a code, do not give explanation above or below the code";
+            var response = await gptService.GetAiResponse(prompt, String.Empty, Constants.Model, true);
+            return response.Message;
+        }
+
+        private static string ReadFiles(string directoryPath)
+        {
+            string allFileContent = string.Empty;
+            try
+            {
+                foreach (string filePath in Directory.GetFiles(directoryPath))
+                {
+                    string fileContent = File.ReadAllText(filePath);
+                    string fileName = Path.GetFileName(filePath);
+                    allFileContent += $"<{fileName}>\n";
+                    allFileContent += fileContent + "\n";
+                    allFileContent += $"</{fileName}>\n\n";
+                }
+
+                foreach (string subDir in Directory.GetDirectories(directoryPath))
+                {
+                    allFileContent += ReadFiles(subDir);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"An error occurred: {ex.Message}");
+            }
+            return allFileContent;
         }
     }
 }
