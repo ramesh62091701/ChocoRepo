@@ -11,7 +11,7 @@ const $$ComponentName$$Container = ({
 $$ParametersAssignments$$
 }) => {
 
-// Todo: Define Properties.
+  // Todo: Define Properties.
   const localizedHomeLabelText = useLocalizationsDefaults(
     `${$$ComponentName$$.HomeLabel}`
   );
@@ -27,12 +27,12 @@ $$ParametersAssignments$$
     $$ComponentName$$Items.push({
       disable: false,
       label: localizedHomeLabelText, // replace with your localization
-      to: homePageUrl, // replace with your parameters
+      to: homePageUrl, // Todo: Replace with your parameters
     });
     $$ComponentName$$Items.push({
       disable: false,
       label: localizedEATtitle,  // replace with your localization
-      to: "", // replace with your parameters
+      to: "", // ToDo: Replace with your parameters
     });
     return $$ComponentName$$Items;
   };

@@ -23,12 +23,14 @@ const DueDatePicker: React.FC<Props> = ({ dateValue }) => {
   );
 
   // Todo: Define Properties.
-  const DueDateLabel = useLocalizationsDefaults(`${object.DueDate}`); //replace object with appropriate class
+  // Todo: Replace object with appropriate class
+
+  const DueDateLabel = useLocalizationsDefaults(`${object.DueDate}`); 
   const DueDateInvalidDate = useLocalizationsDefaults(
-    `${object.DueDateInvalidDate}` //replace object with appropriate class
+    `${object.DueDateInvalidDate}` 
   );
   const DueDatePastDate = useLocalizationsDefaults(
-    `${object.DueDatePastDate}`  //replace object with appropriate class
+    `${object.DueDatePastDate}` 
   );
   
   const [DateValue, setDateValue] = React.useState<SingleDateValue>(dateValue);
@@ -132,8 +134,6 @@ const DueDatePicker: React.FC<Props> = ({ dateValue }) => {
         payload: { UTCvalue: "", value: undefined, hasError: false },
       });
     }
-
-    // setSelectedDate("dueDate", date);
   };
 
   const today = new Date();

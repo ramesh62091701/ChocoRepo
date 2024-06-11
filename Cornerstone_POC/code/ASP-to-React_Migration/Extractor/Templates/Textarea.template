@@ -5,13 +5,13 @@ import { useLocalizationsDefaults } from "@flare/primitives/core-ui";
 interface Props {
     inputComment: string | undefined;
     setInputComment: (
-        field: keyof $$Interface$$, // add your interface here
+        field: keyof $$Interface$$, // Todo: Add your interface here
         value: string | Date | null
     ) => void;
 }
 // Todo: Define Properties.
 const $$PropertyName$$: React.FC<Props> = ({ inputComment, setInputComment }) => {
-    const $$PropertyName$$ = useLocalizationsDefaults(`object.$$PropertyName$$`); //change object with appropriate class name
+    const $$PropertyName$$ = useLocalizationsDefaults(`object.$$PropertyName$$`); // Todo: Change object with appropriate class name
     return (
         <TextField
             errorMessage="Please enter valid details"

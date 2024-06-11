@@ -5,6 +5,7 @@ import {
   DataGridRow,
 } from "@flare/primitives/data-grid";
 import "style/style.less";
+import { fetch$$Entity$$Details } from "services/CommonAPIService";
 import $$Entity$$GridToolBar from "./$$Entity$$GridToolBar";
 
 // Todo: Define Properties.
@@ -13,7 +14,7 @@ interface Props {
   setSelected: (value: Record<number, $$Entity$$Detail>) => void;
 }
 
-const {{Entity}}GridContainer: React.FC<Props> = ({
+const $$Entity$$GridContainer: React.FC<Props> = ({
   selected,
   setSelected,
 }):JSX.Element => {
@@ -32,7 +33,7 @@ $$Columns$$
 ];
 
 // Todo: Define state
-const [data1, setData] = React.useState<$$Entity$$Detail[]>([]);
+const [data, setData] = React.useState<$$Entity$$Detail[]>([]);
 const [TotalRows, setTotalRows] = React.useState<number>(0);
 const [searchText, setSearchText] = React.useState<string>("");
 const [selectedKey, setselectedKey] = React.useState<Record<number, $$Entity$$Detail>>(selected);
@@ -40,7 +41,30 @@ const [columns, setColumns] = React.useState<DataGridColumnDef<$$Entity$$Detail>
 const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
 const [isDataLoaded, setIsDataLoaded] = React.useState<boolean>(false);
 const [showSelected, setShowSelected] = React.useState<boolean>(false);
-  
+
+// Fetch Details
+  const Fetch$$Entity$$Details = React.useCallback(
+    (userFilters: UserFilters) => {
+      setData([]);
+      setIsDataLoaded(false);
+      setIsUserLoaded(false);
+      fetch$$Entity$$Details(loId, userFilters)
+        .then((response: UserDetailsResponse) => {
+          setIsUserLoaded(true);
+          setIsDataLoaded(true);
+          setTotalRows(response.totalCount);
+          // Todo: Add logic here
+        })
+        .catch((error) => {
+          setIsUserLoaded(true);
+          setIsDataLoaded(true);
+          setData([]);
+          setTotalRows(0);
+          tempData.current = [];
+        });
+    },
+    [loId, setIsUserLoaded]
+  );
 
 // Define useeffect
 useEffect(() => {
@@ -63,7 +87,7 @@ useEffect(() => {
         manualPagination
         columns={$$Entity$$Columns}
         data={$$Entity$$Rows}
-        getRowId={(orgRow: Entity) => `${orgRow.entityId}`} //Replace the entity id.
+        getRowId={(orgRow: Entity) => `${orgRow.entityId}`} //Todo: Replace the entity id.
         renderTopToolbar={({ table }) => {
           return (
             <$$Entity$$ToolBar
