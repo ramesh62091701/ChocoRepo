@@ -243,9 +243,44 @@ Above are the component files in the React. Generate a json response in below fo
   }},
 ]";
             var response = await gptService.GetAiResponse(prompt, String.Empty, Constants.Model, true);
-            return response.Message;
+
+            string pattern = @"\[[\s\S]*\]";
+            Match match = Regex.Match(response.Message, pattern);
+
+            if (!match.Success)
+            {
+                Logger.Log("No JSON array found in the response.");
+            }
+
+            string arrayJson = match.Value;
+
+            JArray jsonArray = JArray.Parse(arrayJson);
+            StringBuilder componentBuilder = new StringBuilder();
+            foreach (JObject obj in jsonArray)
+            {
+                string type = obj["type"].ToString();
+                var declaredVariables = obj["declared-variable"].ToObject<string[]>();
+
+                componentBuilder.AppendLine($"<{type}");
+
+                string variablesString = string.Join("\n", declaredVariables.Select(declaredVariable =>
+                    $"{declaredVariable.ToLower()}={{{declaredVariable}}}"));
+
+                componentBuilder.AppendLine(variablesString);
+                componentBuilder.AppendLine("/>");
+            }
+            string templateFilePath = "./Templates/App.template";
+            string template = File.ReadAllText(templateFilePath);
+            string componentString = componentBuilder.ToString();
+            template = template.Replace("$$Components$$", componentString);
+
+            return template;
         }
 
+        
+        
+        
+        
         private static string ReadFiles(string directoryPath)
         {
             string allFileContent = string.Empty;

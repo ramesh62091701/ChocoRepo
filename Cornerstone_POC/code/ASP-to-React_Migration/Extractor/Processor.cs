@@ -135,7 +135,6 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
                 //await MigrateToCSODReact(request);
 
                 var mainFileContent =await ComponentProcess.GenerateMainFile(request);
-                mainFileContent = Helper.RemoveMarkupCode(mainFileContent, "typescript");
                 Helper.CreateFile(request.OutputPath, "App.tsx", mainFileContent);
 
                 

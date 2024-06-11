@@ -82,22 +82,7 @@ const AssignTraining: React.FC = (props: any): JSX.Element => {
   return (
     <div id="AssignTrainingWrapper">
       {isBreadcrumbLoaded && (
-      $$Breadcrumb$$
-        <BreadcrumbContainer
-          homePageUrl={homePageUrl}
-          LoId={loId}
-          TrainingTitle={trainingTitle}
-        />
-      )}
-
-      {isMetaDataLoaded && isUserLoaded && (
-        <ButtonsContainer
-          currentPage={currentPage}
-          onSubmit={submitHandler}
-          isDisabled={
-            //add your logic here
-          }
-        />
+      $$Components$$
       )}
       <ToastMsg />
     </div>

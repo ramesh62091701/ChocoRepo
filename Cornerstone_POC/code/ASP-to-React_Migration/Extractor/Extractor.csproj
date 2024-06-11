@@ -15,6 +15,9 @@
     <None Update="Files\Breadcrumb.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\App.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\Breadcrumb.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
