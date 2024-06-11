@@ -1,0 +1,108 @@
+﻿/* istanbul ignore file */
+
+import React, { useEffect } from "react";
+import "style/style.less";
+import { AppConstants } from "constants/AppConstants";
+import {
+  GetHomePageUrl,
+  assignUsers,
+  fetchTrainingDetails,
+  fetchTrainingPurposes,
+} from "services/CommonAPIService";
+import BreadcrumbContainer from "components/BreadcrumbContainer";
+import UserGridContainer from "components/UserGridContainer";
+import { InfoIcon } from "@flare/primitives/icon";
+import { ListboxItem } from "@flare/primitives/dropdown";
+import SelectDetailsContainer from "components/SelectDetailsContainer";
+import { DetailsState } from "actions/SelectDetailsActions";
+import ButtonsContainer from "components/ButtonsContainer";
+import { useLocalizationsDefaults } from "@flare/primitives/core-ui";
+import {
+  AssignmentToastMessage,
+  ExtendedAssignTrainingCommon,
+  TrainingDetails,
+  TrainingPurpose,
+  UserGrid,
+} from "localizations";
+import { TrainingPurposeObj } from "models/TrainingPurpose";
+import TrainingDetailsContainer from "components/TrainingDetailsContainer";
+import { LoDetail } from "models/TrainingDetails";
+import { UserDetail } from "models/UserDetails";
+import { dueDate } from "models/DueDate";
+import { shallowEqual, useSelector, useDispatch } from "react-redux";
+import { Actions } from "actions/Actions";
+import SeatAvailabilityModal from "components/SeatAvailabilityModal";
+import WarningMessageContainer from "components/WarningMessageContainer";
+import { TrainingAssignmentRequest } from "models/TrainingAssignmentRequest";
+import ToastMsg from "components/ToastMsg";
+import { ApiResponseModel } from "models/ApiResponseModel";
+import "react-loading-skeleton/dist/skeleton.css";
+import { Preloader } from "@flare/primitives/preloader";
+
+interface ToastMessage {
+  showToast: boolean;
+  toastMessage: string;
+}
+
+const AssignTraining: React.FC = (props: any): JSX.Element => {
+  const {
+    location: { search },
+  } = props;
+
+  const [homePageUrl, setHomePageUrl] = React.useState<string>(
+    AppConstants.BreadcrumbHomeDefaultPath
+  );
+  const [isBreadcrumbLoaded, setIsBreadcrumbLoaded] =
+    React.useState<boolean>(false);
+  const [isUserLoaded, setIsUserLoaded] = React.useState<boolean>(false);
+  const [isMetaDataLoaded, setIsMetaDataLoaded] =
+    React.useState<boolean>(false);
+
+  const [currentPage, setcurrentPage] = React.useState(1);
+
+
+
+  function isValidGuid(guid: string): boolean {
+    const guidRegex =
+      /^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/;
+
+    return guidRegex.test(guid);
+  }
+
+
+  const url = AppConstants.BreadcrumbTrainingTitle.replace("{loId}", loId);
+
+  const submitHandler = (
+    e: React.MouseEvent,
+    buttonIdentifier: string
+  ): any => {
+    
+  };
+  
+  return (
+    <div id="AssignTrainingWrapper">
+      {isBreadcrumbLoaded && (
+      $$Breadcrumb$$
+        <BreadcrumbContainer
+          homePageUrl={homePageUrl}
+          LoId={loId}
+          TrainingTitle={trainingTitle}
+        />
+      )}
+
+      {isMetaDataLoaded && isUserLoaded && (
+        <ButtonsContainer
+          currentPage={currentPage}
+          onSubmit={submitHandler}
+          isDisabled={
+            //add your logic here
+          }
+        />
+      )}
+      <ToastMsg />
+    </div>
+  );
+};
+
+export default AssignTraining;
+
