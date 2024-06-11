@@ -243,6 +243,7 @@
             txtFigmaUrl.Name = "txtFigmaUrl";
             txtFigmaUrl.Size = new Size(612, 31);
             txtFigmaUrl.TabIndex = 18;
+            txtFigmaUrl.Text = "https://api.figma.com/v1/files/QFYvJ8SwzxdpTgdcpsSEkc/nodes?ids=1275-25182";
             // 
             // rdbImage
             // 

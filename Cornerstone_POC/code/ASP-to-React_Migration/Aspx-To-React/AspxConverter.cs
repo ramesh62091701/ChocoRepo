@@ -83,14 +83,14 @@ namespace Aspx_To_React
         {
             txtFigmaPath.Enabled = rdbImage.Checked;
             btnImage.Enabled = rdbImage.Checked;
-            if (rdbImage.Checked)
+            /*if (rdbImage.Checked)
             {
                 txtFigmaUrl.Text = string.Empty;
             }
             else
             {
                 txtFigmaPath.Text = string.Empty;
-            }
+            }*/
             txtFigmaUrl.Enabled = !rdbImage.Checked;
         }
 
