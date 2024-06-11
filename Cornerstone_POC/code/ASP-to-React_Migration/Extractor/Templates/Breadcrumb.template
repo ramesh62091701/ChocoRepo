@@ -1,0 +1,54 @@
+﻿import {
+  BreadcrumbItemProps,
+  Breadcrumbs,
+} from "@flare/primitives/breadcrumbs";
+import { useLocalizationsDefaults } from "@flare/primitives/core-ui";
+import React from "react";
+
+const $$ComponentName$$Container = ({
+  $$Parameters$$
+}: {
+$$ParametersAssignments$$
+}) => {
+
+// Todo: Define Properties.
+  const localizedHomeLabelText = useLocalizationsDefaults(
+    `${$$ComponentName$$.HomeLabel}`
+  );
+  const localizedEATtitle = useLocalizationsDefaults(
+    `${$$ComponentName$$.TITLE}`
+  );
+  const on$$ComponentName$$Click = (item: BreadcrumbItemProps) => {
+    window.location.href = item.to;
+  };
+  const Get$$ComponentName$$Item = () => {
+    const $$ComponentName$$Items: $$BreadcrumbItemProps[] = [];
+
+    $$ComponentName$$Items.push({
+      disable: false,
+      label: localizedHomeLabelText, // replace with your localization
+      to: homePageUrl, // replace with your parameters
+    });
+    $$ComponentName$$Items.push({
+      disable: false,
+      label: localizedEATtitle,  // replace with your localization
+      to: "", // replace with your parameters
+    });
+    return $$ComponentName$$Items;
+  };
+
+  return (
+    <div className="$$ComponentName$$Wrapper">
+      <Breadcrumbs
+        items={Get$$ComponentName$$Item()}
+        max$$ComponentName$$Length={50}
+        onClick={(item: BreadcrumbItemProps) => on$$ComponentName$$Click(item)}
+        showHomeIcon
+        fontSize="12px"
+        iconSize="small"
+        iconColor={`#${window.csod.context.theming.primary}`}
+      />
+    </div>
+  );
+};
+export default $$ComponentName$$Container;

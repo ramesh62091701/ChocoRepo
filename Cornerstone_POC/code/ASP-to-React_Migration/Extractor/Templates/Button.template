@@ -1,0 +1,41 @@
+﻿import { Button } from "@flare/primitives/button";
+import React from "react";
+import "style/style.less";
+import { useLocalizationsDefaults } from "@flare/primitives/core-ui";
+
+interface Props {
+  currentPage: number;
+  onSubmit: (e: React.MouseEvent, buttonIdentifier: string) => any;
+  isDisabled: boolean;
+}
+
+const $$ComponentName$$Container: React.FC<Props> = ({
+  currentPage,
+  onSubmit,
+  isDisabled,
+}) => {
+
+ // Todo: Define Properties.
+   
+ $$ButtonList$$
+
+  const isRTLdirection = document.dir === "rtl";
+
+  return (
+    <div
+      className="$$ComponentName$$Container"
+      style={isRTLdirection ? { flexDirection: "row" } : {}}
+    >
+      <Button
+        className={isRTLdirection ? "" : "leftButton"}
+        displayStyle="ghostPrimary"
+        onClick={(e) => onSubmit(e, "cancel")}
+        size="large"
+      >
+        {localizedCancel}
+      </Button>
+    </div>
+  );
+};
+
+export default $$ComponentName$$Container;

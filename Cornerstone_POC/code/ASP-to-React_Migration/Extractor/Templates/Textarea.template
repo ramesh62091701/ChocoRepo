@@ -9,8 +9,8 @@ interface Props {
         value: string | Date | null
     ) => void;
 }
-
-const Comments: React.FC<Props> = ({ inputComment, setInputComment }) => {
+// Todo: Define Properties.
+const $$PropertyName$$: React.FC<Props> = ({ inputComment, setInputComment }) => {
     const $$PropertyName$$ = useLocalizationsDefaults(`object.$$PropertyName$$`); //change object with appropriate class name
     return (
         <TextField

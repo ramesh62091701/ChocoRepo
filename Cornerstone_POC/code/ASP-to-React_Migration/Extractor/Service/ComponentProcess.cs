@@ -19,8 +19,17 @@ namespace Extractor.Service
             var jsonPrompt = @"Read the Figma design image and give me the details of all the controls in json format like example data-grid, textarea, Date-picker etc.\nRules to follow while giving json output:
 1.Always generate only json output do not give explanations above or below the json.
 2.Table name should be one word without any spaces.
-3.Use the below format
+3.None of the name in type Breadcrumb should contain spaces.
+4.Get all the buttons from analyzing the image and add it to below json.
+5.Use the below json format as reference
 [
+    {
+	  ""type"": ""Breadcrumb"",
+	  ""paths"": [
+                    { ""name"": ""Home"", ""data-type"": ""string"" },
+                    { ""name"": ""AssignTraining"", ""data-type"": ""string"" },
+                ]
+	},
 	{
 	  ""type"": ""DataGrid"",
 	  ""table-name"": ""UserDetails"",
@@ -50,7 +59,12 @@ namespace Extractor.Service
     {
 	  ""type"": ""TextArea"",
 	  ""property-name"": ""Comments""
-	}
+	},
+    {
+	  ""type"": ""Button"",
+	  ""button-names"": [ ""Submit"", ""Search""],
+	},
+
 ]
 ";
             var gptService = new GPTService();
@@ -74,32 +88,41 @@ namespace Extractor.Service
                 if (token is JObject)
                 {
                     JObject jsonObject = (JObject)token;
-                    if (jsonObject["type"].ToString() == "DataGrid")
+                    string type = jsonObject["type"].ToString();
+
+                    switch (type)
                     {
-                        var template = GenerateGrid(jsonObject);
+                        case "DataGrid":
+                            var gridTemplate = GenerateGrid(jsonObject);
+                            //Logger.Log(gridTemplate.Content);
+                            Helper.CreateFile(request.OutputPath, gridTemplate.FileName, gridTemplate.Content);
+                            break;
 
-                        //Logger.Log(template.Content);
+                        case "TextArea":
+                            var textAreaTemplate = GenerateTextArea(jsonObject);
+                            //Logger.Log(textAreaTemplate.Content);
+                            Helper.CreateFile(request.OutputPath, textAreaTemplate.FileName, textAreaTemplate.Content);
+                            break;
 
-                        Helper.CreateFile(request.OutputPath, template.FileName , template.Content);
-                        
-                    }
-                    else if (jsonObject["type"].ToString() == "TextArea")
-                    {
-                        var template = GenerateTextArea(jsonObject);
+                        case "DatePicker":
+                            var datePickerTemplate = GenerateDatePicker(jsonObject);
+                            //Logger.Log(datePickerTemplate.Content);
+                            Helper.CreateFile(request.OutputPath, datePickerTemplate.FileName, datePickerTemplate.Content);
+                            break;
+                        case "Breadcrumb":
+                            var breadcrumbTemplate = GenerateBreadcrumb(jsonObject);
+                            //Logger.Log(breadcrumbTemplate.Content);
+                            Helper.CreateFile(request.OutputPath, breadcrumbTemplate.FileName, breadcrumbTemplate.Content);
+                            break;
+                        case "Button":
+                            var buttonTemplate = GenerateButtons(jsonObject);
+                            //Logger.Log(buttonTemplate.Content);
+                            Helper.CreateFile(request.OutputPath, buttonTemplate.FileName, buttonTemplate.Content);
+                            break;
 
-                        //Logger.Log(template.Content);
-
-                        Helper.CreateFile(request.OutputPath, template.FileName, template.Content);
-
-                    }
-                    else if (jsonObject["type"].ToString() == "DatePicker")
-                    {
-                        var template = GenerateDatePicker(jsonObject);
-
-                        //Logger.Log(template.Content);
-
-                        Helper.CreateFile(request.OutputPath, template.FileName, template.Content);
-
+                        default:
+                            Logger.Log($"Json object of type ={type} not found");  
+                            break;
                     }
                 }
             }
@@ -147,6 +170,56 @@ namespace Extractor.Service
             string template = File.ReadAllText(templateFilePath);
 
             return (Content: template, FileName: type + ".tsx");
+        }
+
+        private static (string Content, string FileName) GenerateBreadcrumb(JObject jsonObject)
+        {
+            string type = jsonObject["type"].ToString();
+
+            JArray pathsArray = (JArray)jsonObject["paths"];
+
+            var paths = pathsArray.Select(pathObject => new
+            {
+                Name = (string)pathObject["name"],
+                DataType = (string)pathObject["data-type"]
+            }).ToArray();
+
+            string[] pathNames = paths.Select(path => path.Name).ToArray();
+
+            string templateFilePath = "./Templates/Breadcrumb.template";
+            string template = File.ReadAllText(templateFilePath);
+
+            string parametersString = string.Join("\n", pathNames.Select(pathName =>
+                $" {pathName.ToLower()},"));
+
+            string parametersDeclarationString = string.Join(",\n", paths.Select(path =>
+                $" {path.Name.ToLower()}: {path.DataType.ToLower()}"));
+
+
+            template = template.Replace("$$ComponentName$$", type)
+                               .Replace("$$Parameters$$", parametersString)
+                               .Replace("$$ParametersAssignments$$", parametersDeclarationString);
+
+            return (Content: template, FileName: type + "Container.tsx");
+        }
+
+        private static (string Content, string FileName) GenerateButtons(JObject jsonObject)
+        {
+            string type = jsonObject["type"].ToString();
+
+            JArray buttonsArray = (JArray)jsonObject["button-names"];
+            string[] buttonNames = buttonsArray.ToObject<string[]>();
+
+            string templateFilePath = "./Templates/Button.template";
+            string template = File.ReadAllText(templateFilePath);
+
+            string buttonListString = string.Join(",\n", buttonNames.Select(buttonName =>
+                $"//replace object with your localizations\n const localized{buttonName} = useLocalizationsDefaults(\r\n    `${{object.{buttonName}}}`\r\n  );"));
+
+            template = template.Replace("$$ButtonList$$", buttonListString)
+                .Replace("$$ComponentName$$", type);
+
+            return (Content: template, FileName: type + "Container.tsx");
         }
     }
 }

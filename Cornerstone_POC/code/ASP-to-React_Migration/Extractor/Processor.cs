@@ -1,6 +1,7 @@
 ﻿using Extractor.Model;
 using Extractor.Service;
 using Extractor.Utils;
+using Newtonsoft.Json;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -31,7 +32,7 @@ namespace Extractor
             var gptService = new GPTService();
             var jsonResponse = await gptService.GetAiResponseForImage($"<aspx-code>{aspxContent}</aspx-code>/n${Constants.AspxCodeToJson}", string.Empty, Constants.Model, true, request.ImagePath);
             var jsonContent = Helper.RemoveMarkupCode(jsonResponse.Message, "json");
-            var controls = JsonSerializer.Deserialize<AspControls>(jsonContent);
+            var controls = System.Text.Json.JsonSerializer.Deserialize<AspControls>(jsonContent);
             return controls;
         }
 
@@ -84,7 +85,7 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
             }
 
             string jsonArray = match.Value;
-            List<FileContent> rootObjects = JsonSerializer.Deserialize<List<FileContent>>(jsonArray)!;
+            List<FileContent> rootObjects = System.Text.Json.JsonSerializer.Deserialize<List<FileContent>>(jsonArray)!;
             if (rootObjects == null)
             {
                 Logger.Log("Deserialization failed or the JSON response is empty.");
@@ -127,8 +128,12 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
             if (request.IsCustom)
             {
                 // First convert to Json then convert Json to react.
-                //var aspxControls = await GetControlsFromAspx(request);
-                await MigrateToCSODReact(request);
+                var aspxControls = await GetControlsFromAspx(request);
+                string aspxControlsString = JsonConvert.SerializeObject(aspxControls, Formatting.Indented);
+                Helper.CreateFile(request.OutputPath, "aspxcs.json", aspxControlsString);
+                
+                
+                //await MigrateToCSODReact(request);
             }
             else
             {
