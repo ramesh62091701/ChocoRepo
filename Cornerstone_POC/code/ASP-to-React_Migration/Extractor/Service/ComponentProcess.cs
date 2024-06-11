@@ -10,6 +10,7 @@ using Extractor.Model;
 using System.Text.RegularExpressions;
 using System.Text.Json.Nodes;
 using System.Net.NetworkInformation;
+using Microsoft.VisualBasic;
 
 namespace Extractor.Service
 {
@@ -25,51 +26,52 @@ namespace Extractor.Service
 5.Use the below json format as reference
 [
     {
-	  ""type"": ""Breadcrumb"",
-	  ""paths"": [
-                    { ""name"": ""Home"", ""data-type"": ""string"" },
-                    { ""name"": ""AssignTraining"", ""data-type"": ""string"" },
-                ]
-	},
-	{
-	  ""type"": ""DataGrid"",
-	  ""table-name"": ""UserDetails"",
-	  ""total-rows"" :  5,
-	  ""column-names"": [ ""Name"", ""ID"", ""Division"", ],
-	  ""rows"": [
-		{
-		  ""Name"": ""John Doe"",
-		  ""ID"": ""123"",
-		  ""Division"": ""Sales"",
-		},
-		{
-		  ""Name"": ""Jane Smith"",
-		  ""ID"": ""456"",
-		  ""Division"": ""Marketing"",
-		  ""Position"": ""Executive"",
-		},
-	  ],
-	  ""pages"": ""1 of 6""
-	},
-	{
-	  ""type"": ""DatePicker"",
-	  ""initialValue"": {
-		""start"": ""2024-06-04T00:00:00.000Z"",
-		""end"": ""2024-06-12T00:00:00.000Z""
-	},
+        ""type"": ""Breadcrumb"",
+        ""paths"": [
+            { ""name"": ""Home"", ""data-type"": ""string"" },
+            { ""name"": ""AssignTraining"", ""data-type"": ""string"" }
+        ]
+    },
     {
-	  ""type"": ""TextArea"",
-	  ""property-name"": ""Comments""
-	},
+        ""type"": ""DataGrid"",
+        ""table-name"": ""UserDetails"",
+        ""total-rows"": 5,
+        ""column-names"": [""Name"", ""ID"", ""Division""],
+        ""rows"": [
+            {
+                ""Name"": ""John Doe"",
+                ""ID"": ""123"",
+                ""Division"": ""Sales""
+            },
+            {
+                ""Name"": ""Jane Smith"",
+                ""ID"": ""456"",
+                ""Division"": ""Marketing"",
+                ""Position"": ""Executive""
+            }
+        ],
+        ""pages"": ""1 of 6""
+    },
     {
-	  ""type"": ""Button"",
-	  ""button-names"": [ ""Submit"", ""Search""],
-	},
-
+        ""type"": ""DatePicker"",
+        ""initialValue"": {
+            ""start"": ""2024-06-04T00:00:00.000Z"",
+            ""end"": ""2024-06-12T00:00:00.000Z""
+        }
+    },
+    {
+        ""type"": ""TextArea"",
+        ""property-name"": ""Comments""
+    },
+    {
+        ""type"": ""Button"",
+        ""button-names"": [""Submit"", ""Search""]
+    }
 ]
+
 ";
             var gptService = new GPTService();
-            var jsonOutput = await gptService.GetAiResponseForImage(jsonPrompt, string.Empty, Constants.Model, true, request.ImagePath);
+            var jsonOutput = await gptService.GetAiResponseForImage(jsonPrompt, string.Empty, Model.Constants.Model, true, request.ImagePath);
 
             string pattern = @"\[[\s\S]*\]";
             Match match = Regex.Match(jsonOutput.Message, pattern);
@@ -82,63 +84,91 @@ namespace Extractor.Service
 
             string arrayJson = match.Value;
 
-            JArray jsonArray = JArray.Parse(arrayJson);
+            //Send the componenets to the popup screen
 
-            foreach (JToken token in jsonArray)
+            List<ComponentJson> jsonArray = JsonConvert.DeserializeObject<List<ComponentJson>>(arrayJson);
+
+            foreach (var component in jsonArray)
             {
-                if (token is JObject)
+                switch (component.Type)
                 {
-                    JObject jsonObject = (JObject)token;
-                    string type = jsonObject["type"].ToString();
-
-                    switch (type)
-                    {
-                        case "DataGrid":
-                            var gridTemplate = GenerateGrid(jsonObject);
-                            //Logger.Log(gridTemplate.Content);
+                    case "DataGrid":
+                        if (component.Rows != null)
+                        {
+                            var gridTemplate = GenerateGrid(new DataGrid
+                            {
+                                Type = component.Type,
+                                TableName = component.TableName,
+                                TotalRows = component.TotalRows ?? 0,
+                                ColumnNames = component.ColumnNames,
+                                Rows = component.Rows,
+                                Pages = component.Pages
+                            });
                             Helper.CreateFile(request.OutputPath, gridTemplate.FileName, gridTemplate.Content);
-                            break;
+                        }
+                        break;
 
-                        case "TextArea":
-                            var textAreaTemplate = GenerateTextArea(jsonObject);
-                            //Logger.Log(textAreaTemplate.Content);
+                    case "TextArea":
+                        if (component.PropertyName != null)
+                        {
+                            var textAreaTemplate = GenerateTextArea(new TextArea
+                            {
+                                Type = component.Type,
+                                PropertyName = component.PropertyName
+                            });
                             Helper.CreateFile(request.OutputPath, textAreaTemplate.FileName, textAreaTemplate.Content);
-                            break;
+                        }
+                        break;
 
-                        case "DatePicker":
-                            var datePickerTemplate = GenerateDatePicker(jsonObject);
-                            //Logger.Log(datePickerTemplate.Content);
+                    case "DatePicker":
+                        if (component.InitialValue != null)
+                        {
+                            var datePickerTemplate = GenerateDatePicker(new DatePicker
+                            {
+                                Type = component.Type,
+                                InitialValue = component.InitialValue
+                            });
                             Helper.CreateFile(request.OutputPath, datePickerTemplate.FileName, datePickerTemplate.Content);
-                            break;
-                        case "Breadcrumb":
-                            var breadcrumbTemplate = GenerateBreadcrumb(jsonObject);
-                            //Logger.Log(breadcrumbTemplate.Content);
-                            Helper.CreateFile(request.OutputPath, breadcrumbTemplate.FileName, breadcrumbTemplate.Content);
-                            break;
-                        case "Button":
-                            var buttonTemplate = GenerateButtons(jsonObject);
-                            //Logger.Log(buttonTemplate.Content);
-                            Helper.CreateFile(request.OutputPath, buttonTemplate.FileName, buttonTemplate.Content);
-                            break;
+                        }
+                        break;
 
-                        default:
-                            Logger.Log($"Json object of type ={type} not found");  
-                            break;
-                    }
+                    case "Breadcrumb":
+                        if (component.Paths != null)
+                        {
+                            var breadcrumbTemplate = GenerateBreadcrumb(new Breadcrumb
+                            {
+                                Type = component.Type,
+                                Paths = component.Paths
+                            });
+                            Helper.CreateFile(request.OutputPath, breadcrumbTemplate.FileName, breadcrumbTemplate.Content);
+                        }
+                        break;
+
+                    case "Button":
+                        if (component.ButtonNames != null)
+                        {
+                            var buttonTemplate = GenerateButtons(new Button
+                            {
+                                Type = component.Type,
+                                ButtonNames = component.ButtonNames
+                            });
+                            Helper.CreateFile(request.OutputPath, buttonTemplate.FileName, buttonTemplate.Content);
+                        }
+                        break;
+
+                    default:
+                        Logger.Log($"Json object of type ={component.Type} not found");
+                        break;
                 }
-            }
+            }        
             return true;
         }
 
-        private static (string Content, string FileName) GenerateGrid(JObject jsonObject)
+        private static (string Content, string FileName) GenerateGrid(DataGrid dataGrid)
         {
-            string tableName = jsonObject["table-name"].ToString();
+            string tableName = dataGrid.TableName;
 
-            JArray columnNamesArray = (JArray)jsonObject["column-names"];
-            string[] columnNames = columnNamesArray.ToObject<string[]>();
-
-            JArray rowsArray = (JArray)jsonObject["rows"];
-            var rows = rowsArray.Select(row => row.ToObject<JObject>());
+            string[] columnNames = dataGrid.ColumnNames.ToArray();
 
             string templateFilePath = "./Templates/Grid.template";
             string template = File.ReadAllText(templateFilePath);
@@ -152,9 +182,9 @@ namespace Extractor.Service
             return (Content: template , FileName: tableName + ".tsx");
         }
 
-        private static (string Content, string FileName) GenerateTextArea(JObject jsonObject)
+        private static (string Content, string FileName) GenerateTextArea(TextArea textArea)
         {
-            string propertyName = jsonObject["property-name"].ToString();
+            string propertyName = textArea.PropertyName;
 
             string templateFilePath = "./Templates/Textarea.template";
             string template = File.ReadAllText(templateFilePath);
@@ -164,25 +194,25 @@ namespace Extractor.Service
             return (Content :template , FileName : propertyName+".tsx");
         }
 
-        private static (string Content, string FileName) GenerateDatePicker(JObject jsonObject)
+        private static (string Content, string FileName) GenerateDatePicker(DatePicker datePicker)
         {
-            string type = jsonObject["type"].ToString();
+            string type = datePicker.Type;
             string templateFilePath = "./Templates/DatePicker.template";
             string template = File.ReadAllText(templateFilePath);
 
             return (Content: template, FileName: type + ".tsx");
         }
 
-        private static (string Content, string FileName) GenerateBreadcrumb(JObject jsonObject)
+        private static (string Content, string FileName) GenerateBreadcrumb(Breadcrumb breadcrumb)
         {
-            string type = jsonObject["type"].ToString();
+            string type = breadcrumb.Type;
 
-            JArray pathsArray = (JArray)jsonObject["paths"];
+            var pathsArray = breadcrumb.Paths.ToArray(); 
 
             var paths = pathsArray.Select(pathObject => new
             {
-                Name = (string)pathObject["name"],
-                DataType = (string)pathObject["data-type"]
+                Name = pathObject.Name,
+                DataType = pathObject.DataType,
             }).ToArray();
 
             string[] pathNames = paths.Select(path => path.Name).ToArray();
@@ -191,7 +221,7 @@ namespace Extractor.Service
             string template = File.ReadAllText(templateFilePath);
 
             string parametersString = string.Join("\n", pathNames.Select(pathName =>
-                $" {pathName.ToLower()},"));
+        $" {pathName.ToLower()},"));
 
             string parametersDeclarationString = string.Join(",\n", paths.Select(path =>
                 $" {path.Name.ToLower()}: {path.DataType.ToLower()}"));
@@ -204,17 +234,16 @@ namespace Extractor.Service
             return (Content: template, FileName: type + "Container.tsx");
         }
 
-        private static (string Content, string FileName) GenerateButtons(JObject jsonObject)
+        private static (string Content, string FileName) GenerateButtons(Button button)
         {
-            string type = jsonObject["type"].ToString();
+            string type = button.Type;
 
-            JArray buttonsArray = (JArray)jsonObject["button-names"];
-            string[] buttonNames = buttonsArray.ToObject<string[]>();
+            var buttonsArray = button.ButtonNames.ToArray();
 
             string templateFilePath = "./Templates/Button.template";
             string template = File.ReadAllText(templateFilePath);
 
-            string buttonListString = string.Join(",\n", buttonNames.Select(buttonName =>
+            string buttonListString = string.Join(",\n", buttonsArray.Select(buttonName =>
                 $"//replace object with your localizations\n const localized{buttonName} = useLocalizationsDefaults(\r\n    `${{object.{buttonName}}}`\r\n  );"));
 
             template = template.Replace("$$ButtonList$$", buttonListString)
@@ -242,7 +271,7 @@ Above are the component files in the React. Generate a json response in below fo
     ""declared-variable"": [""currentPage"", ""isDisabled""]
   }},
 ]";
-            var response = await gptService.GetAiResponse(prompt, String.Empty, Constants.Model, true);
+            var response = await gptService.GetAiResponse(prompt, String.Empty, Model.Constants.Model, true);
 
             string pattern = @"\[[\s\S]*\]";
             Match match = Regex.Match(response.Message, pattern);
@@ -253,13 +282,13 @@ Above are the component files in the React. Generate a json response in below fo
             }
 
             string arrayJson = match.Value;
+            List<FigmaComponentJson> jsonArray = JsonConvert.DeserializeObject<List<FigmaComponentJson>>(arrayJson);
 
-            JArray jsonArray = JArray.Parse(arrayJson);
             StringBuilder componentBuilder = new StringBuilder();
-            foreach (JObject obj in jsonArray)
+            foreach (var obj in jsonArray)
             {
-                string type = obj["type"].ToString();
-                var declaredVariables = obj["declared-variable"].ToObject<string[]>();
+                string type = obj.Type;
+                var declaredVariables = obj.DeclaredVariable.ToArray();
 
                 componentBuilder.AppendLine($"<{type}");
 

@@ -132,10 +132,10 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
                 //string aspxControlsString = JsonConvert.SerializeObject(aspxControls, Formatting.Indented);
                 //Helper.CreateFile(request.OutputPath, "aspxcs.json", aspxControlsString);
                 
-                //await MigrateToCSODReact(request);
+                await MigrateToCSODReact(request);
 
-                var mainFileContent =await ComponentProcess.GenerateMainFile(request);
-                Helper.CreateFile(request.OutputPath, "App.tsx", mainFileContent);
+                //var mainFileContent =await ComponentProcess.GenerateMainFile(request);
+                //Helper.CreateFile(request.OutputPath, "App.tsx", mainFileContent);
 
                 
             }
