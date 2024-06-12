@@ -1,7 +1,9 @@
-﻿using Extractor.Service;
+﻿using Extractor.Model;
+using Extractor.Service;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Text.RegularExpressions;
 
 
 namespace Extractor.Utils
@@ -61,6 +63,19 @@ namespace Extractor.Utils
                 }
             }
             return null;
+        }
+
+        public static string SelectJsonArray(string jsonOutput)
+        {
+            string pattern = @"\[[\s\S]*\]";
+            Match match = Regex.Match(jsonOutput, pattern);
+
+            if (!match.Success)
+            {
+                Logger.Log("No JSON array found in the response.");
+                return string.Empty;
+            }
+            return match.Value;
         }
 
     }

@@ -56,15 +56,7 @@ namespace Extractor.Service
             var gptService = new GPTService();
             var jsonOutput = await gptService.GetAiResponseForImage(jsonPrompt, string.Empty, Model.Constants.Model, true, request.ImagePath);
 
-            string pattern = @"\[[\s\S]*\]";
-            Match match = Regex.Match(jsonOutput.Message, pattern);
-
-            if (!match.Success)
-            {
-                Logger.Log("No JSON array found in the response.");
-                return new List<FigmaComponent>();
-            }
-            string arrayJson = match.Value;
+            string arrayJson = Helper.SelectJsonArray(jsonOutput.Message);
             List<FigmaComponent> components = JsonConvert.DeserializeObject<List<FigmaComponent>>(arrayJson);
             return components;
         }

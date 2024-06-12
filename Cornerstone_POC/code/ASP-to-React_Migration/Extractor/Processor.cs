@@ -70,34 +70,25 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
 	}},
 ]";
             var reactSeparateResponse = await gptService.GetAiResponse(separatePrompt, Constants.ReactSysPrompt, Constants.Model, true);
-            string pattern = @"\[[\s\S]*\]";
-            Match match = Regex.Match(reactSeparateResponse.Message, pattern);
 
-            if (!match.Success)
-            {
-                Logger.Log("No JSON array found in the response.");
-                return false;
-            }
-
-            string jsonArray = match.Value;
-            List<FileContent> rootObjects = System.Text.Json.JsonSerializer.Deserialize<List<FileContent>>(jsonArray)!;
+            string jsonArray = Helper.SelectJsonArray(reactSeparateResponse.Message);
+            List<FileContent> rootObjects = JsonConvert.DeserializeObject<List<FileContent>>(jsonArray)!;
             if (rootObjects == null)
             {
                 Logger.Log("Deserialization failed or the JSON response is empty.");
                 return false;
             }
-            if (rootObjects != null)
+
+            foreach (var rootObject in rootObjects)
             {
-                foreach (var rootObject in rootObjects)
-                {
-                    string filePath = Path.Combine(request.OutputPath, rootObject.FileName);
-                    string directoryPath = Path.GetDirectoryName(filePath);
-                    if (!Directory.Exists(directoryPath))
-                        Directory.CreateDirectory(directoryPath);
-                    await File.WriteAllTextAsync(filePath, rootObject.Content);
-                    Logger.Log($"File created: {filePath}");
-                }
+                string filePath = Path.Combine(request.OutputPath, rootObject.FileName);
+                string directoryPath = Path.GetDirectoryName(filePath);
+                if (!Directory.Exists(directoryPath))
+                    Directory.CreateDirectory(directoryPath);
+                await File.WriteAllTextAsync(filePath, rootObject.Content);
+                Logger.Log($"File created: {filePath}");
             }
+
             return true;
         }
 

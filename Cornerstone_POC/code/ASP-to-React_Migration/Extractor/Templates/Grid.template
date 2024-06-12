@@ -1,8 +1,8 @@
 ﻿import React, { useEffect } from "react";
 import {
-  DataGrid,
-  DataGridColumnDef,
-  DataGridRow,
+    DataGrid,
+    DataGridColumnDef,
+    DataGridRow,
 } from "@flare/primitives/data-grid";
 import "style/style.less";
 import { fetch$$Entity$$Details } from "services/CommonAPIService";
@@ -10,114 +10,114 @@ import $$Entity$$GridToolBar from "./$$Entity$$GridToolBar";
 
 // Todo: Define Properties.
 interface Props {
-  selected: Record<number, $$Entity$$Detail>;
-  setSelected: (value: Record<number, $$Entity$$Detail>) => void;
+    selected: Record<number, $$Entity$$Detail>;
+    setSelected: (value: Record<number, $$Entity$$Detail>) => void;
 }
 
 const $$Entity$$GridContainer: React.FC<Props> = ({
-  selected,
-  setSelected,
-}):JSX.Element => {
-const tempData = React.useRef<$$Entity$$Detail[]>([]);
+    selected,
+    setSelected,
+}): JSX.Element => {
+    const tempData = React.useRef<$$Entity$$Detail[]>([]);
 
-// Todo: Define localized strings.
+    // Todo: Define localized strings.
 
-// store pagination state in your own state
-const [pagination, setPagination] = React.useState({
-pageIndex: 0,
-pageSize: 25, // customize the default page size
-});
-
-const $$Entity$$GridColumns: DataGridColumnDef<$$Entity$$Detail>[] = [
-$$Columns$$
-];
-
-// Todo: Define state
-const [data, setData] = React.useState<$$Entity$$Detail[]>([]);
-const [TotalRows, setTotalRows] = React.useState<number>(0);
-const [searchText, setSearchText] = React.useState<string>("");
-const [selectedKey, setselectedKey] = React.useState<Record<number, $$Entity$$Detail>>(selected);
-const [columns, setColumns] = React.useState<DataGridColumnDef<$$Entity$$Detail>[]>($$Entity$$GridColumns);
-const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
-const [isDataLoaded, setIsDataLoaded] = React.useState<boolean>(false);
-const [showSelected, setShowSelected] = React.useState<boolean>(false);
-
-// Fetch Details
-  const Fetch$$Entity$$Details = React.useCallback(
-    (userFilters: UserFilters) => {
-      setData([]);
-      setIsDataLoaded(false);
-      setIsUserLoaded(false);
-      fetch$$Entity$$Details(loId, userFilters)
-        .then((response: UserDetailsResponse) => {
-          setIsUserLoaded(true);
-          setIsDataLoaded(true);
-          setTotalRows(response.totalCount);
-          // Todo: Add logic here
-        })
-        .catch((error) => {
-          setIsUserLoaded(true);
-          setIsDataLoaded(true);
-          setData([]);
-          setTotalRows(0);
-          tempData.current = [];
-
-          $$FetchDetails$$
-
-        });
-    },
-    [loId, setIsUserLoaded]
-  );
-
-// Define useeffect
-useEffect(() => {
-    const t: RowSelectionState = {};
-    Object.keys(selectedUsers).forEach((key) => {
-      t[key] = true;
+    // store pagination state in your own state
+    const [pagination, setPagination] = React.useState({
+        pageIndex: 0,
+        pageSize: 25, // customize the default page size
     });
-    setRowSelection(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
- return (
-    <div id="$$Entity$$GridContainer">
-      <DataGrid
-       enableRowSelection={(row: DataGridRow<$$Entity$$>) =>
-          isRecurrenceEnabled ||
-          row.original.currentStatusId === null ||
-          row.original.currentStatusId <= 0
-        }
-        manualPagination
-        columns={$$Entity$$Columns}
-        data={$$Entity$$Rows}
-        getRowId={(orgRow: Entity) => `${orgRow.entityId}`} //Todo: Replace the entity id.
-        renderTopToolbar={({ table }) => {
-          return (
-            <$$Entity$$ToolBar
-              selectedRows={Object.keys(rowSelection).length}
-              totalRows={TotalRows}
-              toggleSwitch={ToggleShowSelected}
-              setSearchText={setSearchText}
-              handleKeyDown={handleKeyDown}
+    const $$Entity$$GridColumns: DataGridColumnDef<$$Entity$$Detail>[] = [
+        $$Columns$$
+    ];
+
+    // Todo: Define state
+    const [data, setData] = React.useState<$$Entity$$Detail[]>([]);
+    const [TotalRows, setTotalRows] = React.useState<number>(0);
+    const [searchText, setSearchText] = React.useState<string>("");
+    const [selectedKey, setselectedKey] = React.useState<Record<number, $$Entity$$Detail>>(selected);
+    const [columns, setColumns] = React.useState<DataGridColumnDef<$$Entity$$Detail>[]>($$Entity$$GridColumns);
+    const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
+    const [isDataLoaded, setIsDataLoaded] = React.useState<boolean>(false);
+    const [showSelected, setShowSelected] = React.useState<boolean>(false);
+
+    // Fetch Details
+    const Fetch$$Entity$$Details = React.useCallback(
+        (userFilters: UserFilters) => {
+            setData([]);
+            setIsDataLoaded(false);
+            setIsUserLoaded(false);
+            fetch$$Entity$$Details(loId, userFilters)
+                .then((response: UserDetailsResponse) => {
+                    setIsUserLoaded(true);
+                    setIsDataLoaded(true);
+                    setTotalRows(response.totalCount);
+                    // Todo: Add logic here
+                })
+                .catch((error) => {
+                    setIsUserLoaded(true);
+                    setIsDataLoaded(true);
+                    setData([]);
+                    setTotalRows(0);
+                    tempData.current = [];
+
+                    $$FetchDetails$$
+
+                });
+        },
+        [loId, setIsUserLoaded]
+    );
+
+    // Define useeffect
+    useEffect(() => {
+        const t: RowSelectionState = {};
+        Object.keys(selectedUsers).forEach((key) => {
+            t[key] = true;
+        });
+        setRowSelection(t);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    return (
+        <div id="$$Entity$$GridContainer">
+            <DataGrid
+                enableRowSelection={(row: DataGridRow<$$Entity$$>) =>
+                    isRecurrenceEnabled ||
+                    row.original.currentStatusId === null ||
+                    row.original.currentStatusId <= 0
+                }
+                manualPagination
+                columns={$$Entity$$Columns}
+                data={$$Entity$$Rows}
+                getRowId={(orgRow: Entity) => `${orgRow.entityId}`} //Todo: Replace the entity id.
+                renderTopToolbar={({ table }) => {
+                    return (
+                        <$$Entity$$ToolBar
+                            selectedRows={Object.keys(rowSelection).length}
+                            totalRows={TotalRows}
+                            toggleSwitch={ToggleShowSelected}
+                            setSearchText={setSearchText}
+                            handleKeyDown={handleKeyDown}
+                        />
+                    );
+                }}
+                rowCount={totalRows}
+                state={{ pagination, rowSelection, loading: !isDataLoaded }}
+                onPaginationChange={setPagination}
+                onRowSelectionChange={setRowSelection}
+                enableSorting={false}
+                enableColumnFilters={false}
+                enableGlobalFilter={false}
+                enableColumnActions={false}
+                defaultColumn={{
+                    maxSize: 20,
+                    minSize: 10,
+                    size: 20,
+                }}
             />
-          );
-        }}
-        rowCount={totalRows}
-        state={{ pagination, rowSelection, loading: !isDataLoaded }}
-        onPaginationChange={setPagination}
-        onRowSelectionChange={setRowSelection}
-        enableSorting={false}
-        enableColumnFilters={false}
-        enableGlobalFilter={false}
-        enableColumnActions={false}
-        defaultColumn={{
-          maxSize: 20,
-          minSize: 10,
-          size: 20,
-        }}
-      />
-    </div>
-  );
+        </div>
+    );
 };
 
 export default $$Entity$$GridContainer;

@@ -1,8 +1,8 @@
 ﻿import {
-  SingleDatePicker,
-  SingleDateValue,
-  usePlayerGlobalizationI18n,
-  defaultPlayerGlobalizationI18nContext,
+    SingleDatePicker,
+    SingleDateValue,
+    usePlayerGlobalizationI18n,
+    defaultPlayerGlobalizationI18nContext,
 } from "@flare/primitives/date-picker";
 import { Actions } from "actions/Actions";
 import moment from "moment";
@@ -13,153 +13,153 @@ import { useLocalizationsDefaults } from "@flare/primitives/core-ui";
 
 
 interface Props {
-  dateValue: SingleDateValue;
+    dateValue: SingleDateValue;
 }
 
 const $$PropertyName$$: React.FC<Props> = ({ dateValue }) => {
-  const i18nTools = usePlayerGlobalizationI18n(
-    Culture,
-    defaultPlayerGlobalizationI18nContext
-  );
+    const i18nTools = usePlayerGlobalizationI18n(
+        Culture,
+        defaultPlayerGlobalizationI18nContext
+    );
 
-  // Todo: Define Properties.
-  // Todo: Replace object with appropriate class
+    // Todo: Define Properties.
+    // Todo: Replace object with appropriate class
 
-  const DueDateLabel = useLocalizationsDefaults(`${object.DueDate}`); 
-  const DueDateInvalidDate = useLocalizationsDefaults(
-    `${object.DueDateInvalidDate}` 
-  );
-  const DueDatePastDate = useLocalizationsDefaults(
-    `${object.DueDatePastDate}` 
-  );
-  
-  const [DateValue, setDateValue] = React.useState<SingleDateValue>(dateValue);
-  const [hasError, setHasError] = React.useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = React.useState<string>("");
-  const dispatch: any = useDispatch();
-  const parseDate = (date: string, dateFormat: string) => {
-    const str = date.replaceAll("/", ".");
-    const format = dateFormat.replaceAll("/", ".");
-    let day = "" , month = "" , year = "";
-    let completeDate = "";
-    const split = str.split(/[.,-]/);
-    const splitformat = format.split(/[.,-]/);
+    const DueDateLabel = useLocalizationsDefaults(`${object.DueDate}`);
+    const DueDateInvalidDate = useLocalizationsDefaults(
+        `${object.DueDateInvalidDate}`
+    );
+    const DueDatePastDate = useLocalizationsDefaults(
+        `${object.DueDatePastDate}`
+    );
 
-    if (split.length === 3) {
-      split.forEach((arr, index) => {
-        const t = splitformat[index][0];
-        if (t.toLowerCase() === "d") {
-          day = arr;
-        } else if (t.toLowerCase() === "m") {
-          month = arr;
+    const [DateValue, setDateValue] = React.useState<SingleDateValue>(dateValue);
+    const [hasError, setHasError] = React.useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = React.useState<string>("");
+    const dispatch: any = useDispatch();
+    const parseDate = (date: string, dateFormat: string) => {
+        const str = date.replaceAll("/", ".");
+        const format = dateFormat.replaceAll("/", ".");
+        let day = "", month = "", year = "";
+        let completeDate = "";
+        const split = str.split(/[.,-]/);
+        const splitformat = format.split(/[.,-]/);
+
+        if (split.length === 3) {
+            split.forEach((arr, index) => {
+                const t = splitformat[index][0];
+                if (t.toLowerCase() === "d") {
+                    day = arr;
+                } else if (t.toLowerCase() === "m") {
+                    month = arr;
+                } else {
+                    year = arr;
+                }
+            });
+            completeDate = `${month}/${day}/${year}`;
+        }
+        return completeDate;
+    };
+
+
+    //Validating proper format for the date
+    const GetValidation = (date: string, isValid: boolean) => {
+        let isError = false;
+        setHasError(false);
+        setErrorMessage("");
+        if (date !== "") {
+            let localIsValid = isValid;
+            let parsedDate = "";
+            if (localIsValid) {
+                parsedDate = parseDate(date, Culture.dateFormats.short);
+                if (parsedDate === "") {
+                    localIsValid = false;
+                }
+            }
+
+            if (localIsValid && dateValue !== new Date(parsedDate)) {
+                const startDate = moment
+                    .utc(moment(parsedDate).startOf("day"))
+                    .format("YYYY-MM-DDTHH:mm:ss");
+
+                if (startDate === "Invalid date") {
+                    isError = true;
+                    setHasError(true);
+                    setErrorMessage("Enter a valid date in m/d/yy");
+                } else {
+                    setDateValue(new Date(parsedDate));
+                }
+            }
+            if (!localIsValid) {
+                isError = true;
+                setHasError(true);
+                setErrorMessage(DueDateInvalidDate);
+            }
+            dispatch({
+                type: Actions.SET_DUE_DATE_ERROR,
+                payload: { value: "", hasError: isError },
+            });
         } else {
-          year = arr;
+            setDateValue(null);
+            dispatch({
+                type: Actions.SET_DUE_DATE_ERROR,
+                payload: { value: "", hasError: isError },
+            });
         }
-      });
-      completeDate = `${month}/${day}/${year}`;
-    }
-    return completeDate;
-  };
- 
+    };
 
-  //Validating proper format for the date
-  const GetValidation = (date: string, isValid: boolean) => {
-    let isError = false;
-    setHasError(false);
-    setErrorMessage("");
-    if (date !== "") {
-      let localIsValid = isValid;
-      let parsedDate = "";
-      if (localIsValid) {
-        parsedDate = parseDate(date, Culture.dateFormats.short);
-        if (parsedDate === "") {
-          localIsValid = false;
-        }
-      }
-
-      if (localIsValid && dateValue !== new Date(parsedDate)) {
-        const startDate = moment
-          .utc(moment(parsedDate).startOf("day"))
-          .format("YYYY-MM-DDTHH:mm:ss");
-
-        if (startDate === "Invalid date") {
-          isError = true;
-          setHasError(true);
-          setErrorMessage("Enter a valid date in m/d/yy");
+    //Validating the date is not in the past
+    const GetValidationForFuture = (date: SingleDateValue) => {
+        if (date !== null) {
+            const startDateVal = moment
+                .utc(moment(date).startOf("day"))
+                .format("YYYY-MM-DDTHH:mm:ss");
+            const currentDate = moment
+                .utc(moment(new Date().setHours(0, 0, 0, 0)).startOf("day"))
+                .format("YYYY-MM-DDTHH:mm:ss");
+            if (startDateVal < currentDate) {
+                setHasError(true);
+                setErrorMessage(DueDatePastDate);
+                dispatch({
+                    type: Actions.SET_DUE_DATE_ERROR,
+                    payload: { UTCvalue: startDateVal, value: date, hasError: true },
+                });
+            } else {
+                dispatch({
+                    type: Actions.SET_DUE_DATE,
+                    payload: { UTCvalue: startDateVal, value: date, hasError: false },
+                });
+            }
+            setDateValue(date);
         } else {
-          setDateValue(new Date(parsedDate));
+            dispatch({
+                type: Actions.SET_DUE_DATE,
+                payload: { UTCvalue: "", value: undefined, hasError: false },
+            });
         }
-      }
-      if (!localIsValid) {
-        isError = true;
-        setHasError(true);
-        setErrorMessage(DueDateInvalidDate);
-      }
-      dispatch({
-        type: Actions.SET_DUE_DATE_ERROR,
-        payload: { value: "", hasError: isError },
-      });
-    } else {
-      setDateValue(null);
-      dispatch({
-        type: Actions.SET_DUE_DATE_ERROR,
-        payload: { value: "", hasError: isError },
-      });
-    }
-  };
+    };
 
-  //Validating the date is not in the past
-  const GetValidationForFuture = (date: SingleDateValue) => {
-    if (date !== null) {
-      const startDateVal = moment
-        .utc(moment(date).startOf("day"))
-        .format("YYYY-MM-DDTHH:mm:ss");
-      const currentDate = moment
-        .utc(moment(new Date().setHours(0, 0, 0, 0)).startOf("day"))
-        .format("YYYY-MM-DDTHH:mm:ss");
-      if (startDateVal < currentDate) {
-        setHasError(true);
-        setErrorMessage(DueDatePastDate);
-        dispatch({
-          type: Actions.SET_DUE_DATE_ERROR,
-          payload: { UTCvalue: startDateVal, value: date, hasError: true },
-        });
-      } else {
-        dispatch({
-          type: Actions.SET_DUE_DATE,
-          payload: { UTCvalue: startDateVal, value: date, hasError: false },
-        });
-      }
-      setDateValue(date);
-    } else {
-      dispatch({
-        type: Actions.SET_DUE_DATE,
-        payload: { UTCvalue: "", value: undefined, hasError: false },
-      });
-    }
-  };
-
-  const today = new Date();
-  return (
-    <SingleDatePicker
-      id="disabled-days"
-      size="medium"
-      label={DueDateLabel}
-      value={DateValue}
-      onTextChange={(date, isValid) => {
-        GetValidation(date, isValid);
-      }}
-      onChange={(date) => {
-        GetValidationForFuture(date);
-      }}
-      disabledDays={{
-        before: new Date(new Date().setDate(today.getDate())),
-      }}
-      i18n={i18nTools}
-      hasError={hasError}
-      errorMessage={errorMessage}
-    />
-  );
+    const today = new Date();
+    return (
+        <SingleDatePicker
+            id="disabled-days"
+            size="medium"
+            label={DueDateLabel}
+            value={DateValue}
+            onTextChange={(date, isValid) => {
+                GetValidation(date, isValid);
+            }}
+            onChange={(date) => {
+                GetValidationForFuture(date);
+            }}
+            disabledDays={{
+                before: new Date(new Date().setDate(today.getDate())),
+            }}
+            i18n={i18nTools}
+            hasError={hasError}
+            errorMessage={errorMessage}
+        />
+    );
 };
 
 export default $$PropertyName$$;

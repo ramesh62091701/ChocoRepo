@@ -1,57 +1,57 @@
 ﻿import {
-  BreadcrumbItemProps,
-  Breadcrumbs,
+    BreadcrumbItemProps,
+    Breadcrumbs,
 } from "@flare/primitives/breadcrumbs";
 import { useLocalizationsDefaults } from "@flare/primitives/core-ui";
 import React from "react";
 
 const $$ComponentName$$Container = ({
-  $$Parameters$$
+    $$Parameters$$
 }: {
-$$ParametersAssignments$$
+    $$ParametersAssignments$$
 }) => {
 
-  // Todo: Define Properties.
-  const localizedHomeLabelText = useLocalizationsDefaults(
-    `${$$ComponentName$$.HomeLabel}`
-  );
-  const localizedEATtitle = useLocalizationsDefaults(
-    `${$$ComponentName$$.TITLE}`
-  );
-  const on$$ComponentName$$Click = (item: BreadcrumbItemProps) => {
-    window.location.href = item.to;
-  };
-  const Get$$ComponentName$$Item = () => {
-    const $$ComponentName$$Items: $$BreadcrumbItemProps[] = [];
+    // Todo: Define Properties.
+    const localizedHomeLabelText = useLocalizationsDefaults(
+        `${$$ComponentName$$.HomeLabel}`
+    );
+    const localizedEATtitle = useLocalizationsDefaults(
+        `${$$ComponentName$$.TITLE}`
+    );
+    const on$$ComponentName$$Click = (item: BreadcrumbItemProps) => {
+        window.location.href = item.to;
+    };
+    const Get$$ComponentName$$Item = () => {
+        const $$ComponentName$$Items: $$BreadcrumbItemProps[] = [];
 
-    $$ComponentName$$Items.push({
-      disable: false,
-      label: localizedHomeLabelText, // Todo: replace with your localization
-      to: homePageUrl, // Todo: Replace with your parameters
-    });
-    $$ComponentName$$Items.push({
-      disable: false,
-      label: localizedEATtitle,  // Todo: replace with your localization
-      to: "", // ToDo: Replace with your parameters
-    });
+        $$ComponentName$$Items.push({
+            disable: false,
+            label: localizedHomeLabelText, // Todo: replace with your localization
+            to: homePageUrl, // Todo: Replace with your parameters
+        });
+        $$ComponentName$$Items.push({
+            disable: false,
+            label: localizedEATtitle,  // Todo: replace with your localization
+            to: "", // ToDo: Replace with your parameters
+        });
 
-    $$FetchDetails$$
+        $$FetchDetails$$
 
-    return $$ComponentName$$Items;
-  };
+        return $$ComponentName$$Items;
+    };
 
-  return (
-    <div className="$$ComponentName$$Wrapper">
-      <Breadcrumbs
-        items={Get$$ComponentName$$Item()}
-        max$$ComponentName$$Length={50}
-        onClick={(item: BreadcrumbItemProps) => on$$ComponentName$$Click(item)}
-        showHomeIcon
-        fontSize="12px"
-        iconSize="small"
-        iconColor={`#${window.csod.context.theming.primary}`}
-      />
-    </div>
-  );
+    return (
+        <div className="$$ComponentName$$Wrapper">
+            <Breadcrumbs
+                items={Get$$ComponentName$$Item()}
+                max$$ComponentName$$Length={50}
+                onClick={(item: BreadcrumbItemProps) => on$$ComponentName$$Click(item)}
+                showHomeIcon
+                fontSize="12px"
+                iconSize="small"
+                iconColor={`#${window.csod.context.theming.primary}`}
+            />
+        </div>
+    );
 };
 export default $$ComponentName$$Container;
