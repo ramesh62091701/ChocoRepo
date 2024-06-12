@@ -2,11 +2,6 @@
 
 namespace Extractor.Model
 {
-    public class AspControls
-    {
-        public List<AspControls> aspControls { get; set; }
-        public List<UcControl> ucControls { get; set; }
-    }
 
     public class AspControl
     {
@@ -24,16 +19,9 @@ namespace Extractor.Model
         public string @class { get; set; }
         public string alternateText { get; set; }
         public string text { get; set; }
-    }
-
-
-    public class UcControl
-    {
-        public string type { get; set; }
-        public string runat { get; set; }
-        public string id { get; set; }
         public string watermarkText { get; set; }
         public string startDate { get; set; }
         public string ignoreTimezone { get; set; }
     }
+
 }

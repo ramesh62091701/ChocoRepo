@@ -22,17 +22,17 @@ namespace Extractor
             return await FigmaHelper.GetContents(request.FigmaUrl);
         }
 
-        private async static Task<AspControls> GetControlsFromAspx(Request request)
+        private async static Task<List<AspControl>> GetControlsFromAspx(Request request)
         {
             if (string.IsNullOrEmpty(request.AspxPagePath))
             {
-                return new AspControls();
+                return new List<AspControl>();
             }
             var aspxContent = File.ReadAllText(request.AspxPagePath);
             var gptService = new GPTService();
             var jsonResponse = await gptService.GetAiResponseForImage($"<aspx-code>{aspxContent}</aspx-code>/n${Constants.AspxCodeToJson}", string.Empty, Constants.Model, true, request.ImagePath);
             var jsonContent = Helper.RemoveMarkupCode(jsonResponse.Message, "json");
-            var controls = System.Text.Json.JsonSerializer.Deserialize<AspControls>(jsonContent);
+            var controls = System.Text.Json.JsonSerializer.Deserialize<List<AspControl>>(jsonContent);
             return controls;
         }
 
@@ -106,11 +106,6 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
             return true;
         }
 
-        private async static Task<bool> MigrateToCSODReact(Request request)
-        {
-            await ComponentProcess.Process(request);
-            return true;
-        }
 
         public async static Task<bool> MigrateToHtml(Request request)
         {
@@ -122,22 +117,26 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
             return true;
         }
 
-        public async static Task<bool> MigrateToReact(Request request)
+
+        public async static Task<ControlResponse> GetControls(Request request)
         {
             Logger.Log("Started processing...");
+            var response = new ControlResponse();
             if (request.IsCustom)
             {
-                // First convert to Json then convert Json to react.
-                //var aspxControls = await GetControlsFromAspx(request);
-                //string aspxControlsString = JsonConvert.SerializeObject(aspxControls, Formatting.Indented);
-                //Helper.CreateFile(request.OutputPath, "aspxcs.json", aspxControlsString);
-                
-                await MigrateToCSODReact(request);
+                response.AspxComponents = await GetControlsFromAspx(request);
+                response.FigmaComponents = await ComponentProcess.GetFigmaControls(request);
+            }
+            return response;
+        }
 
-                //var mainFileContent =await ComponentProcess.GenerateMainFile(request);
-                //Helper.CreateFile(request.OutputPath, "App.tsx", mainFileContent);
-
-                
+        public async static Task<bool> MigrateToReact(Request request)
+        {
+            if (request.IsCustom)
+            {
+                await ComponentProcess.Process(request);
+                var mainFileContent = await ComponentProcess.GenerateMainFile(request);
+                Helper.CreateFile(request.OutputPath, "App.tsx", mainFileContent);
             }
             else
             {

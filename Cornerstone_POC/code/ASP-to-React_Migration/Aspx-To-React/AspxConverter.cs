@@ -107,6 +107,16 @@ namespace Aspx_To_React
                 IsFigmaUrl = rdbFileUrl.Checked,
                 FigmaUrl = txtFigmaUrl.Text,
             };
+
+            // Get Controls to Map
+            AspxToFigmaMapping aspxToFigmaFrm = new AspxToFigmaMapping();
+            request.ControlResponse =  await Processor.GetControls(request);
+            if (request.ControlResponse.AspxComponents?.Count > 0)
+            {
+                aspxToFigmaFrm.Initialize(request);
+                aspxToFigmaFrm.ShowDialog(this);
+                request.Mapping = aspxToFigmaFrm.Mapping;
+            }
             await Processor.MigrateToReact(request);
         }
     }

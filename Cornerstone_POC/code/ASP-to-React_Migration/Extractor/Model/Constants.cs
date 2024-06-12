@@ -32,8 +32,8 @@ Remember generate only HTML markup with CSS, do not give any explanation.";
         public const string AspxCodeToJson = @"Above is the code for aspx page.Can you provide the details in the json format for all the controls starting with <asp:x> and <uc:x> (user controls) controls defined at in this page.
 Only return the json code in lower case. Don't add any description or notes.
 The sample format of json is:
-{
-  ""aspControls"": [
+
+  [
     {
       ""type"": ""asp:Content"",
       ""Id"": ""idname"",
@@ -43,23 +43,18 @@ The sample format of json is:
       ""class"": ""css class name"",
     },
     {
+      ""type"": ""uc:Header"",
+      ""ID"": ""idname"",
+      ""runat"": ""server"",
+      ""OnItemDataBound"": ""event_OnItemDataBound"",
+      ""startDate"": ""today"",
+    },
+    {
       ""type"": ""asp:Repeater"",
       ""ID"": ""idname"",
       ""runat"": ""server"",
-      ""OnItemDataBound"": ""event_OnItemDataBound""
-    }],
-
-""ucControls"": [
-    {
-      ""type"": ""uc:ResponsivePackLoader"",
-      ""runat"": ""server""
-    },
-    {
-      ""type"": ""uc:SelectDateControl"",
-      ""id"": ""idname"",
-      ""runat"": ""server"",
+      ""OnItemDataBound"": ""event_OnItemDataBound"",
       ""startDate"": ""today"",
-    }]
-}";
+    }]";
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Aspx_To_React
 {
-    partial class AspxToFihmaMapping
+    partial class AspxToFigmaMapping
     {
         /// <summary>
         /// Required designer variable.
@@ -28,34 +28,36 @@
         /// </summary>
         private void InitializeComponent()
         {
-            comboBox1 = new ComboBox();
-            comboBox2 = new ComboBox();
+            cmbFigma1 = new ComboBox();
+            cmbAspx1 = new ComboBox();
             label1 = new Label();
             label2 = new Label();
             btnAdd = new Button();
             btnSumit = new Button();
+            label3 = new Label();
             SuspendLayout();
             // 
-            // comboBox1
+            // cmbFigma1
             // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(71, 83);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(182, 33);
-            comboBox1.TabIndex = 0;
+            cmbFigma1.FormattingEnabled = true;
+            cmbFigma1.Location = new Point(12, 94);
+            cmbFigma1.Name = "cmbFigma1";
+            cmbFigma1.Size = new Size(244, 33);
+            cmbFigma1.TabIndex = 0;
             // 
-            // comboBox2
+            // cmbAspx1
             // 
-            comboBox2.FormattingEnabled = true;
-            comboBox2.Location = new Point(292, 83);
-            comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(182, 33);
-            comboBox2.TabIndex = 1;
+            cmbAspx1.DropDownWidth = 244;
+            cmbAspx1.FormattingEnabled = true;
+            cmbAspx1.Location = new Point(274, 95);
+            cmbAspx1.Name = "cmbAspx1";
+            cmbAspx1.Size = new Size(268, 33);
+            cmbAspx1.TabIndex = 1;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(152, 43);
+            label1.Location = new Point(101, 58);
             label1.Name = "label1";
             label1.Size = new Size(61, 25);
             label1.TabIndex = 2;
@@ -64,7 +66,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(359, 43);
+            label2.Location = new Point(388, 58);
             label2.Name = "label2";
             label2.Size = new Size(51, 25);
             label2.TabIndex = 3;
@@ -72,46 +74,61 @@
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(524, 83);
+            btnAdd.Location = new Point(552, 96);
             btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(112, 34);
+            btnAdd.Size = new Size(200, 89);
             btnAdd.TabIndex = 4;
             btnAdd.Text = "Add";
             btnAdd.UseVisualStyleBackColor = true;
+            btnAdd.Click += btnAdd_Click;
             // 
             // btnSumit
             // 
-            btnSumit.Location = new Point(71, 219);
+            btnSumit.BackColor = Color.FromArgb(255, 128, 0);
+            btnSumit.Location = new Point(552, 190);
             btnSumit.Name = "btnSumit";
-            btnSumit.Size = new Size(280, 34);
+            btnSumit.Size = new Size(200, 89);
             btnSumit.TabIndex = 5;
-            btnSumit.Text = "Submit";
-            btnSumit.UseVisualStyleBackColor = true;
+            btnSumit.Text = "Next";
+            btnSumit.UseVisualStyleBackColor = false;
+            btnSumit.Click += btnSumit_Click;
             // 
-            // AspxToFihmaMapping
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            label3.Location = new Point(139, 9);
+            label3.Name = "label3";
+            label3.Size = new Size(374, 38);
+            label3.TabIndex = 6;
+            label3.Text = "Map Figma to Aspx control";
+            // 
+            // AspxToFigmaMapping
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label3);
             Controls.Add(btnSumit);
             Controls.Add(btnAdd);
             Controls.Add(label2);
             Controls.Add(label1);
-            Controls.Add(comboBox2);
-            Controls.Add(comboBox1);
-            Name = "AspxToFihmaMapping";
-            Text = "AspxToFihmaMapping";
+            Controls.Add(cmbAspx1);
+            Controls.Add(cmbFigma1);
+            Name = "AspxToFigmaMapping";
+            Text = "FigmaToAspxMapping";
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private ComboBox comboBox1;
-        private ComboBox comboBox2;
+        private ComboBox cmbFigma1;
+        private ComboBox cmbAspx1;
         private Label label1;
         private Label label2;
         private Button btnAdd;
         private Button btnSumit;
+        private Label label3;
     }
 }

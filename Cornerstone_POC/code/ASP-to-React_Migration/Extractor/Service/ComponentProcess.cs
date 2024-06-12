@@ -16,7 +16,8 @@ namespace Extractor.Service
 {
     public static class ComponentProcess
     {
-        public static async Task<bool> Process(Request request)
+
+        public static async Task<List<FigmaComponent>> GetFigmaControls(Request request)
         {
             var jsonPrompt = @"Read the Figma design image and give me the details of all the controls in json format like example data-grid, textarea, Date-picker etc.\nRules to follow while giving json output:
 1.Always generate only json output do not give explanations above or below the json.
@@ -79,16 +80,15 @@ namespace Extractor.Service
             if (!match.Success)
             {
                 Logger.Log("No JSON array found in the response.");
-                return false;
+                return new List<FigmaComponent>();
             }
-
             string arrayJson = match.Value;
-
-            //Send the componenets to the popup screen
-
-            List<ComponentJson> jsonArray = JsonConvert.DeserializeObject<List<ComponentJson>>(arrayJson);
-
-            foreach (var component in jsonArray)
+            List<FigmaComponent> components = JsonConvert.DeserializeObject<List<FigmaComponent>>(arrayJson);
+            return components;
+        }
+        public static async Task<bool> Process(Request request)
+        {
+            foreach (var component in request.ControlResponse.FigmaComponents)
             {
                 switch (component.Type)
                 {

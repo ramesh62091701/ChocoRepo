@@ -83,7 +83,7 @@ namespace Extractor.Model
         public List<string> ButtonNames { get; set; }
     }
 
-    public class ComponentJson
+    public class FigmaComponent
     {
         [JsonProperty("type")]
         public string Type { get; set; }
