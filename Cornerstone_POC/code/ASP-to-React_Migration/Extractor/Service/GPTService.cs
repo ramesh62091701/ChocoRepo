@@ -1,20 +1,14 @@
 ﻿using Extractor.Utils;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Extractor.Service
 {
     public class GPTService
     {
 
-        private static readonly HttpClient client = new HttpClient() {Timeout= TimeSpan.FromSeconds(300)};
+        private static readonly HttpClient client = new HttpClient() { Timeout = TimeSpan.FromSeconds(300) };
         private readonly string apiKey;
         private readonly string apiUrl;
 
@@ -76,7 +70,7 @@ namespace Extractor.Service
             }
         }
 
-        public async Task<(string Message, string Id)> GetAiResponseForImage(string prompt, string systemPrompt, string model, bool logResponse ,string imagePath)
+        public async Task<(string Message, string Id)> GetAiResponseForImage(string prompt, string systemPrompt, string model, bool logResponse, string imagePath)
         {
             Logger.Log("Processing Image.");
             string base64Image = EncodeImage(imagePath);
@@ -95,7 +89,7 @@ namespace Extractor.Service
                             new { type = "image_url", image_url = new
                                     {
                                         url = $"data:image/png;base64,{base64Image}"
-                                    }  
+                                    }
                             }
                         }
                     }

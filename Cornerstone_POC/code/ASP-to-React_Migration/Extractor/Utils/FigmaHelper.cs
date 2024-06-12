@@ -2,11 +2,6 @@
 using Extractor.Service;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Extractor.Utils
 {
@@ -20,7 +15,7 @@ namespace Extractor.Utils
             //RemoveKeys(json, ContentsToRemove);
             string filteredJsonString = JsonConvert.SerializeObject(json, Formatting.Indented);
             var gptService = new GPTService();
-            filteredJsonString = string.Join("", filteredJsonString.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+            filteredJsonString = string.Join(string.Empty, filteredJsonString.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
 
             filteredJsonString = filteredJsonString.Replace(" ", "");
             var prompt = $@"<Figma-json>{filteredJsonString}</Figma-json>

@@ -158,7 +158,6 @@ namespace Extractor.Service
                 var fetchDetails = Helper.GetMethodDetails(mappedControl.AspComponent.id, request.AspxPagePath + ".cs");
                 template = template.Replace("$$FetchDetails$$", $"/*{Environment.NewLine}{fetchDetails}{Environment.NewLine}*/");
             }
-
             return new FileContent
             {
                 FileName = tableName,
