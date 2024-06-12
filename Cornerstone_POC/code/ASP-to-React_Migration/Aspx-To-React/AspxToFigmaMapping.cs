@@ -56,6 +56,7 @@ namespace Aspx_To_React
                     MappedControls.Add(new MappedControl() { AspComponent = aspComponent, FigmaComponent = figmaComponent });
                 }
             }
+            this.Close();
         }
 
         private ComboBox AddComboBox(ComboBox referenceComboBox, int index, string prefix)

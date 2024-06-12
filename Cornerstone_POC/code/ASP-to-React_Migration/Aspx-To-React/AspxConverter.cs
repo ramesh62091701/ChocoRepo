@@ -110,15 +110,17 @@ namespace Aspx_To_React
 
             if (request.IsCustom && !request.IsFigmaUrl)
             {
-                AspxToFigmaMapping aspxToFigmaFrm = new AspxToFigmaMapping();
-                request.Components =  await Processor.GetControls(request);
-                if (request.Components.AspComponents?.Count > 0)
+                using (var aspxToFigmaFrm = new AspxToFigmaMapping())
                 {
-                    Logger.Log("Use the Mapping window to map controls.");
-                    aspxToFigmaFrm.Initialize(request);
-                    aspxToFigmaFrm.ShowDialog(this);
-                    request.MappedControls = aspxToFigmaFrm.MappedControls;
-                    
+                    request.Components = await Processor.GetControls(request);
+                    if (request.Components.AspComponents?.Count > 0)
+                    {
+                        Logger.Log("Use the Mapping window to map controls.");
+                        aspxToFigmaFrm.Initialize(request);
+                        aspxToFigmaFrm.ShowDialog(this);
+                        request.MappedControls = aspxToFigmaFrm.MappedControls;
+
+                    }
                 }
             }
             // Get Controls to Map

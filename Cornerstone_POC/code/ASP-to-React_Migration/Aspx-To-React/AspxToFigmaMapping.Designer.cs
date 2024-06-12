@@ -89,7 +89,7 @@
             btnSumit.Name = "btnSumit";
             btnSumit.Size = new Size(200, 54);
             btnSumit.TabIndex = 5;
-            btnSumit.Text = "Next";
+            btnSumit.Text = "Close";
             btnSumit.UseVisualStyleBackColor = false;
             btnSumit.Click += btnSumit_Click;
             // 
