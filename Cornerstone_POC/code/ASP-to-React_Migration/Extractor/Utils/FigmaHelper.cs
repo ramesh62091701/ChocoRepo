@@ -14,15 +14,15 @@ namespace Extractor.Utils
             JObject json = JObject.Parse(contents);
             //RemoveKeys(json, ContentsToRemove);
             string filteredJsonString = JsonConvert.SerializeObject(json, Formatting.Indented);
-            var gptService = new GPTService();
             filteredJsonString = string.Join(string.Empty, filteredJsonString.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
 
             filteredJsonString = filteredJsonString.Replace(" ", "");
+            var gptService = new GPTService();
             var prompt = $@"<Figma-json>{filteredJsonString}</Figma-json>
 {Constants.FigmaUrlToHTMLPrompt}";
             var response = await gptService.GetAiResponse(prompt, String.Empty, Constants.Model, true);
             return response.Message;
-            
+
         }
 
         private static void RemoveKeys(JToken token, List<string> keysToRemove)

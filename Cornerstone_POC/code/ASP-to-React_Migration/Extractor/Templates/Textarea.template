@@ -28,4 +28,4 @@ const $$PropertyName$$: React.FC<Props> = ({ inputComment, setInputComment }) =>
     );
 };
 
-export default Comments;
+export default $$PropertyName$$;

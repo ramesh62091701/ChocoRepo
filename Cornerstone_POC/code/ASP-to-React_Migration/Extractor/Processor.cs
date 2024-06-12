@@ -15,10 +15,13 @@ namespace Extractor
         {
             if (!request.IsFigmaUrl)
             {
+                Logger.Log("Processing Figma Image.");
                 var gptService = new GPTService();
                 var htmlResponse = await gptService.GetAiResponseForImage(Constants.FigmaImageToHTMLPrompt, string.Empty, Constants.Model, true, request.ImagePath);
+                Logger.Log("Processing Completed.");
                 return htmlResponse.Message;
             }
+            Logger.Log("Started executing AI request.");
             return await FigmaHelper.GetContents(request.FigmaUrl);
         }
 
@@ -31,8 +34,8 @@ namespace Extractor
             var aspxContent = File.ReadAllText(request.AspxPagePath);
             var gptService = new GPTService();
             var jsonResponse = await gptService.GetAiResponseForImage($"<aspx-code>{aspxContent}</aspx-code>/n${Constants.AspxCodeToJson}", string.Empty, Constants.Model, true, request.ImagePath);
-            var jsonContent = Helper.RemoveMarkupCode(jsonResponse.Message, "json");
-            var controls = System.Text.Json.JsonSerializer.Deserialize<List<AspComponent>>(jsonContent);
+            var jsonContent = Helper.SelectJsonArray(jsonResponse.Message);
+            var controls = JsonConvert.DeserializeObject<List<AspComponent>>(jsonContent);
             return controls;
         }
 
@@ -42,11 +45,14 @@ namespace Extractor
 
             //Get HTML for Figma
             var htmlResponse = await GetHTMLFromFigma(request);
-            var reactPrompt = @$"<HTML-Code>\n{htmlResponse}\n</HTML-Code>
+            var reactPrompt = @$"<HTML-Code>
+{htmlResponse}
+</HTML-Code>
 Convert above HTML Code to react code.
 Create one single react page.";
 
             //Get React 
+            Logger.Log("Generating React components.");
             var reactResponse = await gptService.GetAiResponse(reactPrompt, Constants.ReactSysPrompt, Constants.Model, true);
 
             //Get Separate controls  
@@ -69,6 +75,7 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
 		""content"" : ""its code""
 	}},
 ]";
+            
             var reactSeparateResponse = await gptService.GetAiResponse(separatePrompt, Constants.ReactSysPrompt, Constants.Model, true);
 
             string jsonArray = Helper.SelectJsonArray(reactSeparateResponse.Message);
@@ -78,7 +85,9 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
                 Logger.Log("Deserialization failed or the JSON response is empty.");
                 return false;
             }
+            Logger.Log("React Components created.");
 
+            Logger.Log("Saving React Component files.");
             foreach (var rootObject in rootObjects)
             {
                 string filePath = Path.Combine(request.OutputPath, rootObject.FileName);
@@ -98,6 +107,7 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
             Logger.Log("Started processing...");
             var htmlContent = await GetHTMLFromFigma(request);
             htmlContent = Helper.RemoveMarkupCode(htmlContent, "html");
+            Logger.Log("AI request executed.");
             Helper.CreateFile(request.OutputPath, "index.html", htmlContent);
             Logger.Log("Completed.");
             return true;
@@ -110,22 +120,32 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
             var response = new Components();
             if (request.IsCustom)
             {
+                Logger.Log("Getting Aspx Controls");
                 response.AspComponents = await GetControlsFromAspx(request);
+                Logger.Log("Getting Figma Controls");
                 response.FigmaComponents = await ComponentProcess.GetFigmaControls(request);
             }
+            Logger.Log("Processing Completed.");
             return response;
         }
 
         public async static Task<bool> MigrateToReact(Request request)
         {
+            if (request.IsFigmaUrl)
+            {
+                await FigmaHelper.GetContents(request.FigmaUrl);
+            }
             if (request.IsCustom)
             {
+                Logger.Log("Generating Files");
                 await ComponentProcess.Process(request);
             }
             else
             {
                 // First convert to html then convert html to react.
+                Logger.Log("Started executing AI request.");
                 await MigrateToReactInternal(request);
+                Logger.Log("AI request executed.");
             }
             Logger.Log("Completed.");
             return true;

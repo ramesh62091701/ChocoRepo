@@ -111,7 +111,6 @@ namespace Extractor.Service
                         break;
 
                     default:
-                        Logger.Log($"Json object of type ={component.Type} not found");
                         break;
                 }
             }
@@ -228,19 +227,34 @@ namespace Extractor.Service
             string templateFilePath = "./Templates/Button.template";
             string template = File.ReadAllText(templateFilePath);
 
-            var mappedControl = request.MappedControls.FirstOrDefault(x => x.FigmaComponent.Type == type);
+            List<string> buttonActions = new List<string>();
+            List<string> buttonListStrings = new List<string>();
 
-            if (mappedControl != null && File.Exists(request.AspxPagePath + ".cs"))
+            foreach (var button in buttons)
             {
-                var buttonAction = Helper.GetMethodDetails(mappedControl.AspComponent.id, request.AspxPagePath + ".cs");
-                template = template.Replace("$$ButtonAction$$", $"/*{Environment.NewLine}{buttonAction}{Environment.NewLine}*/");
+                string buttonName = button.Name;
+
+                var mappedControl = request.MappedControls.FirstOrDefault(x => x.FigmaComponent.Type == type && x.FigmaComponent.Name == buttonName);
+
+                // Initialize buttonAction for the current button
+                string buttonAction = string.Empty;
+                if (mappedControl != null && File.Exists(request.AspxPagePath + ".cs"))
+                {
+                    buttonAction = Helper.GetMethodDetails(mappedControl.AspComponent.id, request.AspxPagePath + ".cs");
+                }
+
+                buttonActions.Add($"/*{Environment.NewLine}{buttonAction}{Environment.NewLine}*/");
+
+                string buttonListString = $"//replace object with your localizations\n const localized{buttonName} = useLocalizationsDefaults(\r\n    `${{object.{buttonName}}}`\r\n  );";
+                buttonListStrings.Add(buttonListString);
             }
 
-            string buttonListString = string.Join(",\n", buttonNames.Select(buttonName =>
-                $"//replace object with your localizations\n const localized{buttonName} = useLocalizationsDefaults(\r\n    `${{object.{buttonName}}}`\r\n  );"));
+            string combinedButtonActions = string.Join(Environment.NewLine, buttonActions);
+            string combinedButtonListStrings = string.Join(Environment.NewLine, buttonListStrings);
 
-            template = template.Replace("$$ButtonList$$", buttonListString)
-                .Replace("$$ComponentName$$", type);
+            template = template.Replace("$$ButtonList$$", combinedButtonListStrings)
+                .Replace("$$ComponentName$$", type)
+                .Replace("$$ButtonAction$$", combinedButtonActions);
 
             return new FileContent
             {
