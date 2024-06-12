@@ -130,8 +130,6 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
             if (request.IsCustom)
             {
                 await ComponentProcess.Process(request);
-                var mainFileContent = await ComponentProcess.GenerateMainFile(request);
-                Helper.CreateFile(request.OutputPath, "App.tsx", mainFileContent);
             }
             else
             {

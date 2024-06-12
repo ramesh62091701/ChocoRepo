@@ -17,7 +17,8 @@ namespace Extractor.Service
 {
     public static class ComponentProcess
     {
-
+        private static StringBuilder componentBuilder = new StringBuilder();
+        private static StringBuilder importComponent = new StringBuilder();
         public static async Task<List<FigmaComponent>> GetFigmaControls(Request request)
         {
             var jsonPrompt = @"Read the Figma design image and give me the details of all the controls in json format like example data-grid, textarea, Date-picker etc.\nRules to follow while giving json output:
@@ -95,7 +96,10 @@ namespace Extractor.Service
                                 ColumnNames = component.ColumnNames,
 
                             }, request);
-                            Helper.CreateFile(request.OutputPath, gridTemplate.FileName, gridTemplate.Content);
+                            componentBuilder.AppendLine($"<{gridTemplate.FileName}\nselected={{selected}}\n/>");
+                            importComponent.AppendLine($"import {{ {gridTemplate.FileName} }} from \"components/{gridTemplate.FileName}\"; ");
+
+                            Helper.CreateFile(request.OutputPath, gridTemplate.FileName + ".tsx", gridTemplate.Content);
                         }
                         break;
 
@@ -105,9 +109,12 @@ namespace Extractor.Service
                             var textAreaTemplate = GenerateTextArea(new FigmaComponent
                             {
                                 Type = component.Type,
-                                Name = component.Label
+                                Label = component.Label
                             });
-                            Helper.CreateFile(request.OutputPath, textAreaTemplate.FileName, textAreaTemplate.Content);
+                            componentBuilder.AppendLine($"<{textAreaTemplate.FileName}\ninputcomment={{inputComment}}\n/>");
+                            importComponent.AppendLine($"import {{ {textAreaTemplate.FileName} }} from \"components/{textAreaTemplate.FileName}\"; ");
+
+                            Helper.CreateFile(request.OutputPath, textAreaTemplate.FileName + ".tsx", textAreaTemplate.Content);
                         }
                         break;
 
@@ -119,19 +126,26 @@ namespace Extractor.Service
                                 Type = component.Type,
                                 Label = component.Label
                             });
-                            Helper.CreateFile(request.OutputPath, datePickerTemplate.FileName, datePickerTemplate.Content);
+                            componentBuilder.AppendLine($"<{datePickerTemplate.FileName}\ndatevalue={{dateValue}}\n/>");
+                            importComponent.AppendLine($"import {{ {datePickerTemplate.FileName} }} from \"components/{datePickerTemplate.FileName}\"; ");
+                            Helper.CreateFile(request.OutputPath, datePickerTemplate.FileName + ".tsx", datePickerTemplate.Content);
                         }
                         break;
 
                     case "Breadcrumb":
-                        if (component.Paths != null)
+                        if (component.Type != null)
                         {
                             var breadcrumbTemplate = GenerateBreadcrumb(new FigmaComponent
                             {
                                 Type = component.Type,
                                 Paths = component.Paths
                             });
-                            Helper.CreateFile(request.OutputPath, breadcrumbTemplate.FileName, breadcrumbTemplate.Content);
+                            string variablesString = string.Join("", component.Paths.Select(declaredVariable =>
+                    $"{declaredVariable.Name.ToLower()}={{{declaredVariable.Name}}}\n"));
+                            componentBuilder.AppendLine($"<{breadcrumbTemplate.FileName}\n");
+                            componentBuilder.AppendLine($"{variablesString}\n/>");
+                            importComponent.AppendLine($"import {{ {breadcrumbTemplate.FileName} }} from \"components/{breadcrumbTemplate.FileName}\"; ");
+                            Helper.CreateFile(request.OutputPath, breadcrumbTemplate.FileName + ".tsx", breadcrumbTemplate.Content);
                         }
                         break;
 
@@ -147,8 +161,17 @@ namespace Extractor.Service
             if (buttons.Any())
             {
                 var buttonTemplate = GenerateButtons(buttons);
-                Helper.CreateFile(request.OutputPath, buttonTemplate.FileName, buttonTemplate.Content);
+                componentBuilder.AppendLine($"<{buttonTemplate.FileName}\ncurrentpage={{currentPage}}\nisdisabled={{isDisabled}}\n/>");
+                importComponent.AppendLine($"import {{ {buttonTemplate.FileName} }} from \"components/{buttonTemplate.FileName}\"; ");
+                Helper.CreateFile(request.OutputPath, buttonTemplate.FileName + ".tsx", buttonTemplate.Content);
             }
+
+            string templateFilePath = "./Templates/App.template";
+            string template = File.ReadAllText(templateFilePath);
+            template = template.Replace("$$Components$$", componentBuilder.ToString())
+                .Replace("$$ImportComponents$$", importComponent.ToString());
+            Helper.CreateFile(request.OutputPath, "App.tsx", template);
+
             return true;
         }
 
@@ -175,19 +198,19 @@ namespace Extractor.Service
                 template = template.Replace("$$FetchDetails$$", $"/*{Environment.NewLine}{fetchDetails}{Environment.NewLine}*/");
             }
 
-            return (Content: template , FileName: tableName + ".tsx");
+            return (Content: template , FileName: tableName);
         }
 
         private static (string Content, string FileName) GenerateTextArea(FigmaComponent textArea)
         {
-            string propertyName = textArea.Name;
+            string propertyName = textArea.Label.Replace(" ","");
 
             string templateFilePath = "./Templates/Textarea.template";
             string template = File.ReadAllText(templateFilePath);
 
             template = template.Replace("$$PropertyName$$", propertyName);
 
-            return (Content :template , FileName : propertyName+".tsx");
+            return (Content :template , FileName : propertyName);
         }
 
         private static (string Content, string FileName) GenerateDatePicker(FigmaComponent datePicker)
@@ -197,7 +220,7 @@ namespace Extractor.Service
             string template = File.ReadAllText(templateFilePath);
 
             template = template.Replace("$$PropertyName$$", type);
-            return (Content: template, FileName: type + ".tsx");
+            return (Content: template, FileName: type);
         }
 
         private static (string Content, string FileName) GenerateBreadcrumb(FigmaComponent breadcrumb)
@@ -228,7 +251,7 @@ namespace Extractor.Service
                                .Replace("$$Parameters$$", parametersString)
                                .Replace("$$ParametersAssignments$$", parametersDeclarationString);
 
-            return (Content: template, FileName: type + "Container.tsx");
+            return (Content: template, FileName: type + "Container");
         }
 
         private static (string Content, string FileName) GenerateButtons(List<FigmaComponent> buttons)
@@ -246,90 +269,7 @@ namespace Extractor.Service
             template = template.Replace("$$ButtonList$$", buttonListString)
                 .Replace("$$ComponentName$$", type);
 
-            return (Content: template, FileName: type + "Container.tsx");
-        }
-
-
-        public static async Task<string> GenerateMainFile(Request request)
-        {
-            var allComponentContent = ReadFiles(request.OutputPath);
-            var gptService = new GPTService();
-            var prompt = $@"{allComponentContent}
-Above are the component files in the React. Generate a json response in below format for the code of React component
-1.Always generate only json output do not give explanations above or below the json.
-2.type should always be a single word.
-3.Use the below json format as reference:
-[
-  {{
-    ""type"": ""BreadcrumbContainer"",
-    ""declared-variable"": [""home"", ""assigntraining""]
-  }},
-  {{
-    ""type"": ""ButtonContainer"",
-    ""declared-variable"": [""currentPage"", ""isDisabled""]
-  }},
-]";
-            var response = await gptService.GetAiResponse(prompt, String.Empty, Model.Constants.Model, true);
-
-            string pattern = @"\[[\s\S]*\]";
-            Match match = Regex.Match(response.Message, pattern);
-
-            if (!match.Success)
-            {
-                Logger.Log("No JSON array found in the response.");
-            }
-
-            string arrayJson = match.Value;
-            List<FigmaComponentJson> jsonArray = JsonConvert.DeserializeObject<List<FigmaComponentJson>>(arrayJson);
-
-            StringBuilder componentBuilder = new StringBuilder();
-            StringBuilder importComponent = new StringBuilder();
-            foreach (var obj in jsonArray)
-            {
-                string type = obj.Type;
-                var declaredVariables = obj.DeclaredVariable.ToArray();
-
-                componentBuilder.AppendLine($"<{type}");
-
-                string variablesString = string.Join("\n", declaredVariables.Select(declaredVariable =>
-                    $"{declaredVariable.ToLower()}={{{declaredVariable}}}"));
-
-                componentBuilder.AppendLine(variablesString);
-                componentBuilder.AppendLine("/>");
-                importComponent.AppendLine($"import {{ {type} }} from \"components/{type}\"; ");
-            }
-            string templateFilePath = "./Templates/App.template";
-            string template = File.ReadAllText(templateFilePath);
-            template = template.Replace("$$Components$$", componentBuilder.ToString())
-                .Replace("$$ImportComponents$$", importComponent.ToString());
-
-            return template;
-        }
-        
-        private static string ReadFiles(string directoryPath)
-        {
-            string allFileContent = string.Empty;
-            try
-            {
-                foreach (string filePath in Directory.GetFiles(directoryPath))
-                {
-                    string fileContent = File.ReadAllText(filePath);
-                    string fileName = Path.GetFileName(filePath);
-                    allFileContent += $"<{fileName}>\n";
-                    allFileContent += fileContent + "\n";
-                    allFileContent += $"</{fileName}>\n\n";
-                }
-
-                foreach (string subDir in Directory.GetDirectories(directoryPath))
-                {
-                    allFileContent += ReadFiles(subDir);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Log($"An error occurred: {ex.Message}");
-            }
-            return allFileContent;
+            return (Content: template, FileName: type + "Container");
         }
     }
 }
