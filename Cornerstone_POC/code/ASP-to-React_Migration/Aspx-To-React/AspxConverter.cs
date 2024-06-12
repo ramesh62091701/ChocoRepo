@@ -108,7 +108,7 @@ namespace Aspx_To_React
                 FigmaUrl = txtFigmaUrl.Text,
             };
 
-            if (request.IsCustom)
+            if (request.IsCustom && !request.IsFigmaUrl)
             {
                 AspxToFigmaMapping aspxToFigmaFrm = new AspxToFigmaMapping();
                 request.Components =  await Processor.GetControls(request);

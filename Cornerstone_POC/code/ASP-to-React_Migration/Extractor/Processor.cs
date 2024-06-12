@@ -131,9 +131,9 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
 
         public async static Task<bool> MigrateToReact(Request request)
         {
-            if (request.IsFigmaUrl)
+            if (request.IsFigmaUrl && request.IsCustom)
             {
-                await FigmaHelper.GetContents(request.FigmaUrl);
+                var content = await FigmaHelper.GetFigmaJsonFromUrl(request.FigmaUrl);
             }
             if (request.IsCustom)
             {

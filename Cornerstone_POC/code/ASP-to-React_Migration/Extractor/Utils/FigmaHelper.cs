@@ -2,6 +2,7 @@
 using Extractor.Service;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Text.Json;
 
 namespace Extractor.Utils
 {
@@ -23,6 +24,60 @@ namespace Extractor.Utils
             var response = await gptService.GetAiResponse(prompt, String.Empty, Constants.Model, true);
             return response.Message;
 
+        }
+
+        public async static Task<string> GetFigmaJsonFromUrl(string fileUrl)
+        {
+            var contents = await HttpHelper.ExecuteGet("application/json", "X-Figma-Token", Configuration.FigmaToken, fileUrl);
+            string allChildrenString = string.Empty;
+            List<JsonElement> allChildren = new List<JsonElement>();
+            using (JsonDocument doc = JsonDocument.Parse(contents))
+            {
+                JsonElement root = doc.RootElement;
+                if (root.TryGetProperty("nodes", out JsonElement nodesElement))
+                {
+                    foreach (JsonProperty nodeProperty in nodesElement.EnumerateObject())
+                    {
+                        JsonElement nodeElement = nodeProperty.Value;
+                        if (nodeElement.TryGetProperty("document", out JsonElement documentElement) &&
+                            documentElement.TryGetProperty("children", out JsonElement childrenElement))
+                        {
+                            if (childrenElement.ValueKind == JsonValueKind.Array)
+                            {
+                                Console.WriteLine($"Children for node {nodeProperty.Name}:");
+                                foreach (JsonElement child in childrenElement.EnumerateArray())
+                                {
+                                    allChildren.Add(child);
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Children for node {nodeProperty.Name} is not an array.");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Node {nodeProperty.Name} does not have a document or children.");
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Could not find the nodes element in JSON.");
+                }
+
+
+            allChildrenString = System.Text.Json.JsonSerializer.Serialize(allChildren);
+            }
+            List<FigmaJsonModel> childrenJson = JsonConvert.DeserializeObject<List<FigmaJsonModel>>(allChildrenString);
+            string childNames = string.Empty;
+            foreach (var child in childrenJson)
+            {
+                childNames += child.name + ",";
+            }
+            Logger.Log(childNames);
+
+            return string.Empty;
         }
 
         private static void RemoveKeys(JToken token, List<string> keysToRemove)
