@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,10 @@ namespace Extractor.Model
 {
     public class FileContent
     {
-        public string filename { get; set; }
-        public string content { get; set; }
+        [JsonProperty("filename")]
+        public string FileName { get; set; }
+
+        [JsonProperty("content")]
+        public string Content { get; set; }
     }
 }

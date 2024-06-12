@@ -90,11 +90,11 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
             {
                 foreach (var rootObject in rootObjects)
                 {
-                    string filePath = Path.Combine(request.OutputPath, rootObject.filename);
+                    string filePath = Path.Combine(request.OutputPath, rootObject.FileName);
                     string directoryPath = Path.GetDirectoryName(filePath);
                     if (!Directory.Exists(directoryPath))
                         Directory.CreateDirectory(directoryPath);
-                    await File.WriteAllTextAsync(filePath, rootObject.content);
+                    await File.WriteAllTextAsync(filePath, rootObject.Content);
                     Logger.Log($"File created: {filePath}");
                 }
             }

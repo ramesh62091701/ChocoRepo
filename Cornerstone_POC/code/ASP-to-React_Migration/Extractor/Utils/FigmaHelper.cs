@@ -30,15 +30,6 @@ namespace Extractor.Utils
             
         }
 
-        private static bool KeyExists(string key)
-        {
-            foreach (var line in ContentsToRemove)
-            {
-                if (key.Contains(line)) return true;
-            }
-            return false;
-        }
-
         private static void RemoveKeys(JToken token, List<string> keysToRemove)
         {
             if (token.Type == JTokenType.Object)

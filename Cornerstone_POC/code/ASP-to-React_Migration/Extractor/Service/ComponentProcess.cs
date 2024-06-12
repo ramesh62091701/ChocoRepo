@@ -139,15 +139,12 @@ namespace Extractor.Service
             return true;
         }
 
-        private static (string Content, string FileName) GenerateGrid(FigmaComponent dataGrid, Request request)
+        private static FileContent GenerateGrid(FigmaComponent dataGrid, Request request)
         {
             string tableName = dataGrid.Name;
-
             string[] columnNames = dataGrid.ColumnNames.ToArray();
-
             string templateFilePath = "./Templates/Grid.template";
             string template = File.ReadAllText(templateFilePath);
-
             string columnsString = string.Join(",\n", columnNames.Select(columnName =>
                 $"  {{ accessorKey: \"{columnName.ToLower()}\", header: \"{columnName}\" }}"));
 
@@ -162,50 +159,53 @@ namespace Extractor.Service
                 template = template.Replace("$$FetchDetails$$", $"/*{Environment.NewLine}{fetchDetails}{Environment.NewLine}*/");
             }
 
-            return (Content: template , FileName: tableName);
+            return new FileContent
+            {
+                FileName = tableName,
+                Content = template
+            };
         }
 
-        private static (string Content, string FileName) GenerateTextArea(FigmaComponent textArea)
+        private static FileContent GenerateTextArea(FigmaComponent textArea)
         {
             string propertyName = textArea.Label.Replace(" ","");
-
             string templateFilePath = "./Templates/Textarea.template";
             string template = File.ReadAllText(templateFilePath);
-
             template = template.Replace("$$PropertyName$$", propertyName);
 
-            return (Content :template , FileName : propertyName);
+            return new FileContent
+            {
+                FileName = propertyName,
+                Content = template
+            };
         }
 
-        private static (string Content, string FileName) GenerateDatePicker(FigmaComponent datePicker)
+        private static FileContent GenerateDatePicker(FigmaComponent datePicker)
         {
             string type = datePicker.Type;
             string templateFilePath = "./Templates/DatePicker.template";
             string template = File.ReadAllText(templateFilePath);
-
             template = template.Replace("$$PropertyName$$", type);
-            return (Content: template, FileName: type);
+
+            return new FileContent
+            {
+                FileName = type,
+                Content = template
+            };
         }
 
-        private static (string Content, string FileName) GenerateBreadcrumb(FigmaComponent breadcrumb , Request request)
+        private static FileContent GenerateBreadcrumb(FigmaComponent breadcrumb , Request request)
         {
             string type = breadcrumb.Type;
-
             var pathsArray = breadcrumb.Paths.ToArray(); 
-
             var paths = pathsArray.Select(pathObject => new
             {
                 Name = pathObject.Name,
                 DataType = pathObject.DataType,
             }).ToArray();
-
             string[] pathNames = paths.Select(path => path.Name).ToArray();
-
-
-
             string templateFilePath = "./Templates/Breadcrumb.template";
             string template = File.ReadAllText(templateFilePath);
-
             string parametersString = string.Join("\n", pathNames.Select(pathName =>
         $" {pathName.ToLower()},"));
 
@@ -219,20 +219,21 @@ namespace Extractor.Service
             string parametersDeclarationString = string.Join(",\n", paths.Select(path =>
                 $" {path.Name.ToLower()}: {path.DataType.ToLower()}"));
 
-
             template = template.Replace("$$ComponentName$$", type)
                                .Replace("$$Parameters$$", parametersString)
                                .Replace("$$ParametersAssignments$$", parametersDeclarationString);
 
-            return (Content: template, FileName: type + "Container");
+            return new FileContent
+            {
+                FileName = type + "Container",
+                Content = template
+            };
         }
 
-        private static (string Content, string FileName) GenerateButtons(List<FigmaComponent> buttons , Request request)
+        private static FileContent GenerateButtons(List<FigmaComponent> buttons , Request request)
         {
             string type = buttons.First().Type;
-
             var buttonNames = buttons.Select(b => b.Name).ToList();
-
             string templateFilePath = "./Templates/Button.template";
             string template = File.ReadAllText(templateFilePath);
 
@@ -249,7 +250,12 @@ namespace Extractor.Service
 
             template = template.Replace("$$ButtonList$$", buttonListString)
                 .Replace("$$ComponentName$$", type);
-            return (Content: template, FileName: type + "Container");
+
+            return new FileContent
+            {
+                FileName = type + "Container",
+                Content = template
+            };
         }
     }
 }
