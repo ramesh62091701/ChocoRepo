@@ -8,8 +8,7 @@
         public string OutputPath { get; set; }
         public bool IsCustom { get; set; }
         public bool IsFigmaUrl { get; set; }
-        public ControlResponse ControlResponse { get; set; }
-
-        public List<MappedControl> Mapping { get; set; }
+        public Components Components { get; set; }
+        public List<MappedControl> MappedControls { get; set; }
     }
 }

@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace Extractor.Model
+﻿namespace Extractor.Model
 {
 
     public class AspComponent

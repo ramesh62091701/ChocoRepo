@@ -110,12 +110,12 @@ namespace Aspx_To_React
 
             // Get Controls to Map
             AspxToFigmaMapping aspxToFigmaFrm = new AspxToFigmaMapping();
-            request.ControlResponse =  await Processor.GetControls(request);
-            if (request.ControlResponse.AspxComponents?.Count > 0)
+            request.Components =  await Processor.GetControls(request);
+            if (request.Components.AspComponents?.Count > 0)
             {
                 aspxToFigmaFrm.Initialize(request);
                 aspxToFigmaFrm.ShowDialog(this);
-                request.Mapping = aspxToFigmaFrm.MappedControls;
+                request.MappedControls = aspxToFigmaFrm.MappedControls;
             }
             await Processor.MigrateToReact(request);
         }

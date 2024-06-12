@@ -22,14 +22,14 @@ namespace Aspx_To_React
             this.request = request;
             
             //filter components with empty id
-            aspxComponents =  request.ControlResponse.AspxComponents.FindAll(x => !String.IsNullOrEmpty(x.id));
+            aspxComponents =  request.Components.AspComponents.FindAll(x => !String.IsNullOrEmpty(x.id));
             aspxComponents.Insert(0, new AspComponent { id = String.Empty});
             cmbAspx1.DataSource = aspxComponents;
             cmbAspx1.DisplayMember = "id";
             cmbAspx1.ValueMember = "id";
             cmbAspx1.SelectedIndex = 0;
 
-            figmaComponents = request.ControlResponse.FigmaComponents;
+            figmaComponents = request.Components.FigmaComponents;
             figmaComponents.Insert(0, new FigmaComponent { Type = string.Empty, Name = string.Empty });
             cmbFigma1.DataSource = figmaComponents;
             cmbFigma1.DisplayMember = "Id";

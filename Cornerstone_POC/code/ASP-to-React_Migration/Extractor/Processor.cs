@@ -113,13 +113,13 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
         }
 
 
-        public async static Task<ControlResponse> GetControls(Request request)
+        public async static Task<Components> GetControls(Request request)
         {
             Logger.Log("Started processing...");
-            var response = new ControlResponse();
+            var response = new Components();
             if (request.IsCustom)
             {
-                response.AspxComponents = await GetControlsFromAspx(request);
+                response.AspComponents = await GetControlsFromAspx(request);
                 response.FigmaComponents = await ComponentProcess.GetFigmaControls(request);
             }
             return response;

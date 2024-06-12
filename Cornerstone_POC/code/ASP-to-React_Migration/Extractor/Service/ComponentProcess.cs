@@ -1,24 +1,13 @@
-﻿using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Newtonsoft.Json;
 using System.Text;
-using System.Threading.Tasks;
 using Extractor.Utils;
 using Extractor.Model;
 using System.Text.RegularExpressions;
-using System.Text.Json.Nodes;
-using System.Net.NetworkInformation;
-using Microsoft.VisualBasic;
-using System.Globalization;
 
 namespace Extractor.Service
 {
     public static class ComponentProcess
     {
-        private static StringBuilder componentBuilder = new StringBuilder();
-        private static StringBuilder importComponent = new StringBuilder();
         public static async Task<List<FigmaComponent>> GetFigmaControls(Request request)
         {
             var jsonPrompt = @"Read the Figma design image and give me the details of all the controls in json format like example data-grid, textarea, Date-picker etc.\nRules to follow while giving json output:
@@ -81,39 +70,26 @@ namespace Extractor.Service
         }
         public static async Task<bool> Process(Request request)
         {
+            StringBuilder appFileHTMLBuilder = new StringBuilder();
+            StringBuilder appFileImportBuilder = new StringBuilder();
             List<FigmaComponent> buttons = new List<FigmaComponent>();
-            foreach (var component in request.ControlResponse.FigmaComponents)
+            foreach (var component in request.Components.FigmaComponents)
             {
                 switch (component.Type)
                 {
                     case "DataGrid":
-                        if (component.Type != null)
-                        {
-                            var gridTemplate = GenerateGrid(new FigmaComponent
-                            {
-                                Type = component.Type,
-                                Name = component.Name,
-                                ColumnNames = component.ColumnNames,
-
-                            }, request);
-                            componentBuilder.AppendLine($"<{gridTemplate.FileName}\nselected={{selected}}\n/>");
-                            importComponent.AppendLine($"import {{ {gridTemplate.FileName} }} from \"components/{gridTemplate.FileName}\"; ");
-
-                            Helper.CreateFile(request.OutputPath, gridTemplate.FileName + ".tsx", gridTemplate.Content);
-                        }
+                        var gridTemplate = GenerateGrid(component, request);
+                        appFileHTMLBuilder.AppendLine($"<{gridTemplate.FileName}\nselected={{selected}}\n/>");
+                        appFileImportBuilder.AppendLine($"import {{ {gridTemplate.FileName} }} from \"components/{gridTemplate.FileName}\"; ");
+                        Helper.CreateFile(request.OutputPath, gridTemplate.FileName + ".tsx", gridTemplate.Content);
                         break;
 
                     case "TextArea":
                         if (!string.IsNullOrEmpty(component.Label))
                         {
-                            var textAreaTemplate = GenerateTextArea(new FigmaComponent
-                            {
-                                Type = component.Type,
-                                Label = component.Label
-                            });
-                            componentBuilder.AppendLine($"<{textAreaTemplate.FileName}\ninputcomment={{inputComment}}\n/>");
-                            importComponent.AppendLine($"import {{ {textAreaTemplate.FileName} }} from \"components/{textAreaTemplate.FileName}\"; ");
-
+                            var textAreaTemplate = GenerateTextArea(component);
+                            appFileHTMLBuilder.AppendLine($"<{textAreaTemplate.FileName}\ninputcomment={{inputComment}}\n/>");
+                            appFileImportBuilder.AppendLine($"import {{ {textAreaTemplate.FileName} }} from \"components/{textAreaTemplate.FileName}\"; ");
                             Helper.CreateFile(request.OutputPath, textAreaTemplate.FileName + ".tsx", textAreaTemplate.Content);
                         }
                         break;
@@ -121,32 +97,21 @@ namespace Extractor.Service
                     case "DatePicker":
                         if (!string.IsNullOrEmpty(component.Label))
                         {
-                            var datePickerTemplate = GenerateDatePicker(new FigmaComponent
-                            {
-                                Type = component.Type,
-                                Label = component.Label
-                            });
-                            componentBuilder.AppendLine($"<{datePickerTemplate.FileName}\ndatevalue={{dateValue}}\n/>");
-                            importComponent.AppendLine($"import {{ {datePickerTemplate.FileName} }} from \"components/{datePickerTemplate.FileName}\"; ");
+                            var datePickerTemplate = GenerateDatePicker(component);
+                            appFileHTMLBuilder.AppendLine($"<{datePickerTemplate.FileName}\ndatevalue={{dateValue}}\n/>");
+                            appFileImportBuilder.AppendLine($"import {{ {datePickerTemplate.FileName} }} from \"components/{datePickerTemplate.FileName}\"; ");
                             Helper.CreateFile(request.OutputPath, datePickerTemplate.FileName + ".tsx", datePickerTemplate.Content);
                         }
                         break;
 
                     case "Breadcrumb":
-                        if (component.Type != null)
-                        {
-                            var breadcrumbTemplate = GenerateBreadcrumb(new FigmaComponent
-                            {
-                                Type = component.Type,
-                                Paths = component.Paths
-                            } , request);
-                            string variablesString = string.Join("", component.Paths.Select(declaredVariable =>
-                    $"{declaredVariable.Name.ToLower()}={{{declaredVariable.Name}}}\n"));
-                            componentBuilder.AppendLine($"<{breadcrumbTemplate.FileName}\n");
-                            componentBuilder.AppendLine($"{variablesString}\n/>");
-                            importComponent.AppendLine($"import {{ {breadcrumbTemplate.FileName} }} from \"components/{breadcrumbTemplate.FileName}\"; ");
-                            Helper.CreateFile(request.OutputPath, breadcrumbTemplate.FileName + ".tsx", breadcrumbTemplate.Content);
-                        }
+                        var breadcrumbTemplate = GenerateBreadcrumb(component, request);
+                        string variablesString = string.Join("", component.Paths.Select(declaredVariable =>
+                $"{declaredVariable.Name.ToLower()}={{{declaredVariable.Name}}}\n"));
+                        appFileHTMLBuilder.AppendLine($"<{breadcrumbTemplate.FileName}\n");
+                        appFileHTMLBuilder.AppendLine($"{variablesString}\n/>");
+                        appFileImportBuilder.AppendLine($"import {{ {breadcrumbTemplate.FileName} }} from \"components/{breadcrumbTemplate.FileName}\"; ");
+                        Helper.CreateFile(request.OutputPath, breadcrumbTemplate.FileName + ".tsx", breadcrumbTemplate.Content);
                         break;
 
                     case "Button":
@@ -160,18 +125,17 @@ namespace Extractor.Service
             }
             if (buttons.Any())
             {
-                var buttonTemplate = GenerateButtons(buttons , request);
-                componentBuilder.AppendLine($"<{buttonTemplate.FileName}\ncurrentpage={{currentPage}}\nisdisabled={{isDisabled}}\n/>");
-                importComponent.AppendLine($"import {{ {buttonTemplate.FileName} }} from \"components/{buttonTemplate.FileName}\"; ");
+                var buttonTemplate = GenerateButtons(buttons, request);
+                appFileHTMLBuilder.AppendLine($"<{buttonTemplate.FileName}\ncurrentpage={{currentPage}}\nisdisabled={{isDisabled}}\n/>");
+                appFileImportBuilder.AppendLine($"import {{ {buttonTemplate.FileName} }} from \"components/{buttonTemplate.FileName}\"; ");
                 Helper.CreateFile(request.OutputPath, buttonTemplate.FileName + ".tsx", buttonTemplate.Content);
             }
 
             string templateFilePath = "./Templates/App.template";
             string template = File.ReadAllText(templateFilePath);
-            template = template.Replace("$$Components$$", componentBuilder.ToString())
-                .Replace("$$ImportComponents$$", importComponent.ToString());
+            template = template.Replace("$$Components$$", appFileHTMLBuilder.ToString())
+                .Replace("$$ImportComponents$$", appFileImportBuilder.ToString());
             Helper.CreateFile(request.OutputPath, "App.tsx", template);
-
             return true;
         }
 
@@ -190,7 +154,7 @@ namespace Extractor.Service
             template = template.Replace("$$Entity$$", tableName)
                            .Replace("$$Columns$$", columnsString);
 
-            var mappedControl = request.Mapping.FirstOrDefault(x => x.FigmaComponent.Type == "DataGrid" && x.FigmaComponent.Name == tableName);
+            var mappedControl = request.MappedControls.FirstOrDefault(x => x.FigmaComponent.Type == "DataGrid" && x.FigmaComponent.Name == tableName);
 
             if (mappedControl != null && File.Exists(request.AspxPagePath + ".cs"))
             {
@@ -245,7 +209,7 @@ namespace Extractor.Service
             string parametersString = string.Join("\n", pathNames.Select(pathName =>
         $" {pathName.ToLower()},"));
 
-            var mappedControl = request.Mapping.FirstOrDefault(x => x.FigmaComponent.Type == type);
+            var mappedControl = request.MappedControls.FirstOrDefault(x => x.FigmaComponent.Type == type);
 
             if (mappedControl != null && File.Exists(request.AspxPagePath + ".cs"))
             {
@@ -272,7 +236,7 @@ namespace Extractor.Service
             string templateFilePath = "./Templates/Button.template";
             string template = File.ReadAllText(templateFilePath);
 
-            var mappedControl = request.Mapping.FirstOrDefault(x => x.FigmaComponent.Type == type);
+            var mappedControl = request.MappedControls.FirstOrDefault(x => x.FigmaComponent.Type == type);
 
             if (mappedControl != null && File.Exists(request.AspxPagePath + ".cs"))
             {
@@ -285,9 +249,6 @@ namespace Extractor.Service
 
             template = template.Replace("$$ButtonList$$", buttonListString)
                 .Replace("$$ComponentName$$", type);
-
-
-
             return (Content: template, FileName: type + "Container");
         }
     }
