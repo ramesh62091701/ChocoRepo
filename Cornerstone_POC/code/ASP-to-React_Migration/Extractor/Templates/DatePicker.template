@@ -16,7 +16,7 @@ interface Props {
   dateValue: SingleDateValue;
 }
 
-const DueDatePicker: React.FC<Props> = ({ dateValue }) => {
+const $$PropertyName$$: React.FC<Props> = ({ dateValue }) => {
   const i18nTools = usePlayerGlobalizationI18n(
     Culture,
     defaultPlayerGlobalizationI18nContext
@@ -61,6 +61,8 @@ const DueDatePicker: React.FC<Props> = ({ dateValue }) => {
     return completeDate;
   };
  
+
+  //Validating proper format for the date
   const GetValidation = (date: string, isValid: boolean) => {
     let isError = false;
     setHasError(false);
@@ -105,6 +107,8 @@ const DueDatePicker: React.FC<Props> = ({ dateValue }) => {
       });
     }
   };
+
+  //Validating the date is not in the past
   const GetValidationForFuture = (date: SingleDateValue) => {
     if (date !== null) {
       const startDateVal = moment
@@ -115,7 +119,6 @@ const DueDatePicker: React.FC<Props> = ({ dateValue }) => {
         .format("YYYY-MM-DDTHH:mm:ss");
       if (startDateVal < currentDate) {
         setHasError(true);
-        // setError(true);
         setErrorMessage(DueDatePastDate);
         dispatch({
           type: Actions.SET_DUE_DATE_ERROR,
@@ -159,4 +162,4 @@ const DueDatePicker: React.FC<Props> = ({ dateValue }) => {
   );
 };
 
-export default DueDatePicker;
+export default $$PropertyName$$;

@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Text.Json.Nodes;
 using System.Net.NetworkInformation;
 using Microsoft.VisualBasic;
+using System.Globalization;
 
 namespace Extractor.Service
 {
@@ -25,50 +26,41 @@ namespace Extractor.Service
 3.None of the name in type Breadcrumb should contain spaces.
 4.Get all the buttons from analyzing the image and add it to below json.
 5.Use the below json format as reference
-[
-    {
-        ""type"": ""Breadcrumb"",
-        ""paths"": [
-            { ""name"": ""Home"", ""data-type"": ""string"" },
-            { ""name"": ""AssignTraining"", ""data-type"": ""string"" }
-        ]
-    },
-    {
-        ""type"": ""DataGrid"",
-        ""table-name"": ""UserDetails"",
-        ""total-rows"": 5,
-        ""column-names"": [""Name"", ""ID"", ""Division""],
-        ""rows"": [
-            {
-                ""Name"": ""John Doe"",
-                ""ID"": ""123"",
-                ""Division"": ""Sales""
-            },
-            {
-                ""Name"": ""Jane Smith"",
-                ""ID"": ""456"",
-                ""Division"": ""Marketing"",
-                ""Position"": ""Executive""
-            }
-        ],
-        ""pages"": ""1 of 6""
-    },
-    {
-        ""type"": ""DatePicker"",
-        ""initialValue"": {
-            ""start"": ""2024-06-04T00:00:00.000Z"",
-            ""end"": ""2024-06-12T00:00:00.000Z""
+    [
+        {
+            ""type"": ""Breadcrumb"",
+            ""paths"": [
+                { ""name"": ""Home"", ""data-type"": ""string"" },
+                { ""name"": ""AssignTraining"", ""data-type"": ""string"" }
+            ]
+        },
+        {
+            ""type"": ""DataGrid"",
+            ""name"": ""UserDetails"",
+            ""columnNames"": [""Name"", ""ID"", ""Division""],
+        },
+        {
+            ""type"": ""DataGrid"",
+            ""name"": ""ClientDetails"",
+            ""columnNames"": [""Name"", ""ID"", ""Division""],
+        },
+        {
+            ""type"": ""DatePicker"",
+            ""label"": ""Date"",
+        },
+        {
+            ""type"": ""TextArea"",
+            ""label"": ""Comments""
+        },
+        {
+            ""type"": ""Button"",
+            ""name"": ""Submit"",
+        },
+        {
+            ""type"": ""Button"",
+            ""name"": ""Cancel"",
         }
-    },
-    {
-        ""type"": ""TextArea"",
-        ""property-name"": ""Comments""
-    },
-    {
-        ""type"": ""Button"",
-        ""button-names"": [""Submit"", ""Search""]
-    }
-]
+    ]
 
 ";
             var gptService = new GPTService();
@@ -88,45 +80,44 @@ namespace Extractor.Service
         }
         public static async Task<bool> Process(Request request)
         {
+            List<FigmaComponent> buttons = new List<FigmaComponent>();
             foreach (var component in request.ControlResponse.FigmaComponents)
             {
                 switch (component.Type)
                 {
                     case "DataGrid":
-                        if (component.Rows != null)
+                        if (component.Type != null)
                         {
-                            var gridTemplate = GenerateGrid(new DataGrid
+                            var gridTemplate = GenerateGrid(new FigmaComponent
                             {
                                 Type = component.Type,
-                                TableName = component.TableName,
-                                TotalRows = component.TotalRows ?? 0,
+                                Name = component.Name,
                                 ColumnNames = component.ColumnNames,
-                                Rows = component.Rows,
-                                Pages = component.Pages
+
                             });
                             Helper.CreateFile(request.OutputPath, gridTemplate.FileName, gridTemplate.Content);
                         }
                         break;
 
                     case "TextArea":
-                        if (component.PropertyName != null)
+                        if (component.Name != null)
                         {
-                            var textAreaTemplate = GenerateTextArea(new TextArea
+                            var textAreaTemplate = GenerateTextArea(new FigmaComponent
                             {
                                 Type = component.Type,
-                                PropertyName = component.PropertyName
+                                Name = component.Name
                             });
                             Helper.CreateFile(request.OutputPath, textAreaTemplate.FileName, textAreaTemplate.Content);
                         }
                         break;
 
                     case "DatePicker":
-                        if (component.InitialValue != null)
+                        if (component.Name != null)
                         {
-                            var datePickerTemplate = GenerateDatePicker(new DatePicker
+                            var datePickerTemplate = GenerateDatePicker(new FigmaComponent
                             {
                                 Type = component.Type,
-                                InitialValue = component.InitialValue
+                                Label = component.Label
                             });
                             Helper.CreateFile(request.OutputPath, datePickerTemplate.FileName, datePickerTemplate.Content);
                         }
@@ -135,7 +126,7 @@ namespace Extractor.Service
                     case "Breadcrumb":
                         if (component.Paths != null)
                         {
-                            var breadcrumbTemplate = GenerateBreadcrumb(new Breadcrumb
+                            var breadcrumbTemplate = GenerateBreadcrumb(new FigmaComponent
                             {
                                 Type = component.Type,
                                 Paths = component.Paths
@@ -145,28 +136,25 @@ namespace Extractor.Service
                         break;
 
                     case "Button":
-                        if (component.ButtonNames != null)
-                        {
-                            var buttonTemplate = GenerateButtons(new Button
-                            {
-                                Type = component.Type,
-                                ButtonNames = component.ButtonNames
-                            });
-                            Helper.CreateFile(request.OutputPath, buttonTemplate.FileName, buttonTemplate.Content);
-                        }
+                        buttons.Add(component);
                         break;
 
                     default:
                         Logger.Log($"Json object of type ={component.Type} not found");
                         break;
                 }
-            }        
+            }
+            if (buttons.Any())
+            {
+                var buttonTemplate = GenerateButtons(buttons);
+                Helper.CreateFile(request.OutputPath, buttonTemplate.FileName, buttonTemplate.Content);
+            }
             return true;
         }
 
-        private static (string Content, string FileName) GenerateGrid(DataGrid dataGrid)
+        private static (string Content, string FileName) GenerateGrid(FigmaComponent dataGrid)
         {
-            string tableName = dataGrid.TableName;
+            string tableName = dataGrid.Name;
 
             string[] columnNames = dataGrid.ColumnNames.ToArray();
 
@@ -182,9 +170,9 @@ namespace Extractor.Service
             return (Content: template , FileName: tableName + ".tsx");
         }
 
-        private static (string Content, string FileName) GenerateTextArea(TextArea textArea)
+        private static (string Content, string FileName) GenerateTextArea(FigmaComponent textArea)
         {
-            string propertyName = textArea.PropertyName;
+            string propertyName = textArea.Name;
 
             string templateFilePath = "./Templates/Textarea.template";
             string template = File.ReadAllText(templateFilePath);
@@ -194,16 +182,17 @@ namespace Extractor.Service
             return (Content :template , FileName : propertyName+".tsx");
         }
 
-        private static (string Content, string FileName) GenerateDatePicker(DatePicker datePicker)
+        private static (string Content, string FileName) GenerateDatePicker(FigmaComponent datePicker)
         {
             string type = datePicker.Type;
             string templateFilePath = "./Templates/DatePicker.template";
             string template = File.ReadAllText(templateFilePath);
 
+            template = template.Replace("$$PropertyName$$", type);
             return (Content: template, FileName: type + ".tsx");
         }
 
-        private static (string Content, string FileName) GenerateBreadcrumb(Breadcrumb breadcrumb)
+        private static (string Content, string FileName) GenerateBreadcrumb(FigmaComponent breadcrumb)
         {
             string type = breadcrumb.Type;
 
@@ -234,16 +223,16 @@ namespace Extractor.Service
             return (Content: template, FileName: type + "Container.tsx");
         }
 
-        private static (string Content, string FileName) GenerateButtons(Button button)
+        private static (string Content, string FileName) GenerateButtons(List<FigmaComponent> buttons)
         {
-            string type = button.Type;
+            string type = buttons.First().Type;
 
-            var buttonsArray = button.ButtonNames.ToArray();
+            var buttonNames = buttons.Select(b => b.Name).ToList();
 
             string templateFilePath = "./Templates/Button.template";
             string template = File.ReadAllText(templateFilePath);
 
-            string buttonListString = string.Join(",\n", buttonsArray.Select(buttonName =>
+            string buttonListString = string.Join(",\n", buttonNames.Select(buttonName =>
                 $"//replace object with your localizations\n const localized{buttonName} = useLocalizationsDefaults(\r\n    `${{object.{buttonName}}}`\r\n  );"));
 
             template = template.Replace("$$ButtonList$$", buttonListString)
@@ -251,6 +240,7 @@ namespace Extractor.Service
 
             return (Content: template, FileName: type + "Container.tsx");
         }
+
 
         public static async Task<string> GenerateMainFile(Request request)
         {
@@ -285,6 +275,7 @@ Above are the component files in the React. Generate a json response in below fo
             List<FigmaComponentJson> jsonArray = JsonConvert.DeserializeObject<List<FigmaComponentJson>>(arrayJson);
 
             StringBuilder componentBuilder = new StringBuilder();
+            StringBuilder importComponent = new StringBuilder();
             foreach (var obj in jsonArray)
             {
                 string type = obj.Type;
@@ -297,18 +288,15 @@ Above are the component files in the React. Generate a json response in below fo
 
                 componentBuilder.AppendLine(variablesString);
                 componentBuilder.AppendLine("/>");
+                importComponent.AppendLine($"import {{ {type} }} from \"components/{type}\"; ");
             }
             string templateFilePath = "./Templates/App.template";
             string template = File.ReadAllText(templateFilePath);
-            string componentString = componentBuilder.ToString();
-            template = template.Replace("$$Components$$", componentString);
+            template = template.Replace("$$Components$$", componentBuilder.ToString())
+                .Replace("$$ImportComponents$$", importComponent.ToString());
 
             return template;
         }
-
-        
-        
-        
         
         private static string ReadFiles(string directoryPath)
         {

@@ -57,9 +57,8 @@ Create one single react page.";
 From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from the provided React code and convert them into JSON data following these rules:
 1.Generate only JSON data without any explanation.
 2.Call all components in the App.js file.
-3.Remember to write all CSS styles for the react component in a 'App.css' file.
-4.Use 'src/component/filename' for components in the JSON response filename.
-5.Use the specified JSON format for the response.
+3.Use 'src/component/filename' for components in the JSON response filename.
+4.Use the specified JSON format for the response.
 [
 	{{
 		""filename"" : ""src/App.js"",
@@ -68,10 +67,6 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
 	{{
 		""filename"" : ""src/components/Grid.jsx"",
 		""content"" : ""its code""
-	}},
-	{{
-		""filename"" : ""src/components/component.css"",
-		""content"" : ""css style code""
 	}},
 ]";
             var reactSeparateResponse = await gptService.GetAiResponse(separatePrompt, Constants.ReactSysPrompt, Constants.Model, true);

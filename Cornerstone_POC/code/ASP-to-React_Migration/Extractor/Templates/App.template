@@ -1,93 +1,101 @@
-﻿/* istanbul ignore file */
-
-import React, { useEffect } from "react";
+﻿import React, { useEffect } from "react";
 import "style/style.less";
 import { AppConstants } from "constants/AppConstants";
-import {
-  GetHomePageUrl,
-  assignUsers,
-  fetchTrainingDetails,
-  fetchTrainingPurposes,
-} from "services/CommonAPIService";
-import BreadcrumbContainer from "components/BreadcrumbContainer";
-import UserGridContainer from "components/UserGridContainer";
+import { GetHomePageUrl } from "services/CommonAPIService";
+$$ImportComponents$$
 import { InfoIcon } from "@flare/primitives/icon";
 import { ListboxItem } from "@flare/primitives/dropdown";
-import SelectDetailsContainer from "components/SelectDetailsContainer";
-import { DetailsState } from "actions/SelectDetailsActions";
-import ButtonsContainer from "components/ButtonsContainer";
 import { useLocalizationsDefaults } from "@flare/primitives/core-ui";
-import {
-  AssignmentToastMessage,
-  ExtendedAssignTrainingCommon,
-  TrainingDetails,
-  TrainingPurpose,
-  UserGrid,
-} from "localizations";
-import { TrainingPurposeObj } from "models/TrainingPurpose";
-import TrainingDetailsContainer from "components/TrainingDetailsContainer";
-import { LoDetail } from "models/TrainingDetails";
-import { UserDetail } from "models/UserDetails";
-import { dueDate } from "models/DueDate";
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
-import { Actions } from "actions/Actions";
-import SeatAvailabilityModal from "components/SeatAvailabilityModal";
-import WarningMessageContainer from "components/WarningMessageContainer";
-import { TrainingAssignmentRequest } from "models/TrainingAssignmentRequest";
-import ToastMsg from "components/ToastMsg";
-import { ApiResponseModel } from "models/ApiResponseModel";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Preloader } from "@flare/primitives/preloader";
 
 interface ToastMessage {
-  showToast: boolean;
-  toastMessage: string;
+    showToast: boolean;
+    toastMessage: string;
 }
 
-const AssignTraining: React.FC = (props: any): JSX.Element => {
-  const {
-    location: { search },
-  } = props;
+// Todo: Define Properties.
+interface Props {
 
-  const [homePageUrl, setHomePageUrl] = React.useState<string>(
-    AppConstants.BreadcrumbHomeDefaultPath
-  );
-  const [isBreadcrumbLoaded, setIsBreadcrumbLoaded] =
-    React.useState<boolean>(false);
-  const [isUserLoaded, setIsUserLoaded] = React.useState<boolean>(false);
-  const [isMetaDataLoaded, setIsMetaDataLoaded] =
-    React.useState<boolean>(false);
+}
 
-  const [currentPage, setcurrentPage] = React.useState(1);
+const AppComponent: React.FC = (props: any): JSX.Element => {
+
+    let prevUrl: any = "";
+    let loId = "";
+
+    const {
+        location: { search },
+    } = props;
+    // Todo: Define state
+    const [homePageUrl, setHomePageUrl] = React.useState<string>(
+        AppConstants.BreadcrumbHomeDefaultPath
+    );
+    const [isBreadcrumbLoaded, setIsBreadcrumbLoaded] =
+        React.useState<boolean>(false);
+    const [isUserLoaded, setIsUserLoaded] = React.useState<boolean>(false);
+    const [isMetaDataLoaded, setIsMetaDataLoaded] =
+        React.useState<boolean>(false);
+    const [currentPage, setcurrentPage] = React.useState(1);
+
+    // Todo: Define localized strings.
 
 
+    try {
+        // eslint-disable-next-line compat/compat
+        const up = new URLSearchParams(search);
+        const qs: any = up.get("LoId");
+        const qsBack: any = up.get("back");
+        loId = qs;
 
-  function isValidGuid(guid: string): boolean {
-    const guidRegex =
-      /^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/;
+        if (qsBack !== null && qsBack !== "") {
+            prevUrl = qsBack;
+            sessionStorage.setItem(`prevUrl_${loId}`, prevUrl);
+        } else if (document.referrer !== null && document.referrer !== "") {
+            prevUrl = document.referrer;
+            sessionStorage.setItem(`prevUrl_${loId}`, prevUrl);
+        } else if (sessionStorage.getItem(`prevUrl_${loId}`) !== null) {
+            prevUrl = sessionStorage.getItem(`prevUrl_${loId}`)?.toString();
+        }
+    } catch (ex) {
+        loId = "";
+    }
 
-    return guidRegex.test(guid);
-  }
+
+    const url = AppConstants.BreadcrumbTrainingTitle.replace("{loId}", loId);
+
+    useEffect(() => {
+        GetHomePageUrl()
+            .then((pageUrl: string) => {
+                if (pageUrl !== "") {
+                    setHomePageUrl(`/${pageUrl}`);
+                }
+                setIsBreadcrumbLoaded(true);
+            })
+            .catch(() => {
+                setHomePageUrl(`/${AppConstants.BreadcrumbHomeDefaultPath}`);
+                setIsBreadcrumbLoaded(true);
+            });
+    }, []);
 
 
-  const url = AppConstants.BreadcrumbTrainingTitle.replace("{loId}", loId);
+    const submitHandler = (
+        e: React.MouseEvent,
+        buttonIdentifier: string
+    ): any => {
 
-  const submitHandler = (
-    e: React.MouseEvent,
-    buttonIdentifier: string
-  ): any => {
-    
-  };
-  
-  return (
-    <div id="AssignTrainingWrapper">
-      {isBreadcrumbLoaded && (
-      $$Components$$
-      )}
-      <ToastMsg />
-    </div>
-  );
+    };
+
+    return (
+        <div>
+            {isBreadcrumbLoaded && (
+                $$Components$$
+            )}
+            <ToastMsg />
+        </div>
+    );
 };
 
-export default AssignTraining;
+export default AppComponent;
 

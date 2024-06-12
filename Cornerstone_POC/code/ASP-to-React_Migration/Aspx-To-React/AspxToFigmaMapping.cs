@@ -39,7 +39,7 @@ namespace Aspx_To_React
             cmbAspx1.ValueMember = "id";
             //cmbAspx1.SelectedIndex = 0;
 
-            figmaComponents = request.ControlResponse.FigmaComponents.FindAll(x => !String.IsNullOrEmpty(x.TableName) || !String.IsNullOrEmpty(x.PropertyName)); ;
+            figmaComponents = request.ControlResponse.FigmaComponents.FindAll(x => !String.IsNullOrEmpty(x.Name) || !String.IsNullOrEmpty(x.Name)); ;
             figmaComponents.Insert(0, new FigmaComponent { Type = string.Empty });
             cmbFigma1.DataSource = figmaComponents;
             cmbFigma1.DisplayMember = "TableName";

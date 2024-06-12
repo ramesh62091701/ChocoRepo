@@ -26,12 +26,12 @@ $$ParametersAssignments$$
 
     $$ComponentName$$Items.push({
       disable: false,
-      label: localizedHomeLabelText, // replace with your localization
+      label: localizedHomeLabelText, // Todo: replace with your localization
       to: homePageUrl, // Todo: Replace with your parameters
     });
     $$ComponentName$$Items.push({
       disable: false,
-      label: localizedEATtitle,  // replace with your localization
+      label: localizedEATtitle,  // Todo: replace with your localization
       to: "", // ToDo: Replace with your parameters
     });
     return $$ComponentName$$Items;
