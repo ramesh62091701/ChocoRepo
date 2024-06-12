@@ -23,7 +23,15 @@ namespace Extractor.Model
         {
             get
             {
-                return Type + "-" + Name;
+                string val = string.Empty;
+                if (!string.IsNullOrEmpty(Type))
+                    val = Type;
+                var name = Name;
+                if (string.IsNullOrEmpty(name))
+                    name = Label;
+                if (!string.IsNullOrEmpty(name))
+                    val = $"{val}-{name}";
+                return val;
             }
         }
         [JsonProperty("type")]

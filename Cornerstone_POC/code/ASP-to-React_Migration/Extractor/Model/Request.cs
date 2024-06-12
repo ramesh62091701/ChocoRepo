@@ -10,6 +10,6 @@
         public bool IsFigmaUrl { get; set; }
         public ControlResponse ControlResponse { get; set; }
 
-        public Dictionary<string, string> Mapping { get; set; }
+        public List<MappedControl> Mapping { get; set; }
     }
 }

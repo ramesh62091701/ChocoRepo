@@ -1,16 +1,6 @@
 ﻿using Extractor.Model;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+
 
 namespace Aspx_To_React
 {
@@ -18,39 +8,38 @@ namespace Aspx_To_React
     {
         private int index = 1;
         private Request request;
-        private List<AspControl> aspxComponents;
+        private List<AspComponent> aspxComponents;
         private List<FigmaComponent> figmaComponents;
-        public Dictionary<string, string> Mapping { get; set; }
+        public List<MappedControl> MappedControls { get; }
         public AspxToFigmaMapping()
         {
             InitializeComponent();
+            MappedControls = new List<MappedControl>();
         }
 
         public void Initialize(Request request)
         {
-            Mapping = new Dictionary<string, string>();
             this.request = request;
             
             //filter components with empty id
             aspxComponents =  request.ControlResponse.AspxComponents.FindAll(x => !String.IsNullOrEmpty(x.id));
-            aspxComponents.Insert(0, new AspControl { id = String.Empty});
+            aspxComponents.Insert(0, new AspComponent { id = String.Empty});
             cmbAspx1.DataSource = aspxComponents;
             cmbAspx1.DisplayMember = "id";
             cmbAspx1.ValueMember = "id";
-            //cmbAspx1.SelectedIndex = 0;
+            cmbAspx1.SelectedIndex = 0;
 
-            figmaComponents = request.ControlResponse.FigmaComponents.FindAll(x => !String.IsNullOrEmpty(x.Name) || !String.IsNullOrEmpty(x.Name)); ;
-            figmaComponents.Insert(0, new FigmaComponent { Type = string.Empty });
+            figmaComponents = request.ControlResponse.FigmaComponents;
+            figmaComponents.Insert(0, new FigmaComponent { Type = string.Empty, Name = string.Empty });
             cmbFigma1.DataSource = figmaComponents;
-            cmbFigma1.DisplayMember = "TableName";
-            cmbFigma1.ValueMember = "TableName";
-            //cmbFigma1.SelectedIndex = 0;
+            cmbFigma1.DisplayMember = "Id";
+            cmbFigma1.ValueMember = "Id";
+            cmbFigma1.SelectedIndex = 0;
 
             for (int i = 0; i < 3; i++)
             {
                 Add();
             }
-           
         }
 
         private void btnSumit_Click(object sender, EventArgs e)
@@ -59,10 +48,12 @@ namespace Aspx_To_React
             {
                 var figmaControl = this.Controls.Find($"cmbFigma{i}", false)[0] as ComboBox;
                 var aspxControl = this.Controls.Find($"cmbAspx{i}", false)[0] as ComboBox;
-                if (!string.IsNullOrEmpty(figmaControl?.SelectedText) &&
-                    !string.IsNullOrEmpty(aspxControl?.SelectedText))
+                if (!string.IsNullOrEmpty(figmaControl?.SelectedValue as string) &&
+                    !string.IsNullOrEmpty(aspxControl?.SelectedValue as string))
                 {
-                    Mapping.Add(figmaControl.Text, aspxControl.Text);
+                    var aspComponent = aspxComponents.First(x => x.id == aspxControl?.SelectedValue as string);
+                    var figmaComponent = figmaComponents.First(x => x.Id == figmaControl?.SelectedValue as string);
+                    MappedControls.Add(new MappedControl() { AspComponent = aspComponent, FigmaComponent = figmaComponent });
                 }
             }
         }
@@ -80,8 +71,7 @@ namespace Aspx_To_React
             comboBox.DataSource = prefix == "cmbFigma" ? Clone(figmaComponents) : Clone(aspxComponents);
             comboBox.DisplayMember = referenceComboBox.DisplayMember;
             comboBox.ValueMember = referenceComboBox.ValueMember;
-            // Optionally set default selected item
-            //comboBox.SelectedIndex = 0;
+            comboBox.BringToFront();
 
             // Add the ComboBox to the Form's controls
             this.Controls.Add(comboBox);

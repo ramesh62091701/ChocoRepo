@@ -8,7 +8,7 @@ namespace Extractor.Model
 {
     public  class ControlResponse
     {
-        public List<AspControl> AspxComponents { get; set; }
+        public List<AspComponent> AspxComponents { get; set; }
 
         public List<FigmaComponent> FigmaComponents { get; set; }
     }

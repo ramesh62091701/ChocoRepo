@@ -94,25 +94,25 @@ namespace Extractor.Service
                                 Name = component.Name,
                                 ColumnNames = component.ColumnNames,
 
-                            });
+                            }, request);
                             Helper.CreateFile(request.OutputPath, gridTemplate.FileName, gridTemplate.Content);
                         }
                         break;
 
                     case "TextArea":
-                        if (component.Name != null)
+                        if (!string.IsNullOrEmpty(component.Label))
                         {
                             var textAreaTemplate = GenerateTextArea(new FigmaComponent
                             {
                                 Type = component.Type,
-                                Name = component.Name
+                                Name = component.Label
                             });
                             Helper.CreateFile(request.OutputPath, textAreaTemplate.FileName, textAreaTemplate.Content);
                         }
                         break;
 
                     case "DatePicker":
-                        if (component.Name != null)
+                        if (!string.IsNullOrEmpty(component.Label))
                         {
                             var datePickerTemplate = GenerateDatePicker(new FigmaComponent
                             {
@@ -152,7 +152,7 @@ namespace Extractor.Service
             return true;
         }
 
-        private static (string Content, string FileName) GenerateGrid(FigmaComponent dataGrid)
+        private static (string Content, string FileName) GenerateGrid(FigmaComponent dataGrid, Request request)
         {
             string tableName = dataGrid.Name;
 
@@ -166,6 +166,14 @@ namespace Extractor.Service
 
             template = template.Replace("$$Entity$$", tableName)
                            .Replace("$$Columns$$", columnsString);
+
+            var mappedControl = request.Mapping.FirstOrDefault(x => x.FigmaComponent.Type == "DataGrid" && x.FigmaComponent.Name == tableName);
+
+            if (mappedControl != null && File.Exists(request.AspxPagePath + ".cs"))
+            {
+                var fetchDetails = Helper.GetMethodDetails(mappedControl.AspComponent.id, request.AspxPagePath + ".cs");
+                template = template.Replace("$$FetchDetails$$", $"/*{Environment.NewLine}{fetchDetails}{Environment.NewLine}*/");
+            }
 
             return (Content: template , FileName: tableName + ".tsx");
         }

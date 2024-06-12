@@ -40,24 +40,24 @@
             // cmbFigma1
             // 
             cmbFigma1.FormattingEnabled = true;
-            cmbFigma1.Location = new Point(12, 94);
+            cmbFigma1.Location = new Point(27, 175);
             cmbFigma1.Name = "cmbFigma1";
-            cmbFigma1.Size = new Size(244, 33);
+            cmbFigma1.Size = new Size(287, 33);
             cmbFigma1.TabIndex = 0;
             // 
             // cmbAspx1
             // 
             cmbAspx1.DropDownWidth = 244;
             cmbAspx1.FormattingEnabled = true;
-            cmbAspx1.Location = new Point(274, 95);
+            cmbAspx1.Location = new Point(344, 175);
             cmbAspx1.Name = "cmbAspx1";
-            cmbAspx1.Size = new Size(268, 33);
+            cmbAspx1.Size = new Size(311, 33);
             cmbAspx1.TabIndex = 1;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(101, 58);
+            label1.Location = new Point(131, 141);
             label1.Name = "label1";
             label1.Size = new Size(61, 25);
             label1.TabIndex = 2;
@@ -66,7 +66,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(388, 58);
+            label2.Location = new Point(458, 141);
             label2.Name = "label2";
             label2.Size = new Size(51, 25);
             label2.TabIndex = 3;
@@ -74,9 +74,9 @@
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(552, 96);
+            btnAdd.Location = new Point(110, 66);
             btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(200, 89);
+            btnAdd.Size = new Size(200, 54);
             btnAdd.TabIndex = 4;
             btnAdd.Text = "Add";
             btnAdd.UseVisualStyleBackColor = true;
@@ -85,9 +85,9 @@
             // btnSumit
             // 
             btnSumit.BackColor = Color.FromArgb(255, 128, 0);
-            btnSumit.Location = new Point(552, 190);
+            btnSumit.Location = new Point(364, 64);
             btnSumit.Name = "btnSumit";
-            btnSumit.Size = new Size(200, 89);
+            btnSumit.Size = new Size(200, 54);
             btnSumit.TabIndex = 5;
             btnSumit.Text = "Next";
             btnSumit.UseVisualStyleBackColor = false;
@@ -107,7 +107,7 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(741, 655);
             Controls.Add(label3);
             Controls.Add(btnSumit);
             Controls.Add(btnAdd);

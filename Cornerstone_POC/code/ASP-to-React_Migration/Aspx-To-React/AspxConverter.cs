@@ -115,7 +115,7 @@ namespace Aspx_To_React
             {
                 aspxToFigmaFrm.Initialize(request);
                 aspxToFigmaFrm.ShowDialog(this);
-                request.Mapping = aspxToFigmaFrm.Mapping;
+                request.Mapping = aspxToFigmaFrm.MappedControls;
             }
             await Processor.MigrateToReact(request);
         }

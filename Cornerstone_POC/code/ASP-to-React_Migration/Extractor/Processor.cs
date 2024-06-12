@@ -22,17 +22,17 @@ namespace Extractor
             return await FigmaHelper.GetContents(request.FigmaUrl);
         }
 
-        private async static Task<List<AspControl>> GetControlsFromAspx(Request request)
+        private async static Task<List<AspComponent>> GetControlsFromAspx(Request request)
         {
             if (string.IsNullOrEmpty(request.AspxPagePath))
             {
-                return new List<AspControl>();
+                return new List<AspComponent>();
             }
             var aspxContent = File.ReadAllText(request.AspxPagePath);
             var gptService = new GPTService();
             var jsonResponse = await gptService.GetAiResponseForImage($"<aspx-code>{aspxContent}</aspx-code>/n${Constants.AspxCodeToJson}", string.Empty, Constants.Model, true, request.ImagePath);
             var jsonContent = Helper.RemoveMarkupCode(jsonResponse.Message, "json");
-            var controls = System.Text.Json.JsonSerializer.Deserialize<List<AspControl>>(jsonContent);
+            var controls = System.Text.Json.JsonSerializer.Deserialize<List<AspComponent>>(jsonContent);
             return controls;
         }
 

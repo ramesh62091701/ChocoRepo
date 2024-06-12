@@ -3,7 +3,7 @@
 namespace Extractor.Model
 {
 
-    public class AspControl
+    public class AspComponent
     {
         public string type { get; set; }
         public string id { get; set; }
