@@ -139,7 +139,7 @@ namespace Extractor.Service
                             {
                                 Type = component.Type,
                                 Paths = component.Paths
-                            });
+                            } , request);
                             string variablesString = string.Join("", component.Paths.Select(declaredVariable =>
                     $"{declaredVariable.Name.ToLower()}={{{declaredVariable.Name}}}\n"));
                             componentBuilder.AppendLine($"<{breadcrumbTemplate.FileName}\n");
@@ -160,7 +160,7 @@ namespace Extractor.Service
             }
             if (buttons.Any())
             {
-                var buttonTemplate = GenerateButtons(buttons);
+                var buttonTemplate = GenerateButtons(buttons , request);
                 componentBuilder.AppendLine($"<{buttonTemplate.FileName}\ncurrentpage={{currentPage}}\nisdisabled={{isDisabled}}\n/>");
                 importComponent.AppendLine($"import {{ {buttonTemplate.FileName} }} from \"components/{buttonTemplate.FileName}\"; ");
                 Helper.CreateFile(request.OutputPath, buttonTemplate.FileName + ".tsx", buttonTemplate.Content);
@@ -223,7 +223,7 @@ namespace Extractor.Service
             return (Content: template, FileName: type);
         }
 
-        private static (string Content, string FileName) GenerateBreadcrumb(FigmaComponent breadcrumb)
+        private static (string Content, string FileName) GenerateBreadcrumb(FigmaComponent breadcrumb , Request request)
         {
             string type = breadcrumb.Type;
 
@@ -237,12 +237,21 @@ namespace Extractor.Service
 
             string[] pathNames = paths.Select(path => path.Name).ToArray();
 
+
+
             string templateFilePath = "./Templates/Breadcrumb.template";
             string template = File.ReadAllText(templateFilePath);
 
             string parametersString = string.Join("\n", pathNames.Select(pathName =>
         $" {pathName.ToLower()},"));
 
+            var mappedControl = request.Mapping.FirstOrDefault(x => x.FigmaComponent.Type == type);
+
+            if (mappedControl != null && File.Exists(request.AspxPagePath + ".cs"))
+            {
+                var fetchDetails = Helper.GetMethodDetails(mappedControl.AspComponent.id, request.AspxPagePath + ".cs");
+                template = template.Replace("$$FetchDetails$$", $"/*{Environment.NewLine}{fetchDetails}{Environment.NewLine}*/");
+            }
             string parametersDeclarationString = string.Join(",\n", paths.Select(path =>
                 $" {path.Name.ToLower()}: {path.DataType.ToLower()}"));
 
@@ -254,7 +263,7 @@ namespace Extractor.Service
             return (Content: template, FileName: type + "Container");
         }
 
-        private static (string Content, string FileName) GenerateButtons(List<FigmaComponent> buttons)
+        private static (string Content, string FileName) GenerateButtons(List<FigmaComponent> buttons , Request request)
         {
             string type = buttons.First().Type;
 
@@ -263,11 +272,21 @@ namespace Extractor.Service
             string templateFilePath = "./Templates/Button.template";
             string template = File.ReadAllText(templateFilePath);
 
+            var mappedControl = request.Mapping.FirstOrDefault(x => x.FigmaComponent.Type == type);
+
+            if (mappedControl != null && File.Exists(request.AspxPagePath + ".cs"))
+            {
+                var buttonAction = Helper.GetMethodDetails(mappedControl.AspComponent.id, request.AspxPagePath + ".cs");
+                template = template.Replace("$$ButtonAction$$", $"/*{Environment.NewLine}{buttonAction}{Environment.NewLine}*/");
+            }
+
             string buttonListString = string.Join(",\n", buttonNames.Select(buttonName =>
                 $"//replace object with your localizations\n const localized{buttonName} = useLocalizationsDefaults(\r\n    `${{object.{buttonName}}}`\r\n  );"));
 
             template = template.Replace("$$ButtonList$$", buttonListString)
                 .Replace("$$ComponentName$$", type);
+
+
 
             return (Content: template, FileName: type + "Container");
         }
