@@ -2,9 +2,7 @@
 using Extractor.Service;
 using Extractor.Utils;
 using Newtonsoft.Json;
-using System.Net.Http;
-using System.Text.Json;
-using System.Text.RegularExpressions;
+
 
 namespace Extractor
 {
@@ -13,7 +11,7 @@ namespace Extractor
     {
         private async static Task<string> GetHTMLFromFigma(Request request)
         {
-            if (!request.IsFigmaUrl)
+            if (!request.IsFigmaUrlOnly)
             {
                 Logger.Log("Processing Figma Image.");
                 var gptService = new GPTService();
@@ -22,6 +20,7 @@ namespace Extractor
                 return htmlResponse.Message;
             }
             Logger.Log("Started executing AI request.");
+            //Will not work if nodes are more.
             return await FigmaHelper.GetContents(request.FigmaUrl);
         }
 
@@ -131,9 +130,10 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
 
         public async static Task<bool> MigrateToReact(Request request)
         {
-            if ((request.IsFigmaUrl || request.IsUseBoth) && request.IsCustom)
+            if ((request.IsFigmaUrlOnly || request.IsBothFigmaUrlAndImage) && request.IsCustom)
             {
                 var content = await FigmaHelper.GetFigmaJsonFromUrl(request.FigmaUrl);
+                // Enrich controls fetched from Figma url json.
             }
             if (request.IsCustom)
             {

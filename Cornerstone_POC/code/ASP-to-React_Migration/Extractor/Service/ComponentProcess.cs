@@ -10,10 +10,12 @@ namespace Extractor.Service
     {
         public static async Task<List<FigmaComponent>> GetFigmaControls(Request request)
         {
-            if (!request.IsFigmaUrl)
+            if (request.IsFigmaUrlOnly)
             {
+                return new List<FigmaComponent>();
+            }
 
-                var jsonPrompt = @"Read the Figma design image and give me the details of all the controls in json format like example data-grid, textarea, Date-picker etc.
+            var jsonPrompt = @"Read the Figma design image and give me the details of all the controls in json format like example data-grid, textarea, Date-picker etc.
     Rules to follow while giving json output:
     1.Always generate only json output do not give explanations above or below the json.
     2.Table name should be one word without any spaces.
@@ -58,15 +60,12 @@ namespace Extractor.Service
         ]
 
     ";
-                var gptService = new GPTService();
-                var jsonOutput = await gptService.GetAiResponseForImage(jsonPrompt, string.Empty, Model.Constants.Model, true, request.ImagePath);
+            var gptService = new GPTService();
+            var jsonOutput = await gptService.GetAiResponseForImage(jsonPrompt, string.Empty, Model.Constants.Model, true, request.ImagePath);
 
-                string arrayJson = Helper.SelectJsonArray(jsonOutput.Message);
-                List<FigmaComponent> components = JsonConvert.DeserializeObject<List<FigmaComponent>>(arrayJson);
-                return components;
-            }
-
-            return new List<FigmaComponent>();
+            string arrayJson = Helper.SelectJsonArray(jsonOutput.Message);
+            List<FigmaComponent> components = JsonConvert.DeserializeObject<List<FigmaComponent>>(arrayJson);
+            return components;
         }
         public static async Task<bool> Process(Request request)
         {

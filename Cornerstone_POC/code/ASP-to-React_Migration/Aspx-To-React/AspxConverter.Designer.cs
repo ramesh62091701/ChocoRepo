@@ -290,10 +290,10 @@
             rdbUseBoth.AutoSize = true;
             rdbUseBoth.Location = new Point(264, 34);
             rdbUseBoth.Name = "rdbUseBoth";
-            rdbUseBoth.Size = new Size(108, 29);
+            rdbUseBoth.Size = new Size(109, 29);
             rdbUseBoth.TabIndex = 22;
             rdbUseBoth.TabStop = true;
-            rdbUseBoth.Text = "Use Both";
+            rdbUseBoth.Text = "Use both";
             rdbUseBoth.UseVisualStyleBackColor = true;
             rdbUseBoth.CheckedChanged += rdbUseBoth_CheckedChanged;
             // 

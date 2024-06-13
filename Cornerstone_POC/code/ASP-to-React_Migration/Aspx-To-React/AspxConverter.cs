@@ -1,6 +1,5 @@
 using Extractor;
 using Extractor.Model;
-using Extractor.Service;
 using Extractor.Utils;
 
 namespace Aspx_To_React
@@ -33,23 +32,32 @@ namespace Aspx_To_React
 
         private async void btnConvert_Click(object sender, EventArgs e)
         {
-            ClearLog();
-            var request = new Request()
+            try
             {
-                AspxPagePath = txtAspxPath.Text,
-                ImagePath = txtFigmaPath.Text,
-                OutputPath = txtOutput.Text,
-                IsCustom = radioButton2.Checked,
-                IsFigmaUrl = rdbFileUrl.Checked,
-                FigmaUrl = txtFigmaUrl.Text,
-                IsUseBoth = rdbUseBoth.Checked,
-            };
+                ClearLog();
+                var request = new Request()
+                {
+                    AspxPagePath = txtAspxPath.Text,
+                    ImagePath = txtFigmaPath.Text,
+                    OutputPath = txtOutput.Text,
+                    IsCustom = radioButton2.Checked,
+                    IsFigmaUrlOnly = rdbFileUrl.Checked,
+                    FigmaUrl = txtFigmaUrl.Text,
+                    IsBothFigmaUrlAndImage = rdbUseBoth.Checked,
+                };
 
-            await Processor.MigrateToHtml(request);
+                await Processor.MigrateToHtml(request);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogToFile(ex.ToString());
+            }
+            Logger.Log("Conversion completed.");
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+
             var result = openFileDialog1.ShowDialog(this);
             if (result == DialogResult.OK)
             {
@@ -106,36 +114,43 @@ namespace Aspx_To_React
 
         private async void btnConvertToReact_Click(object sender, EventArgs e)
         {
-
-            ClearLog();
-            var request = new Request()
+            try
             {
-                AspxPagePath = txtAspxPath.Text,
-                ImagePath = txtFigmaPath.Text,
-                OutputPath = txtOutput.Text,
-                IsCustom = radioButton2.Checked,
-                IsFigmaUrl = rdbFileUrl.Checked,
-                FigmaUrl = txtFigmaUrl.Text,
-                IsUseBoth = rdbUseBoth.Checked,
-            };
-
-            if (request.IsCustom)
-            {
-                using (var aspxToFigmaFrm = new AspxToFigmaMapping())
+                ClearLog();
+                var request = new Request()
                 {
-                    request.Components = await Processor.GetControls(request);
-                    if (request.Components.AspComponents?.Count > 0)
-                    {
-                        Logger.Log("Use the Mapping window to map controls.");
-                        aspxToFigmaFrm.Initialize(request);
-                        aspxToFigmaFrm.ShowDialog(this);
-                        request.MappedControls = aspxToFigmaFrm.MappedControls;
+                    AspxPagePath = txtAspxPath.Text,
+                    ImagePath = txtFigmaPath.Text,
+                    OutputPath = txtOutput.Text,
+                    IsCustom = radioButton2.Checked,
+                    IsFigmaUrlOnly = rdbFileUrl.Checked,
+                    FigmaUrl = txtFigmaUrl.Text,
+                    IsBothFigmaUrlAndImage = rdbUseBoth.Checked,
+                };
 
+                if (request.IsCustom)
+                {
+                    using (var aspxToFigmaFrm = new AspxToFigmaMapping())
+                    {
+                        request.Components = await Processor.GetControls(request);
+                        if (request.Components.AspComponents?.Count > 0)
+                        {
+                            Logger.Log("Use the Mapping window to map controls.");
+                            aspxToFigmaFrm.Initialize(request);
+                            aspxToFigmaFrm.ShowDialog(this);
+                            request.MappedControls = aspxToFigmaFrm.MappedControls;
+
+                        }
                     }
                 }
+                // Get Controls to Map
+                await Processor.MigrateToReact(request);
             }
-            // Get Controls to Map
-            await Processor.MigrateToReact(request);
+            catch (Exception ex)
+            {
+                Logger.LogToFile(ex.ToString());
+            }
+            Logger.Log("Conversion completed.");
         }
 
         private void rdbFileUrl_CheckedChanged(object sender, EventArgs e)
