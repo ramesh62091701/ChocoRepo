@@ -26,16 +26,23 @@ namespace Extractor
 
         private async static Task<List<AspComponent>> GetControlsFromAspx(Request request)
         {
-            if (string.IsNullOrEmpty(request.AspxPagePath))
+            try
             {
+                if (string.IsNullOrEmpty(request.AspxPagePath))
+                {
+                    return new List<AspComponent>();
+                }
+                var aspxContent = File.ReadAllText(request.AspxPagePath);
+                var gptService = new GPTService();
+                var jsonResponse = await gptService.GetAiResponseForImage($"<aspx-code>{aspxContent}</aspx-code>/n${Constants.AspxCodeToJson}", string.Empty, Constants.Model, true, request.ImagePath);
+                var jsonContent = Helper.SelectJsonArray(jsonResponse.Message);
+                var controls = JsonConvert.DeserializeObject<List<AspComponent>>(jsonContent);
+                return controls;
+            }catch (Exception ex)
+            {
+                Logger.LogToFile(ex.ToString());
                 return new List<AspComponent>();
             }
-            var aspxContent = File.ReadAllText(request.AspxPagePath);
-            var gptService = new GPTService();
-            var jsonResponse = await gptService.GetAiResponseForImage($"<aspx-code>{aspxContent}</aspx-code>/n${Constants.AspxCodeToJson}", string.Empty, Constants.Model, true, request.ImagePath);
-            var jsonContent = Helper.SelectJsonArray(jsonResponse.Message);
-            var controls = JsonConvert.DeserializeObject<List<AspComponent>>(jsonContent);
-            return controls;
         }
 
         private async static Task<bool> MigrateToReactInternal(Request request)
