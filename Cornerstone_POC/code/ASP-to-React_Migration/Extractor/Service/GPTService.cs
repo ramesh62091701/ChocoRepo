@@ -20,6 +20,7 @@ namespace Extractor.Service
 
         public async Task<(string Message, string Id)> GetAiResponse(string prompt, string systemPrompt, string model, bool logResponse)
         {
+            Logger.LogToFile(prompt);
             var requestBody = new
             {
                 model = model,
@@ -69,6 +70,7 @@ namespace Extractor.Service
 
         public async Task<(string Message, string Id)> GetAiResponseForImage(string prompt, string systemPrompt, string model, bool logResponse, string imagePath)
         {
+            Logger.LogToFile(prompt);
             string base64Image = EncodeImage(imagePath);
             var requestBody = new
             {
@@ -102,7 +104,6 @@ namespace Extractor.Service
             }
 
             HttpResponseMessage response = await client.PostAsync(apiUrl, content);
-
             string responseBody = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
