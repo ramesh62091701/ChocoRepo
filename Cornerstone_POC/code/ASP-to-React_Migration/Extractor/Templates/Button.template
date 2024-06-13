@@ -17,6 +17,7 @@ const $$ComponentName$$Container: React.FC<Props> = ({
 
     // Todo: Define Properties.
 
+    // Todo: replace object with your localizations
     $$ButtonList$$
 
     const isRTLdirection = document.dir === "rtl"

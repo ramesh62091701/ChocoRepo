@@ -254,7 +254,7 @@ namespace Extractor.Service
 
                 buttonActions.Add($"/*{Environment.NewLine}{buttonAction}{Environment.NewLine}*/");
 
-                string buttonListString = $"//replace object with your localizations\n const localized{buttonName} = useLocalizationsDefaults(\r\n    `${{object.{buttonName}}}`\r\n  );";
+                string buttonListString = $"\nconst localized{buttonName} = useLocalizationsDefaults(\r\n    `${{object.{buttonName}}}`\r\n  );";
                 buttonListStrings.Add(buttonListString);
             }
 
