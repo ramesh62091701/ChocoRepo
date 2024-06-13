@@ -56,15 +56,15 @@ namespace Extractor
 </HTML-Code>
 Follow this rules:
 1.Convert above HTML Code to react code.
-2.Create one single react page.
+2.Create one single react page with App.jsx as file name.
 3.Generate only code, do not give explanation below or above the code.
-4.Generate the code in markdown format with ```js.";
+4.Generate the code in markdown format with ```jsx.";
 
             //Get React 
             Logger.Log("Generating React components.");
             var reactResponse = await gptService.GetAiResponse(reactPrompt, Constants.ReactSysPrompt, Constants.Model, true);
-            var reactCode = Helper.RemoveMarkupCode(reactResponse.Message, "js");
-            Helper.CreateFile(request.OutputPath, "App.js", reactCode);
+            var reactCode = Helper.RemoveMarkupCode(reactResponse.Message, "jsx");
+            Helper.CreateFile(request.OutputPath, "App.jsx", reactCode);
             
 
             //Get Separate controls  
@@ -74,13 +74,13 @@ Follow this rules:
 </React-Code>
 From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from the provided React code and convert them into JSON data following these rules:
 1.Generate only JSON data without any explanation.
-2.Import all components in the App.js file which is generated. Do not add any other components which are not in React-Code.
+2.Import all components in the App.jsx file which is generated. Do not add any other components which are not in React-Code.
 3.Use 'src/component/filename' for components in the JSON response filename.
 4.Replace 'xxxx' with name of the component.
 5.Use the specified JSON format for the response.
 [
 	{{
-		""filename"" : ""src/App.js"",
+		""filename"" : ""src/App.jsx"",
 		""content"" : ""its code""
 	}},
 	{{
