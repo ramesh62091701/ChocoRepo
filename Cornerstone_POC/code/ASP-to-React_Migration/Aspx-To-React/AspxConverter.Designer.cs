@@ -52,6 +52,7 @@
             rdbImage = new RadioButton();
             rdbFileUrl = new RadioButton();
             panel1 = new Panel();
+            rdbUseBoth = new RadioButton();
             label3 = new Label();
             btnConvertToReact = new Button();
             ((System.ComponentModel.ISupportInitialize)pbLogoSonata).BeginInit();
@@ -268,10 +269,12 @@
             rdbFileUrl.TabStop = true;
             rdbFileUrl.Text = "Use Url";
             rdbFileUrl.UseVisualStyleBackColor = true;
+            rdbFileUrl.CheckedChanged += rdbFileUrl_CheckedChanged;
             // 
             // panel1
             // 
             panel1.BorderStyle = BorderStyle.FixedSingle;
+            panel1.Controls.Add(rdbUseBoth);
             panel1.Controls.Add(label3);
             panel1.Controls.Add(rdbFileUrl);
             panel1.Controls.Add(lblFigmaUrl);
@@ -281,6 +284,18 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(871, 150);
             panel1.TabIndex = 21;
+            // 
+            // rdbUseBoth
+            // 
+            rdbUseBoth.AutoSize = true;
+            rdbUseBoth.Location = new Point(264, 34);
+            rdbUseBoth.Name = "rdbUseBoth";
+            rdbUseBoth.Size = new Size(108, 29);
+            rdbUseBoth.TabIndex = 22;
+            rdbUseBoth.TabStop = true;
+            rdbUseBoth.Text = "Use Both";
+            rdbUseBoth.UseVisualStyleBackColor = true;
+            rdbUseBoth.CheckedChanged += rdbUseBoth_CheckedChanged;
             // 
             // label3
             // 
@@ -366,5 +381,6 @@
         private Panel panel1;
         private Label label3;
         private Button btnConvertToReact;
+        private RadioButton rdbUseBoth;
     }
 }

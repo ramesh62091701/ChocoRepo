@@ -43,7 +43,7 @@ namespace Extractor
         {
             var gptService = new GPTService();
 
-            //Get HTML for Figma
+            //Get HTML for Figma Image
             var htmlResponse = await GetHTMLFromFigma(request);
             var reactPrompt = @$"<HTML-Code>
 {htmlResponse}
@@ -131,7 +131,7 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
 
         public async static Task<bool> MigrateToReact(Request request)
         {
-            if (request.IsFigmaUrl && request.IsCustom)
+            if ((request.IsFigmaUrl || request.IsUseBoth) && request.IsCustom)
             {
                 var content = await FigmaHelper.GetFigmaJsonFromUrl(request.FigmaUrl);
             }

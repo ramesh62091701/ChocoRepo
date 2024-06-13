@@ -71,11 +71,12 @@ namespace Extractor.Utils
             }
             List<FigmaJsonModel> childrenJson = JsonConvert.DeserializeObject<List<FigmaJsonModel>>(allChildrenString);
             string childNames = string.Empty;
+            
             foreach (var child in childrenJson)
             {
                 childNames += child.name + ",";
             }
-            Logger.Log(childNames);
+            //Logger.Log(childNames);
 
             return string.Empty;
         }

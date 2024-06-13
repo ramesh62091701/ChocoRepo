@@ -10,55 +10,63 @@ namespace Extractor.Service
     {
         public static async Task<List<FigmaComponent>> GetFigmaControls(Request request)
         {
-            var jsonPrompt = @"Read the Figma design image and give me the details of all the controls in json format like example data-grid, textarea, Date-picker etc.\nRules to follow while giving json output:
-1.Always generate only json output do not give explanations above or below the json.
-2.Table name should be one word without any spaces.
-3.None of the name in type Breadcrumb should contain spaces.
-4.Get all the buttons from analyzing the image and add it to below json.
-5.Use the below json format as reference
-    [
-        {
-            ""type"": ""Breadcrumb"",
-            ""paths"": [
-                { ""name"": ""Home"", ""data-type"": ""string"" },
-                { ""name"": ""AssignTraining"", ""data-type"": ""string"" }
-            ]
-        },
-        {
-            ""type"": ""DataGrid"",
-            ""name"": ""UserDetails"",
-            ""columnNames"": [""Name"", ""ID"", ""Division""],
-        },
-        {
-            ""type"": ""DataGrid"",
-            ""name"": ""ClientDetails"",
-            ""columnNames"": [""Name"", ""ID"", ""Division""],
-        },
-        {
-            ""type"": ""DatePicker"",
-            ""label"": ""Date"",
-        },
-        {
-            ""type"": ""TextArea"",
-            ""label"": ""Comments""
-        },
-        {
-            ""type"": ""Button"",
-            ""name"": ""Submit"",
-        },
-        {
-            ""type"": ""Button"",
-            ""name"": ""Cancel"",
-        }
-    ]
+            if (!request.IsFigmaUrl)
+            {
 
-";
-            var gptService = new GPTService();
-            var jsonOutput = await gptService.GetAiResponseForImage(jsonPrompt, string.Empty, Model.Constants.Model, true, request.ImagePath);
+                var jsonPrompt = @"Read the Figma design image and give me the details of all the controls in json format like example data-grid, textarea, Date-picker etc.
+    Rules to follow while giving json output:
+    1.Always generate only json output do not give explanations above or below the json.
+    2.Table name should be one word without any spaces.
+    3.None of the name in type Breadcrumb should contain spaces.
+    4.Carefully recognize all the buttons from analyzing the image and add it to below json.
+    5.Use the below json format as reference
+        [
+            {
+                ""type"": ""Breadcrumb"",
+                ""paths"": [
+                    { ""name"": ""Home"", ""data-type"": ""string"" },
+                    { ""name"": ""AssignTraining"", ""data-type"": ""string"" }
+                ]
+            },
+            {
+                ""type"": ""DataGrid"",
+                ""name"": ""UserDetails"",
+                ""columnNames"": [""Name"", ""ID"", ""Division""],
+            },
+            {
+                ""type"": ""DataGrid"",
+                ""name"": ""ClientDetails"",
+                ""columnNames"": [""Name"", ""ID"", ""Division""],
+            },
+            {
+                ""type"": ""DatePicker"",
+                ""label"": ""Date"",
+            },
+            {
+                ""type"": ""TextArea"",
+                ""label"": ""Comments"",
+                ""placeHolder"" : "" Add comment"",
+            },
+            {
+                ""type"": ""Button"",
+                ""name"": ""Submit"",
+            },
+            {
+                ""type"": ""Button"",
+                ""name"": ""Cancel"",
+            }
+        ]
 
-            string arrayJson = Helper.SelectJsonArray(jsonOutput.Message);
-            List<FigmaComponent> components = JsonConvert.DeserializeObject<List<FigmaComponent>>(arrayJson);
-            return components;
+    ";
+                var gptService = new GPTService();
+                var jsonOutput = await gptService.GetAiResponseForImage(jsonPrompt, string.Empty, Model.Constants.Model, true, request.ImagePath);
+
+                string arrayJson = Helper.SelectJsonArray(jsonOutput.Message);
+                List<FigmaComponent> components = JsonConvert.DeserializeObject<List<FigmaComponent>>(arrayJson);
+                return components;
+            }
+
+            return new List<FigmaComponent>();
         }
         public static async Task<bool> Process(Request request)
         {
@@ -159,9 +167,11 @@ namespace Extractor.Service
         private static FileContent GenerateTextArea(FigmaComponent textArea)
         {
             string propertyName = textArea.Label.Replace(" ","");
+            string placeHolder = textArea.PlaceHolder;
             string templateFilePath = "./Templates/Textarea.template";
             string template = File.ReadAllText(templateFilePath);
-            template = template.Replace("$$PropertyName$$", propertyName);
+            template = template.Replace("$$PropertyName$$", propertyName)
+                .Replace("$$PlaceHolder$$" , placeHolder);
 
             return new FileContent
             {

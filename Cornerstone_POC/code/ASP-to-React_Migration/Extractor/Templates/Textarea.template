@@ -10,6 +10,7 @@ interface Props {
     ) => void;
 }
 // Todo: Define Properties.
+const placeHolder = "$$PlaceHolder$$"
 const $$PropertyName$$: React.FC<Props> = ({ inputComment, setInputComment }) => {
     const $$PropertyName$$ = useLocalizationsDefaults(`object.$$PropertyName$$`); // Todo: Change object with appropriate class name
     return (
@@ -18,7 +19,7 @@ const $$PropertyName$$: React.FC<Props> = ({ inputComment, setInputComment }) =>
             id="adaptive-width-textfield"
             label={$$PropertyName$$}
             labelSize="small"
-            placeholder={$$PropertyName$$}
+            placeholder={placeHolder}
             size="medium"
             onChange={(comment) => {
                 setInputComment("comments", comment.target.value);

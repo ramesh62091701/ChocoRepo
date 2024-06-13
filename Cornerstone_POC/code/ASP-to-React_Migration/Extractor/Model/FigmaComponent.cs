@@ -42,6 +42,9 @@ namespace Extractor.Model
 
         [JsonProperty("label")]
         public string Label { get; set; }
+        
+        [JsonProperty("placeHolder")]
+        public string PlaceHolder { get; set; }
 
     }
 }

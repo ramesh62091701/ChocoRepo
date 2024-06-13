@@ -42,8 +42,9 @@ namespace Aspx_To_React
                 IsCustom = radioButton2.Checked,
                 IsFigmaUrl = rdbFileUrl.Checked,
                 FigmaUrl = txtFigmaUrl.Text,
+                IsUseBoth = rdbUseBoth.Checked,
             };
-            
+
             await Processor.MigrateToHtml(request);
         }
 
@@ -81,17 +82,26 @@ namespace Aspx_To_React
 
         private void SetFigmaControls()
         {
-            txtFigmaPath.Enabled = rdbImage.Checked;
-            btnImage.Enabled = rdbImage.Checked;
-            /*if (rdbImage.Checked)
+            if (rdbUseBoth.Checked)
             {
-                txtFigmaUrl.Text = string.Empty;
+                txtFigmaPath.Enabled = true;
+                txtFigmaUrl.Enabled = true;
+                btnImage.Enabled = true;
             }
             else
             {
-                txtFigmaPath.Text = string.Empty;
-            }*/
-            txtFigmaUrl.Enabled = !rdbImage.Checked;
+                txtFigmaPath.Enabled = rdbImage.Checked;
+                btnImage.Enabled = rdbImage.Checked;
+                //if (rdbImage.Checked)
+                //{
+                //    txtFigmaUrl.Text = string.Empty;
+                //}
+                //else
+                //{
+                //    txtFigmaPath.Text = string.Empty;
+                //}
+                txtFigmaUrl.Enabled = !rdbImage.Checked;
+            }
         }
 
         private async void btnConvertToReact_Click(object sender, EventArgs e)
@@ -106,9 +116,10 @@ namespace Aspx_To_React
                 IsCustom = radioButton2.Checked,
                 IsFigmaUrl = rdbFileUrl.Checked,
                 FigmaUrl = txtFigmaUrl.Text,
+                IsUseBoth = rdbUseBoth.Checked,
             };
 
-            if (request.IsCustom && !request.IsFigmaUrl)
+            if (request.IsCustom)
             {
                 using (var aspxToFigmaFrm = new AspxToFigmaMapping())
                 {
@@ -125,6 +136,16 @@ namespace Aspx_To_React
             }
             // Get Controls to Map
             await Processor.MigrateToReact(request);
+        }
+
+        private void rdbFileUrl_CheckedChanged(object sender, EventArgs e)
+        {
+            SetFigmaControls();
+        }
+
+        private void rdbUseBoth_CheckedChanged(object sender, EventArgs e)
+        {
+            SetFigmaControls();
         }
     }
 }
