@@ -1,0 +1,731 @@
+using Buildalyzer;
+using Codelyzer.Analysis.Model;
+using Codelyzer.Analysis.Model.Build;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Editing;
+using Microsoft.CodeAnalysis.Text;
+using Microsoft.Extensions.Logging;
+using NuGet.Packaging;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
+using Codelyzer.Analysis.Common;
+using Microsoft.CodeAnalysis.VisualBasic;
+using Constants = Codelyzer.Analysis.Common.Constants;
+using LanguageVersion = Microsoft.CodeAnalysis.CSharp.LanguageVersion;
+using Microsoft.Build.Utilities;
+using Newtonsoft.Json;
+using System.Xml.XPath;
+
+namespace Codelyzer.Analysis.Build
+{
+    public class ProjectBuildHandler : IDisposable
+    {
+        private Project Project;
+        private Compilation Compilation;
+        private Compilation PrePortCompilation;
+        private List<string> PrePortMetaReferences;
+        private List<string> MissingMetaReferences { get; set; }
+
+        private List<string> Errors { get; set; }
+        private ILogger Logger;
+        private readonly AnalyzerConfiguration _analyzerConfiguration;
+        internal IAnalyzerResult AnalyzerResult;
+        internal IProjectAnalyzer ProjectAnalyzer;
+        internal bool isSyntaxAnalysis;
+        private List<string> _metaReferences;
+        private string _projectPath;
+
+        private const string syntaxAnalysisError = "Build Errors: Encountered an unknown build issue. Falling back to syntax analysis";
+
+        private async Task<Compilation> SetPrePortCompilation()
+        {
+            var (prePortCompilation, preportReferences, missingReferences) =
+                await new ProjectBuildHelper(Logger).GetPrePortCompilation(Project);
+            MissingMetaReferences = missingReferences;
+            PrePortMetaReferences = preportReferences;
+            return prePortCompilation;
+        }
+
+        private bool CanSkipErrorsForVisualBasic()
+        {
+            // Compilation returns false build errors, it seems like we can work around this with
+            // MSBuildWorkspace instead of using an AdhocWorkspace
+            return Compilation != null &&
+                   Compilation.Language == "Visual Basic" &&
+                   AnalyzerResult.Succeeded &&
+                   Compilation.SyntaxTrees.Any() &&
+                   Compilation.GetSemanticModel(Compilation.SyntaxTrees.First()) != null;
+        }
+        private async System.Threading.Tasks.Task SetCompilation()
+        {
+            PrePortCompilation = await SetPrePortCompilation();
+
+            if (Project.Language == "Visual Basic")
+            {
+                var netFrameworkPath = AnalyzerResult.Properties
+                    .FirstOrDefault(s => s.Key == "FrameworkPathOverride")
+                    .Value;
+                if (!string.IsNullOrEmpty(netFrameworkPath))
+                {
+                    Project = Project.AddMetadataReference(
+                        MetadataReference.CreateFromFile(
+                            $"{netFrameworkPath}\\mscorlib.dll"));
+                }
+            }
+            Compilation = await Project.GetCompilationAsync();
+            var errors = Compilation.GetDiagnostics()
+                .Where(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error);
+            if (errors.Any() && !CanSkipErrorsForVisualBasic())
+            {
+                Logger.LogError($"Build Errors: {Compilation.AssemblyName}: {errors.Count()} " +
+                                $"compilation errors: \n\t{string.Join("\n\t", errors.Select(e => e.ToString()))}"); //TODO: Add telemetry for single build errors as json
+                Logger.LogDebug(String.Join("\n", errors));
+
+                foreach (var error in errors)
+                {
+                    Errors.Add(error.ToString());
+                }
+            }
+            else
+            {
+                Logger.LogInformation($"Project {Project.Name} compiled with no errors");
+            }
+
+            // Fallback logic: On fatal errors like msbuild is not installed or framework versions not installed
+            // the build fails and does not give syntax trees. 
+            if (Compilation.SyntaxTrees == null ||
+                Compilation.SyntaxTrees.Count() == 0)
+            {
+                try
+                {
+                    Logger.LogError(syntaxAnalysisError);
+                    Errors.Add(syntaxAnalysisError);
+
+                    FallbackCompilation();
+                    isSyntaxAnalysis = true;
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError(e, "Error while running syntax analysis");
+                }
+            }
+        }
+
+        private void FallbackCompilation()
+        {
+            var vbOptions =
+                Project.CompilationOptions is VisualBasicCompilationOptions
+                    ? (VisualBasicCompilationOptions)Project.CompilationOptions
+                    : null;
+            var options = vbOptions != null ? null : (CSharpCompilationOptions)Project.CompilationOptions;
+            var meta = this.Project.MetadataReferences;
+            var trees = new List<SyntaxTree>();
+
+            var projPath = Path.GetDirectoryName(Project.FilePath);
+            DirectoryInfo directory = new DirectoryInfo(projPath);
+
+            if (vbOptions == null)
+            {
+                var allCSharpFiles = directory.GetFiles("*.cs", SearchOption.AllDirectories);
+                foreach (var file in allCSharpFiles)
+                {
+                    try
+                    {
+
+                        using (var stream = File.OpenRead(file.FullName))
+                        {
+                            var syntaxTree = CSharpSyntaxTree.ParseText(SourceText.From(stream), path: file.FullName);
+                            trees.Add(syntaxTree);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                }
+            }
+            else
+            {
+                var allVbFiles = directory.GetFiles("*.vb", SearchOption.AllDirectories);
+                foreach (var file in allVbFiles)
+                {
+                    try
+                    {
+
+                        using (var stream = File.OpenRead(file.FullName))
+                        {
+                            var syntaxTree = VisualBasicSyntaxTree.ParseText(SourceText.From(stream), path: file.FullName);
+                            trees.Add(syntaxTree);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                }
+            }
+
+            if (trees.Count != 0)
+            {
+                if (vbOptions != null)
+                {
+                    Compilation = VisualBasicCompilation.Create(Project.AssemblyName, trees, meta, vbOptions);
+                }
+                else if (options != null)
+                {
+                    Compilation = CSharpCompilation.Create(Project.AssemblyName, trees, meta, options);
+                }
+                else
+                {
+                    Compilation = null;
+                }
+            }
+        }
+        private void SetSyntaxCompilation(List<MetadataReference> metadataReferences)
+        {
+            var trees = new List<SyntaxTree>();
+            isSyntaxAnalysis = true;
+
+            Logger.LogError(syntaxAnalysisError);
+            Errors.Add(syntaxAnalysisError);
+
+            var projPath = Path.GetDirectoryName(ProjectAnalyzer.ProjectFile.Path);
+            DirectoryInfo directory = new DirectoryInfo(projPath);
+            var extension = Path.GetExtension(ProjectAnalyzer.ProjectFile.Path);
+            if (!string.IsNullOrEmpty(extension) && extension.Equals(".csproj", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var allCsharpFiles = FileUtils.GetProjectCodeFiles(ProjectAnalyzer.ProjectFile.Path, directory.FullName, "*.csproj", "*.cs");
+                foreach (var file in allCsharpFiles)
+                {
+                    try
+                    {
+                        using (var stream = File.OpenRead(file))
+                        {
+                            var syntaxTree = CSharpSyntaxTree.ParseText(SourceText.From(stream), path: file);
+                            trees.Add(syntaxTree);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.LogError(e, "Error while running CSharp syntax analysis");
+                        Console.WriteLine(e);
+                    }
+                }
+                if (trees.Count != 0)
+                {
+                    Compilation = CSharpCompilation.Create(ProjectAnalyzer.ProjectInSolution.ProjectName, trees, metadataReferences);
+                }
+            }
+            else if (!string.IsNullOrEmpty(extension) && extension.Equals(".vbproj", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var allVbFiles = FileUtils.GetProjectCodeFiles(ProjectAnalyzer.ProjectFile.Path, directory.FullName, "*.vbproj", "*.vb");
+                foreach (var file in allVbFiles)
+                {
+                    try
+                    {
+                        using (var stream = File.OpenRead(file))
+                        {
+                            var syntaxTree = VisualBasicSyntaxTree.ParseText(SourceText.From(stream), path: file);
+                            trees.Add(syntaxTree);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.LogError(e, "Error while running VisualBasic syntax analysis");
+                        Console.WriteLine(e);
+                    }
+                }
+
+                if (trees.Count != 0)
+                {
+                    Compilation = VisualBasicCompilation.Create(ProjectAnalyzer.ProjectInSolution.ProjectName, trees, metadataReferences);
+                }
+            }
+        }
+
+        private Compilation CreateManualCompilation(string projectPath, List<string> references)
+        {
+            var trees = new List<SyntaxTree>();
+            DirectoryInfo directory = new DirectoryInfo(Path.GetDirectoryName(projectPath));
+            var extension = Path.GetExtension(projectPath);
+            if (!string.IsNullOrEmpty(extension) && extension.Equals(".vbproj", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var allFiles = FileUtils.GetProjectCodeFiles(projectPath, directory.FullName, "*.vbproj", "*.vb");
+                foreach (var file in allFiles)
+                {
+                    try
+                    {
+                        using (var stream = File.OpenRead(file))
+                        {
+                            var syntaxTree = VisualBasicSyntaxTree.ParseText(SourceText.From(stream), path: file);
+                            trees.Add(syntaxTree);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.LogError(e, "Error while running syntax analysis");
+                        Console.WriteLine(e);
+                    }
+                }
+
+                if (trees.Count != 0)
+                {
+                    return VisualBasicCompilation.Create(Path.GetFileNameWithoutExtension(projectPath), trees, references?.Select(r => MetadataReference.CreateFromFile(r)));
+                }
+            }
+            else
+            {
+                var allCSharpFiles = FileUtils.GetProjectCodeFiles(projectPath, directory.FullName, "*.csproj", "*.cs");
+                foreach (var file in allCSharpFiles)
+                {
+                    try
+                    {
+                        using (var stream = File.OpenRead(file))
+                        {
+                            var syntaxTree = CSharpSyntaxTree.ParseText(SourceText.From(stream), path: file);
+                            trees.Add(syntaxTree);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.LogError(e, "Error while running syntax analysis");
+                        Console.WriteLine(e);
+                    }
+                }
+
+                if (trees.Count != 0)
+                {
+                    return CSharpCompilation.Create(Path.GetFileNameWithoutExtension(projectPath), trees, references?.Select(r => MetadataReference.CreateFromFile(r)));
+                }
+            }
+            return null;
+        }
+        private static void DisplayProjectProperties(Project project)
+        {
+            Console.WriteLine($" Project: {project.Name}");
+            Console.WriteLine($" Assembly name: {project.AssemblyName}");
+            Console.WriteLine($" Language: {project.Language}");
+            Console.WriteLine($" Project file: {project.FilePath}");
+            Console.WriteLine($" Output file: {project.OutputFilePath}");
+            Console.WriteLine($" Documents: {project.Documents.Count()}");
+            Console.WriteLine($" Metadata references: {project.MetadataReferences.Count}");
+            Console.WriteLine($" Metadata references: {String.Join("\n", project.MetadataReferences)}");
+            Console.WriteLine($" Project references: {project.ProjectReferences.Count()}");
+            Console.WriteLine($" Project references: {String.Join("\n", project.ProjectReferences)}");
+            Console.WriteLine();
+        }
+        public ProjectBuildHandler(ILogger logger, AnalyzerConfiguration analyzerConfiguration = null, List<string> metaReferences = null)
+        {
+            Logger = logger;
+            _analyzerConfiguration = analyzerConfiguration;
+            _metaReferences = metaReferences;
+
+            Errors = new List<string>();
+            MissingMetaReferences = new List<string>();
+        }
+        public ProjectBuildHandler(ILogger logger, Project project, AnalyzerConfiguration analyzerConfiguration = null)
+        {
+            Logger = logger;
+            _analyzerConfiguration = analyzerConfiguration;
+
+            CompilationOptions options = project?.CompilationOptions;
+
+            if (options is CSharpCompilationOptions)
+            {
+                /*
+                 * This is to fix the compilation errors related to :
+                 * Compile errors for assemblies which reference to mscorlib 2.0.5.0 (LINQPad 5.00.08)
+                 * https://forum.linqpad.net/discussion/856/compile-errors-for-assemblies-which-reference-to-mscorlib-2-0-5-0-linqpad-5-00-08
+                 */
+                options = options.WithAssemblyIdentityComparer(DesktopAssemblyIdentityComparer.Default);
+            }
+
+            this.Project = project?.WithCompilationOptions(options);
+            _projectPath = project?.FilePath;
+            Errors = new List<string>();
+            MissingMetaReferences = new List<string>();
+        }
+        public ProjectBuildHandler(ILogger logger, Project project, Compilation compilation, Compilation preportCompilation, AnalyzerConfiguration analyzerConfiguration = null)
+        {
+            Logger = logger;
+            _analyzerConfiguration = analyzerConfiguration;
+            this.Project = project;
+            _projectPath = project.FilePath;
+            this.Compilation = compilation;
+            this.PrePortCompilation = preportCompilation;
+            Errors = new List<string>();
+            MissingMetaReferences = new List<string>();
+        }
+
+        public ProjectBuildHandler(ILogger logger, string projectPath, List<string> oldReferences, List<string> references, AnalyzerConfiguration analyzerConfiguration = null)
+        {
+            Logger = logger;
+            _analyzerConfiguration = analyzerConfiguration;
+            _projectPath = projectPath;
+
+            this.Compilation = CreateManualCompilation(projectPath, references);
+            //We don't want a compilation if there are no older references, because it'll slow down the analysis
+            this.PrePortCompilation = oldReferences?.Any() == true ? CreateManualCompilation(projectPath, oldReferences) : null;
+            if (Compilation != null)
+            {
+                Errors = new List<string>();
+                MissingMetaReferences = new List<string>();
+
+                var errors = Compilation.GetDiagnostics()
+                   .Where(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error && diagnostic.GetMessage()?.Equals(KnownErrors.NoMainMethodMessage) != true);
+
+                if (errors.Any())
+                {
+                    Logger.LogError($"Build Errors: {Compilation.AssemblyName}: {errors.Count()} " +
+                                    $"compilation errors: \n\t{string.Join("\n\t", errors.Select(e => e.ToString()))}"); //TODO: Add telemetry for single build errors as json
+                    Logger.LogDebug(String.Join("\n", errors));
+
+                    foreach (var error in errors)
+                    {
+                        Errors.Add(error.ToString());
+                    }
+                }
+                else
+                {
+                    Logger.LogInformation($"{Compilation.AssemblyName} compiled with no errors");
+                }
+            }
+            else { Logger.LogError($"Compilation is null for project {projectPath};"); }
+        }
+        public async Task<ProjectBuildResult> Build()
+        {
+            await SetCompilation();
+            ProjectBuildResult projectBuildResult = new ProjectBuildResult
+            {
+                BuildErrors = Errors,
+                ProjectPath = _projectPath,
+                ProjectRootPath = Path.GetDirectoryName(_projectPath),
+                Project = Project,
+                Compilation = Compilation,
+                PrePortCompilation = PrePortCompilation,
+                IsSyntaxAnalysis = isSyntaxAnalysis,
+                PreportReferences = PrePortMetaReferences,
+                MissingReferences = MissingMetaReferences
+            };
+
+            GetTargetFrameworks(projectBuildResult, AnalyzerResult);
+            projectBuildResult.ProjectGuid = ProjectAnalyzer.ProjectGuid.ToString();
+            projectBuildResult.ProjectType = ProjectAnalyzer.ProjectInSolution != null ? ProjectAnalyzer.ProjectInSolution.ProjectType.ToString() : string.Empty;
+
+            foreach (var syntaxTree in Compilation.SyntaxTrees)
+            {
+                var sourceFilePath = Path.GetRelativePath(projectBuildResult.ProjectRootPath, syntaxTree.FilePath);
+                var preportTree = PrePortCompilation?.SyntaxTrees?.FirstOrDefault(s => s.FilePath == syntaxTree.FilePath);
+                var fileResult = new SourceFileBuildResult
+                {
+                    SyntaxTree = syntaxTree,
+                    PrePortSemanticModel = preportTree != null ? PrePortCompilation?.GetSemanticModel(preportTree) : null,
+                    SemanticModel = Compilation.GetSemanticModel(syntaxTree),
+                    SourceFileFullPath = syntaxTree.FilePath,
+                    SyntaxGenerator = SyntaxGenerator.GetGenerator(Project),
+                    SourceFilePath = sourceFilePath
+                };
+                projectBuildResult.SourceFileBuildResults.Add(fileResult);
+                projectBuildResult.SourceFiles.Add(sourceFilePath);
+            }
+
+            if (_analyzerConfiguration != null && _analyzerConfiguration.MetaDataSettings.ReferenceData)
+            {
+                projectBuildResult.ExternalReferences = GetExternalReferences(projectBuildResult?.Compilation, projectBuildResult?.Project);
+            }
+
+            var contentFiles = GetContentFiles(projectBuildResult);
+            projectBuildResult.ContentFiles.AddRange(contentFiles);
+
+            return projectBuildResult;
+        }
+
+        private List<string> GetContentFiles(ProjectBuildResult projectBuildResult)
+        {
+            // Add .NET Framework versions in the "net48" style
+            var dotNetFramework = new List<string> { "net10", "net11", "net20", "net30", "net35", "net40", "net41", "net42", "net43", "net45", "net451", "net452", "net46", "net461", "net462", "net47", "net471", "net472", "net48" };
+
+            XmlDocument xdDoc = new XmlDocument();
+            xdDoc.Load(projectBuildResult.ProjectPath);
+            
+            var itemGroupIncludes = new List<string>();
+
+            // if .NET Framework
+            if (dotNetFramework.Contains(projectBuildResult.TargetFramework))
+            {
+                XmlNamespaceManager xnManager =
+                 new XmlNamespaceManager(xdDoc.NameTable);
+                xnManager.AddNamespace("tu",
+                 "http://schemas.microsoft.com/developer/msbuild/2003");
+                XmlNode xmlNode = xdDoc.DocumentElement;
+                XmlNodeList xmlNodes = xmlNode.SelectNodes("//tu:ItemGroup", xnManager);
+
+                foreach (XmlNode itemGroup in xmlNodes)
+                {
+                    XmlNodeList includeNodes = itemGroup.SelectNodes("tu:TypeScriptCompile | tu:Content", xnManager);
+
+                    foreach (XmlNode includeNode in includeNodes)
+                    {
+                        string includeValue = includeNode.Attributes["Include"]?.Value;
+                        if (!string.IsNullOrEmpty(includeValue))
+                        {
+                            itemGroupIncludes.Add(includeValue);
+                        }
+                    }
+                }
+                itemGroupIncludes.Sort();
+                return itemGroupIncludes;
+            }
+
+            XmlNode xnRoot = xdDoc.DocumentElement;
+            XmlNodeList xnlItemGroups = xnRoot.SelectNodes("//ItemGroup");
+
+            List<string> removedContentFiles = new List<string>();
+
+            foreach (XmlNode itemGroup in xnlItemGroups)
+            {
+                XmlNodeList compileNodes = itemGroup.SelectNodes("Compile");
+
+                foreach (XmlNode compileNode in compileNodes)
+                {
+                    string removeValue = compileNode.Attributes["Remove"]?.Value;
+                    if (!string.IsNullOrEmpty(removeValue))
+                    {
+                        removedContentFiles.Add(removeValue);
+                    }
+                }
+            }
+
+            var allFilesInProjectDirectory = Directory.EnumerateFiles(projectBuildResult.ProjectRootPath, "*", SearchOption.AllDirectories);
+            foreach (var filePath in allFilesInProjectDirectory)
+            {
+                var relativeFilePath = Path.GetRelativePath(projectBuildResult.ProjectRootPath, filePath);
+
+                if (!relativeFilePath.StartsWith("packages", StringComparison.OrdinalIgnoreCase) &&
+                    !relativeFilePath.EndsWith(".cs", StringComparison.OrdinalIgnoreCase) && removedContentFiles.Contains(filePath))
+                {
+                    itemGroupIncludes.Add(relativeFilePath);
+                }
+            }
+
+            itemGroupIncludes.Sort();
+            return itemGroupIncludes;
+        }
+
+        public ProjectBuildResult ReferenceOnlyBuild()
+        {
+            ProjectBuildResult projectBuildResult = new ProjectBuildResult
+            {
+                BuildErrors = Errors,
+                ProjectPath = _projectPath,
+                ProjectRootPath = Path.GetDirectoryName(_projectPath),
+                Compilation = Compilation,
+                PrePortCompilation = PrePortCompilation,
+                IsSyntaxAnalysis = isSyntaxAnalysis,
+                PreportReferences = PrePortMetaReferences,
+                MissingReferences = MissingMetaReferences
+            };
+
+            GetTargetFrameworks(projectBuildResult, AnalyzerResult);
+            projectBuildResult.ProjectGuid = ProjectAnalyzer.ProjectGuid.ToString();
+            projectBuildResult.ProjectType = ProjectAnalyzer.ProjectInSolution != null ? ProjectAnalyzer.ProjectInSolution.ProjectType.ToString() : string.Empty;
+
+            if (Compilation == null)
+            {
+                return projectBuildResult;
+            }
+
+            foreach (var syntaxTree in Compilation?.SyntaxTrees)
+            {
+                var sourceFilePath = Path.GetRelativePath(projectBuildResult.ProjectRootPath, syntaxTree.FilePath);
+                var preportTree = PrePortCompilation?.SyntaxTrees?.FirstOrDefault(s => s.FilePath == syntaxTree.FilePath);
+                var fileResult = new SourceFileBuildResult
+                {
+                    SyntaxTree = syntaxTree,
+                    PrePortSemanticModel = preportTree != null ? PrePortCompilation?.GetSemanticModel(preportTree) : null,
+                    SemanticModel = Compilation.GetSemanticModel(syntaxTree),
+                    SourceFileFullPath = syntaxTree.FilePath,
+                    SourceFilePath = sourceFilePath
+                };
+                projectBuildResult.SourceFileBuildResults.Add(fileResult);
+                projectBuildResult.SourceFiles.Add(sourceFilePath);
+            }
+
+
+            if (_analyzerConfiguration != null && _analyzerConfiguration.MetaDataSettings.ReferenceData)
+            {
+                projectBuildResult.ExternalReferences = GetExternalReferences(Compilation, null);
+            }
+
+            var allFilesInProjectDirectory = Directory.EnumerateFiles(projectBuildResult.ProjectRootPath, "*", SearchOption.AllDirectories);
+            foreach (var filePath in allFilesInProjectDirectory)
+            {
+
+                var relativeFilePath = Path.GetRelativePath(projectBuildResult.ProjectRootPath, filePath);
+                projectBuildResult.ContentFiles.Add(relativeFilePath);
+
+            }
+
+            return projectBuildResult;
+        }
+
+        public async Task<ProjectBuildResult> IncrementalBuild(string filePath, ProjectBuildResult projectBuildResult)
+        {
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                var languageVersion = LanguageVersion.Default;
+
+                SyntaxTree updatedTree;
+                var fileContents = File.ReadAllText(filePath);
+                if (projectBuildResult.Compilation is CSharpCompilation compilation)
+                {
+                    languageVersion = compilation.LanguageVersion;
+                    updatedTree = CSharpSyntaxTree.ParseText(SourceText.From(fileContents), path: filePath, options: new CSharpParseOptions(languageVersion));
+
+                }
+                else if (projectBuildResult.Compilation is VisualBasicCompilation vbCompilation)
+                {
+                    updatedTree = VisualBasicSyntaxTree.ParseText(SourceText.From(fileContents), path: filePath, options: new VisualBasicParseOptions(vbCompilation.LanguageVersion));
+                }
+                else
+                {
+                    // fall back to csharp to match old behavior.
+                    updatedTree = CSharpSyntaxTree.ParseText(SourceText.From(fileContents), path: filePath, options: new CSharpParseOptions(languageVersion));
+                }
+
+                var syntaxTree = Compilation.SyntaxTrees.FirstOrDefault(syntaxTree => syntaxTree.FilePath == filePath);
+                var preportSyntaxTree = Compilation.SyntaxTrees.FirstOrDefault(syntaxTree => syntaxTree.FilePath == filePath);
+
+                Compilation = Compilation.RemoveSyntaxTrees(syntaxTree).AddSyntaxTrees(updatedTree);
+                PrePortCompilation = PrePortCompilation?.RemoveSyntaxTrees(preportSyntaxTree).AddSyntaxTrees(updatedTree);
+
+                var oldSourceFileBuildResult = projectBuildResult.SourceFileBuildResults.FirstOrDefault(sourceFile => sourceFile.SourceFileFullPath == filePath);
+                projectBuildResult.SourceFileBuildResults.Remove(oldSourceFileBuildResult);
+
+                var sourceFilePath = Path.GetRelativePath(projectBuildResult.ProjectRootPath, filePath);
+                var preportTree = PrePortCompilation?.SyntaxTrees?.FirstOrDefault(s => s.FilePath == syntaxTree.FilePath);
+                var fileResult = new SourceFileBuildResult
+                {
+                    SyntaxTree = updatedTree,
+                    PrePortSemanticModel = preportTree != null ? PrePortCompilation?.GetSemanticModel(preportTree) : null,
+                    SemanticModel = Compilation.GetSemanticModel(updatedTree),
+                    SourceFileFullPath = syntaxTree.FilePath,
+                    SyntaxGenerator = SyntaxGenerator.GetGenerator(Project),
+                    SourceFilePath = sourceFilePath
+                };
+
+                projectBuildResult.SourceFileBuildResults.Add(fileResult);
+                projectBuildResult.Compilation = Compilation;
+                projectBuildResult.PrePortCompilation = PrePortCompilation;
+            });
+
+            return projectBuildResult;
+        }
+
+        public ProjectBuildResult SyntaxOnlyBuild()
+        {
+            return SyntaxOnlyBuild(null);
+        }
+
+        public ProjectBuildResult SyntaxOnlyBuild(Dictionary<string, MetadataReference> metadataReferences)
+        {
+            SetSyntaxCompilation(metadataReferences?.Values?.ToList());
+
+            if (Compilation == null)
+            {
+                Logger.LogError($"Error while building project {ProjectAnalyzer?.ProjectFile?.Path}");
+                return null;
+            }
+
+            ProjectBuildResult projectBuildResult = new ProjectBuildResult
+            {
+                BuildErrors = Errors,
+                ProjectPath = ProjectAnalyzer?.ProjectFile?.Path,
+                ProjectRootPath = Path.GetDirectoryName(ProjectAnalyzer?.ProjectFile?.Path),
+                Compilation = Compilation,
+                IsSyntaxAnalysis = isSyntaxAnalysis,
+                ExternalReferences = new ExternalReferences()
+                {
+                    ProjectReferences = metadataReferences?.Select(m => new ExternalReference()
+                    {
+                        Identity = m.Value?.Display,
+                        AssemblyLocation = m.Key
+                    }).ToList()
+                }
+            };
+
+            try
+            {
+                projectBuildResult.ProjectGuid = ProjectAnalyzer.ProjectGuid.ToString();
+                projectBuildResult.ProjectType = ProjectAnalyzer.ProjectInSolution != null ? ProjectAnalyzer.ProjectInSolution.ProjectType.ToString() : string.Empty;
+
+                foreach (var syntaxTree in Compilation?.SyntaxTrees)
+                {
+                    var sourceFilePath = Path.GetRelativePath(projectBuildResult.ProjectRootPath, syntaxTree.FilePath);
+                    var fileResult = new SourceFileBuildResult
+                    {
+                        SyntaxTree = syntaxTree,
+                        SemanticModel = Compilation.GetSemanticModel(syntaxTree),
+                        SourceFileFullPath = syntaxTree.FilePath,
+                        SourceFilePath = sourceFilePath
+                    };
+                    projectBuildResult.SourceFileBuildResults.Add(fileResult);
+                    projectBuildResult.SourceFiles.Add(sourceFilePath);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error while analyzing project {ProjectAnalyzer?.ProjectFile?.Path}");
+            }
+            return projectBuildResult;
+        }
+        private void GetTargetFrameworks(ProjectBuildResult result, Buildalyzer.IAnalyzerResult analyzerResult)
+        {
+            if (analyzerResult != null)
+            {
+                result.TargetFramework = analyzerResult.TargetFramework;
+                var targetFrameworks = analyzerResult.GetProperty(Constants.TargetFrameworks);
+                if (!string.IsNullOrEmpty(targetFrameworks))
+                {
+                    result.TargetFrameworks = targetFrameworks.Split(';').ToList();
+                }
+            }
+            else
+            {
+                result.TargetFramework = ProjectAnalyzer.ProjectFile.TargetFrameworks.FirstOrDefault();
+                result.TargetFrameworks = ProjectAnalyzer.ProjectFile.TargetFrameworks.ToList();
+            }
+        }
+
+        internal ExternalReferences GetExternalReferences(Compilation compilation, Project project, IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> packageReferences = null)
+        {
+            if (string.IsNullOrEmpty(_projectPath)) _projectPath = project.FilePath;
+            ExternalReferenceLoader externalReferenceLoader = new ExternalReferenceLoader(
+                Directory.GetParent(_projectPath).FullName,
+                compilation,
+                project,
+                packageReferences == null ? AnalyzerResult?.PackageReferences : packageReferences,
+                Logger);
+
+            return externalReferenceLoader.Load();
+        }
+
+        public void Dispose()
+        {
+            Compilation = null;
+            AnalyzerResult = null;
+            ProjectAnalyzer = null;
+            Project = null;
+            Logger = null;
+        }
+    }
+}
