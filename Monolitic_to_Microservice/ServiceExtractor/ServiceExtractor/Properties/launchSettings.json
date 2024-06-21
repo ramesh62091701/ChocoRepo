@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ServiceExtractor": {
+      "commandName": "Project",
+      "commandLineArgs": "-c extract -r AccountController -j \"D:\\Monolitic_to_Microservice\\codeelyzer-output\\DemoWebApi.json\" -n \"D:\\Monolitic_to_Microservice\\Naveen\\ServiceExtractor-Output\""
+    }
+  }
+}

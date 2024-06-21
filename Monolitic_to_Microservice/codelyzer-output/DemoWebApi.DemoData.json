@@ -1,0 +1,2336 @@
+{
+  "version": "1.0",
+  "generated-by": "Generated on: Tuesday, 04 June 2024",
+  "workspace-name": "DemoWebApi.DemoData",
+  "workspace-root-path": "D:\\Monolitic_to_Microservice\\MonoProjects\\webapiclientgenexamples\\DemoWebApi.DemoData",
+  "source-files": [
+    "AccountBindingModels.cs",
+    "AccountViewModels.cs",
+    "Entities.cs",
+    "Properties\\AssemblyInfo.cs",
+    "obj\\Debug\\.NETFramework,Version=v4.8.AssemblyAttributes.cs"
+  ],
+  "content-files": [],
+  "errors-found": 0,
+  "target-framework": "net48",
+  "target-frameworks": [],
+  "external-references": {
+    "nuget": [
+      {
+        "identifier": "Fonlow.Poco2Ts",
+        "version": "2.8.3",
+        "assembly-location": "D:\\Monolitic_to_Microservice\\MonoProjects\\webapiclientgenexamples\\packages\\Fonlow.Poco2Ts.2.8.3\\lib\\net462\\Fonlow.DocComment.dll"
+      },
+      {
+        "identifier": "Fonlow.TypeScriptCodeDOM",
+        "version": "2.3.0",
+        "assembly-location": "D:\\Monolitic_to_Microservice\\MonoProjects\\webapiclientgenexamples\\packages\\Fonlow.TypeScriptCodeDOM.2.3.0\\lib\\net462\\Fonlow.TypeScriptCodeDom.dll"
+      },
+      {
+        "identifier": "Fonlow.WebApiClientGen.Axios",
+        "version": "1.3.0",
+        "assembly-location": "D:\\Monolitic_to_Microservice\\MonoProjects\\webapiclientgenexamples\\packages\\Fonlow.WebApiClientGen.Axios.1.3.0\\lib\\net462\\Fonlow.WebApiClientGen.Axios.dll"
+      },
+      {
+        "identifier": "Fonlow.WebApiClientGen.jQuery",
+        "version": "1.2.0",
+        "assembly-location": "D:\\Monolitic_to_Microservice\\MonoProjects\\webapiclientgenexamples\\packages\\Fonlow.WebApiClientGen.jQuery.1.2.0\\lib\\net462\\Fonlow.WebApiClientGen.jQuery.dll"
+      },
+      {
+        "identifier": "Fonlow.WebApiClientGen.NG2",
+        "version": "1.3.0",
+        "assembly-location": "D:\\Monolitic_to_Microservice\\MonoProjects\\webapiclientgenexamples\\packages\\Fonlow.WebApiClientGen.NG2.1.3.0\\lib\\net462\\Fonlow.WebApiClientGen.NG2.dll"
+      },
+      {
+        "identifier": "Newtonsoft.Json",
+        "version": "13.0.3",
+        "assembly-location": "D:\\Monolitic_to_Microservice\\MonoProjects\\webapiclientgenexamples\\packages\\Newtonsoft.Json.13.0.3\\lib\\net45\\Newtonsoft.Json.dll"
+      }
+    ],
+    "nuget-dependencies": [
+      {
+        "identifier": "Fonlow.Poco2Ts",
+        "version": "2.8.3.0",
+        "assembly-location": "D:\\Monolitic_to_Microservice\\MonoProjects\\webapiclientgenexamples\\packages\\Fonlow.Poco2Ts.2.8.3\\lib\\net462\\Fonlow.Poco2Ts.dll"
+      }
+    ],
+    "sdk": [
+      {
+        "identifier": "Microsoft.CSharp",
+        "version": "4.0.0.0",
+        "assembly-location": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8\\Microsoft.CSharp.dll"
+      },
+      {
+        "identifier": "mscorlib",
+        "version": "4.0.0.0",
+        "assembly-location": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8\\mscorlib.dll"
+      },
+      {
+        "identifier": "System.ComponentModel.DataAnnotations",
+        "version": "4.0.0.0",
+        "assembly-location": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8\\System.ComponentModel.DataAnnotations.dll"
+      },
+      {
+        "identifier": "System.Core",
+        "version": "4.0.0.0",
+        "assembly-location": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8\\System.Core.dll"
+      },
+      {
+        "identifier": "System.Data.DataSetExtensions",
+        "version": "4.0.0.0",
+        "assembly-location": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8\\System.Data.DataSetExtensions.dll"
+      },
+      {
+        "identifier": "System.Data",
+        "version": "4.0.0.0",
+        "assembly-location": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8\\System.Data.dll"
+      },
+      {
+        "identifier": "System",
+        "version": "4.0.0.0",
+        "assembly-location": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8\\System.dll"
+      },
+      {
+        "identifier": "System.Runtime.Serialization",
+        "version": "4.0.0.0",
+        "assembly-location": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8\\System.Runtime.Serialization.dll"
+      },
+      {
+        "identifier": "System.Xml",
+        "version": "4.0.0.0",
+        "assembly-location": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8\\System.Xml.dll"
+      },
+      {
+        "identifier": "System.Xml.Linq",
+        "version": "4.0.0.0",
+        "assembly-location": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8\\System.Xml.Linq.dll"
+      }
+    ],
+    "project": []
+  },
+  "source-file-results": [
+    {
+      "type": "source-file-root",
+      "language": "C#",
+      "file-path": "AccountBindingModels.cs",
+      "file-full-path": "D:\\Monolitic_to_Microservice\\MonoProjects\\webapiclientgenexamples\\DemoWebApi.DemoData\\AccountBindingModels.cs",
+      "lines-of-code": 92,
+      "references": [
+        {},
+        {
+          "namespace": "DemoWebApi.Models",
+          "assembly": "DemoWebApi.DemoData",
+          "version": "1.0.0.0"
+        },
+        {
+          "namespace": "System.ComponentModel.DataAnnotations",
+          "assembly": "System.ComponentModel.DataAnnotations",
+          "assembly-location": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8\\System.ComponentModel.DataAnnotations.dll",
+          "version": "4.0.0.0"
+        },
+        {
+          "namespace": "Newtonsoft.Json",
+          "assembly": "Newtonsoft.Json",
+          "assembly-location": "D:\\Monolitic_to_Microservice\\MonoProjects\\webapiclientgenexamples\\packages\\Newtonsoft.Json.13.0.3\\lib\\net45\\Newtonsoft.Json.dll",
+          "version": "13.0.0.0"
+        }
+      ],
+      "children": [
+        {
+          "type": "import-dependency",
+          "identifier": "System",
+          "location": {
+            "start-char-position": 1,
+            "end-char-position": 14,
+            "start-line-position": 1,
+            "end-line-position": 1
+          },
+          "children": []
+        },
+        {
+          "type": "import-dependency",
+          "identifier": "System.ComponentModel.DataAnnotations",
+          "location": {
+            "start-char-position": 1,
+            "end-char-position": 45,
+            "start-line-position": 2,
+            "end-line-position": 2
+          },
+          "children": []
+        },
+        {
+          "type": "import-dependency",
+          "identifier": "Newtonsoft.Json",
+          "location": {
+            "start-char-position": 1,
+            "end-char-position": 23,
+            "start-line-position": 3,
+            "end-line-position": 3
+          },
+          "children": []
+        },
+        {
+          "type": "namespace",
+          "identifier": "DemoWebApi.Models",
+          "location": {
+            "start-char-position": 1,
+            "end-char-position": 2,
+            "start-line-position": 5,
+            "end-line-position": 92
+          },
+          "full-identifier": "DemoWebApi.Models",
+          "children": [
+            {
+              "type": "declaration-node",
+              "identifier": "DemoWebApi",
+              "location": {
+                "start-char-position": 11,
+                "end-char-position": 21,
+                "start-line-position": 5,
+                "end-line-position": 5
+              },
+              "full-identifier": "DemoWebApi",
+              "references": {},
+              "children": []
+            },
+            {
+              "type": "declaration-node",
+              "identifier": "Models",
+              "location": {
+                "start-char-position": 22,
+                "end-char-position": 28,
+                "start-line-position": 5,
+                "end-line-position": 5
+              },
+              "full-identifier": "Models",
+              "references": {},
+              "children": []
+            },
+            {
+              "type": "class",
+              "identifier": "AddExternalLoginBindingModel",
+              "location": {
+                "start-char-position": 5,
+                "end-char-position": 6,
+                "start-line-position": 9,
+                "end-line-position": 15
+              },
+              "full-identifier": "DemoWebApi.Models.AddExternalLoginBindingModel",
+              "base-type": "object",
+              "base-type-original-def": "object",
+              "base-list": [
+                "object"
+              ],
+              "modifiers": "public",
+              "references": {
+                "namespace": "DemoWebApi.Models",
+                "assembly": "DemoWebApi.DemoData",
+                "version": "1.0.0.0"
+              },
+              "children": [
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "External access token",
+                  "location": {
+                    "start-char-position": 25,
+                    "end-char-position": 48,
+                    "start-line-position": 13,
+                    "end-line-position": 13
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "type": "class",
+              "identifier": "ChangePasswordBindingModel",
+              "location": {
+                "start-char-position": 5,
+                "end-char-position": 6,
+                "start-line-position": 17,
+                "end-line-position": 37
+              },
+              "full-identifier": "DemoWebApi.Models.ChangePasswordBindingModel",
+              "base-type": "object",
+              "base-type-original-def": "object",
+              "base-list": [
+                "object"
+              ],
+              "modifiers": "public",
+              "references": {
+                "namespace": "DemoWebApi.Models",
+                "assembly": "DemoWebApi.DemoData",
+                "version": "1.0.0.0"
+              },
+              "children": [
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "OldPwd",
+                  "location": {
+                    "start-char-position": 37,
+                    "end-char-position": 45,
+                    "start-line-position": 20,
+                    "end-line-position": 20
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "DataType",
+                  "location": {
+                    "start-char-position": 19,
+                    "end-char-position": 27,
+                    "start-line-position": 22,
+                    "end-line-position": 22
+                  },
+                  "full-identifier": "System.ComponentModel.DataAnnotations.DataType",
+                  "references": {
+                    "namespace": "System.ComponentModel.DataAnnotations",
+                    "assembly": "System.ComponentModel.DataAnnotations",
+                    "version": "4.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "Current password",
+                  "location": {
+                    "start-char-position": 25,
+                    "end-char-position": 43,
+                    "start-line-position": 23,
+                    "end-line-position": 23
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "Required",
+                  "location": {
+                    "start-char-position": 34,
+                    "end-char-position": 42,
+                    "start-line-position": 26,
+                    "end-line-position": 26
+                  },
+                  "full-identifier": "Newtonsoft.Json.Required",
+                  "references": {
+                    "namespace": "Newtonsoft.Json",
+                    "assembly": "Newtonsoft.Json",
+                    "version": "13.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.Int32",
+                  "semantic-type": "Int32",
+                  "type": "literal",
+                  "identifier": "100",
+                  "location": {
+                    "start-char-position": 23,
+                    "end-char-position": 26,
+                    "start-line-position": 28,
+                    "end-line-position": 28
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "The {0} must be at least {2} characters long.",
+                  "location": {
+                    "start-char-position": 43,
+                    "end-char-position": 90,
+                    "start-line-position": 28,
+                    "end-line-position": 28
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.Int32",
+                  "semantic-type": "Int32",
+                  "type": "literal",
+                  "identifier": "6",
+                  "location": {
+                    "start-char-position": 108,
+                    "end-char-position": 109,
+                    "start-line-position": 28,
+                    "end-line-position": 28
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "DataType",
+                  "location": {
+                    "start-char-position": 19,
+                    "end-char-position": 27,
+                    "start-line-position": 29,
+                    "end-line-position": 29
+                  },
+                  "full-identifier": "System.ComponentModel.DataAnnotations.DataType",
+                  "references": {
+                    "namespace": "System.ComponentModel.DataAnnotations",
+                    "assembly": "System.ComponentModel.DataAnnotations",
+                    "version": "4.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "New password",
+                  "location": {
+                    "start-char-position": 25,
+                    "end-char-position": 39,
+                    "start-line-position": 30,
+                    "end-line-position": 30
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "DataType",
+                  "location": {
+                    "start-char-position": 19,
+                    "end-char-position": 27,
+                    "start-line-position": 33,
+                    "end-line-position": 33
+                  },
+                  "full-identifier": "System.ComponentModel.DataAnnotations.DataType",
+                  "references": {
+                    "namespace": "System.ComponentModel.DataAnnotations",
+                    "assembly": "System.ComponentModel.DataAnnotations",
+                    "version": "4.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "Confirm new password",
+                  "location": {
+                    "start-char-position": 25,
+                    "end-char-position": 47,
+                    "start-line-position": 34,
+                    "end-line-position": 34
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "NewPassword",
+                  "location": {
+                    "start-char-position": 18,
+                    "end-char-position": 31,
+                    "start-line-position": 35,
+                    "end-line-position": 35
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "The new password and confirmation password do not match.",
+                  "location": {
+                    "start-char-position": 48,
+                    "end-char-position": 106,
+                    "start-line-position": 35,
+                    "end-line-position": 35
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "type": "class",
+              "identifier": "RegisterBindingModel",
+              "location": {
+                "start-char-position": 5,
+                "end-char-position": 6,
+                "start-line-position": 39,
+                "end-line-position": 56
+              },
+              "full-identifier": "DemoWebApi.Models.RegisterBindingModel",
+              "base-type": "object",
+              "base-type-original-def": "object",
+              "base-list": [
+                "object"
+              ],
+              "modifiers": "public",
+              "references": {
+                "namespace": "DemoWebApi.Models",
+                "assembly": "DemoWebApi.DemoData",
+                "version": "1.0.0.0"
+              },
+              "children": [
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "Email",
+                  "location": {
+                    "start-char-position": 25,
+                    "end-char-position": 32,
+                    "start-line-position": 43,
+                    "end-line-position": 43
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.Int32",
+                  "semantic-type": "Int32",
+                  "type": "literal",
+                  "identifier": "100",
+                  "location": {
+                    "start-char-position": 23,
+                    "end-char-position": 26,
+                    "start-line-position": 47,
+                    "end-line-position": 47
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "The {0} must be at least {2} characters long.",
+                  "location": {
+                    "start-char-position": 43,
+                    "end-char-position": 90,
+                    "start-line-position": 47,
+                    "end-line-position": 47
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.Int32",
+                  "semantic-type": "Int32",
+                  "type": "literal",
+                  "identifier": "6",
+                  "location": {
+                    "start-char-position": 108,
+                    "end-char-position": 109,
+                    "start-line-position": 47,
+                    "end-line-position": 47
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "DataType",
+                  "location": {
+                    "start-char-position": 19,
+                    "end-char-position": 27,
+                    "start-line-position": 48,
+                    "end-line-position": 48
+                  },
+                  "full-identifier": "System.ComponentModel.DataAnnotations.DataType",
+                  "references": {
+                    "namespace": "System.ComponentModel.DataAnnotations",
+                    "assembly": "System.ComponentModel.DataAnnotations",
+                    "version": "4.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "Password",
+                  "location": {
+                    "start-char-position": 25,
+                    "end-char-position": 35,
+                    "start-line-position": 49,
+                    "end-line-position": 49
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "DataType",
+                  "location": {
+                    "start-char-position": 19,
+                    "end-char-position": 27,
+                    "start-line-position": 52,
+                    "end-line-position": 52
+                  },
+                  "full-identifier": "System.ComponentModel.DataAnnotations.DataType",
+                  "references": {
+                    "namespace": "System.ComponentModel.DataAnnotations",
+                    "assembly": "System.ComponentModel.DataAnnotations",
+                    "version": "4.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "Confirm password",
+                  "location": {
+                    "start-char-position": 25,
+                    "end-char-position": 43,
+                    "start-line-position": 53,
+                    "end-line-position": 53
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "Password",
+                  "location": {
+                    "start-char-position": 18,
+                    "end-char-position": 28,
+                    "start-line-position": 54,
+                    "end-line-position": 54
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "The password and confirmation password do not match.",
+                  "location": {
+                    "start-char-position": 45,
+                    "end-char-position": 99,
+                    "start-line-position": 54,
+                    "end-line-position": 54
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "type": "class",
+              "identifier": "RegisterExternalBindingModel",
+              "location": {
+                "start-char-position": 5,
+                "end-char-position": 6,
+                "start-line-position": 58,
+                "end-line-position": 64
+              },
+              "full-identifier": "DemoWebApi.Models.RegisterExternalBindingModel",
+              "base-type": "object",
+              "base-type-original-def": "object",
+              "base-list": [
+                "object"
+              ],
+              "modifiers": "public",
+              "references": {
+                "namespace": "DemoWebApi.Models",
+                "assembly": "DemoWebApi.DemoData",
+                "version": "1.0.0.0"
+              },
+              "children": [
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "Email",
+                  "location": {
+                    "start-char-position": 25,
+                    "end-char-position": 32,
+                    "start-line-position": 62,
+                    "end-line-position": 62
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "type": "class",
+              "identifier": "RemoveLoginBindingModel",
+              "location": {
+                "start-char-position": 5,
+                "end-char-position": 6,
+                "start-line-position": 66,
+                "end-line-position": 76
+              },
+              "full-identifier": "DemoWebApi.Models.RemoveLoginBindingModel",
+              "base-type": "object",
+              "base-type-original-def": "object",
+              "base-list": [
+                "object"
+              ],
+              "modifiers": "public",
+              "references": {
+                "namespace": "DemoWebApi.Models",
+                "assembly": "DemoWebApi.DemoData",
+                "version": "1.0.0.0"
+              },
+              "children": [
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "Login provider",
+                  "location": {
+                    "start-char-position": 25,
+                    "end-char-position": 41,
+                    "start-line-position": 70,
+                    "end-line-position": 70
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "Provider key",
+                  "location": {
+                    "start-char-position": 25,
+                    "end-char-position": 39,
+                    "start-line-position": 74,
+                    "end-line-position": 74
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "type": "class",
+              "identifier": "SetPasswordBindingModel",
+              "location": {
+                "start-char-position": 5,
+                "end-char-position": 6,
+                "start-line-position": 78,
+                "end-line-position": 91
+              },
+              "full-identifier": "DemoWebApi.Models.SetPasswordBindingModel",
+              "base-type": "object",
+              "base-type-original-def": "object",
+              "base-list": [
+                "object"
+              ],
+              "modifiers": "public",
+              "references": {
+                "namespace": "DemoWebApi.Models",
+                "assembly": "DemoWebApi.DemoData",
+                "version": "1.0.0.0"
+              },
+              "children": [
+                {
+                  "literal-type": "System.Int32",
+                  "semantic-type": "Int32",
+                  "type": "literal",
+                  "identifier": "100",
+                  "location": {
+                    "start-char-position": 23,
+                    "end-char-position": 26,
+                    "start-line-position": 82,
+                    "end-line-position": 82
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "The {0} must be at least {2} characters long.",
+                  "location": {
+                    "start-char-position": 43,
+                    "end-char-position": 90,
+                    "start-line-position": 82,
+                    "end-line-position": 82
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.Int32",
+                  "semantic-type": "Int32",
+                  "type": "literal",
+                  "identifier": "6",
+                  "location": {
+                    "start-char-position": 108,
+                    "end-char-position": 109,
+                    "start-line-position": 82,
+                    "end-line-position": 82
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "DataType",
+                  "location": {
+                    "start-char-position": 19,
+                    "end-char-position": 27,
+                    "start-line-position": 83,
+                    "end-line-position": 83
+                  },
+                  "full-identifier": "System.ComponentModel.DataAnnotations.DataType",
+                  "references": {
+                    "namespace": "System.ComponentModel.DataAnnotations",
+                    "assembly": "System.ComponentModel.DataAnnotations",
+                    "version": "4.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "New password",
+                  "location": {
+                    "start-char-position": 25,
+                    "end-char-position": 39,
+                    "start-line-position": 84,
+                    "end-line-position": 84
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "DataType",
+                  "location": {
+                    "start-char-position": 19,
+                    "end-char-position": 27,
+                    "start-line-position": 87,
+                    "end-line-position": 87
+                  },
+                  "full-identifier": "System.ComponentModel.DataAnnotations.DataType",
+                  "references": {
+                    "namespace": "System.ComponentModel.DataAnnotations",
+                    "assembly": "System.ComponentModel.DataAnnotations",
+                    "version": "4.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "Confirm new password",
+                  "location": {
+                    "start-char-position": 25,
+                    "end-char-position": 47,
+                    "start-line-position": 88,
+                    "end-line-position": 88
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "NewPassword",
+                  "location": {
+                    "start-char-position": 18,
+                    "end-char-position": 31,
+                    "start-line-position": 89,
+                    "end-line-position": 89
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "The new password and confirmation password do not match.",
+                  "location": {
+                    "start-char-position": 48,
+                    "end-char-position": 106,
+                    "start-line-position": 89,
+                    "end-line-position": 89
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "source-file-root",
+      "language": "C#",
+      "file-path": "AccountViewModels.cs",
+      "file-full-path": "D:\\Monolitic_to_Microservice\\MonoProjects\\webapiclientgenexamples\\DemoWebApi.DemoData\\AccountViewModels.cs",
+      "lines-of-code": 53,
+      "references": [
+        {},
+        {
+          "namespace": "DemoWebApi.Models",
+          "assembly": "DemoWebApi.DemoData",
+          "version": "1.0.0.0"
+        }
+      ],
+      "children": [
+        {
+          "type": "import-dependency",
+          "identifier": "System",
+          "location": {
+            "start-char-position": 1,
+            "end-char-position": 14,
+            "start-line-position": 1,
+            "end-line-position": 1
+          },
+          "children": []
+        },
+        {
+          "type": "import-dependency",
+          "identifier": "System.Collections.Generic",
+          "location": {
+            "start-char-position": 1,
+            "end-char-position": 34,
+            "start-line-position": 2,
+            "end-line-position": 2
+          },
+          "children": []
+        },
+        {
+          "type": "import-dependency",
+          "identifier": "System.Runtime.Serialization",
+          "location": {
+            "start-char-position": 1,
+            "end-char-position": 36,
+            "start-line-position": 3,
+            "end-line-position": 3
+          },
+          "children": []
+        },
+        {
+          "type": "namespace",
+          "identifier": "DemoWebApi.Models",
+          "location": {
+            "start-char-position": 1,
+            "end-char-position": 2,
+            "start-line-position": 5,
+            "end-line-position": 53
+          },
+          "full-identifier": "DemoWebApi.Models",
+          "children": [
+            {
+              "type": "declaration-node",
+              "identifier": "DemoWebApi",
+              "location": {
+                "start-char-position": 11,
+                "end-char-position": 21,
+                "start-line-position": 5,
+                "end-line-position": 5
+              },
+              "full-identifier": "DemoWebApi",
+              "references": {},
+              "children": []
+            },
+            {
+              "type": "declaration-node",
+              "identifier": "Models",
+              "location": {
+                "start-char-position": 22,
+                "end-char-position": 28,
+                "start-line-position": 5,
+                "end-line-position": 5
+              },
+              "full-identifier": "Models",
+              "references": {},
+              "children": []
+            },
+            {
+              "type": "class",
+              "identifier": "ExternalLoginViewModel",
+              "location": {
+                "start-char-position": 5,
+                "end-char-position": 6,
+                "start-line-position": 9,
+                "end-line-position": 17
+              },
+              "full-identifier": "DemoWebApi.Models.ExternalLoginViewModel",
+              "base-type": "object",
+              "base-type-original-def": "object",
+              "base-list": [
+                "object"
+              ],
+              "modifiers": "public",
+              "references": {
+                "namespace": "DemoWebApi.Models",
+                "assembly": "DemoWebApi.DemoData",
+                "version": "1.0.0.0"
+              },
+              "children": []
+            },
+            {
+              "type": "class",
+              "identifier": "ManageInfoViewModel",
+              "location": {
+                "start-char-position": 5,
+                "end-char-position": 6,
+                "start-line-position": 19,
+                "end-line-position": 29
+              },
+              "full-identifier": "DemoWebApi.Models.ManageInfoViewModel",
+              "base-type": "object",
+              "base-type-original-def": "object",
+              "base-list": [
+                "object"
+              ],
+              "modifiers": "public",
+              "references": {
+                "namespace": "DemoWebApi.Models",
+                "assembly": "DemoWebApi.DemoData",
+                "version": "1.0.0.0"
+              },
+              "children": [
+                {
+                  "type": "declaration-node",
+                  "identifier": "UserLoginInfoViewModel",
+                  "location": {
+                    "start-char-position": 28,
+                    "end-char-position": 50,
+                    "start-line-position": 26,
+                    "end-line-position": 26
+                  },
+                  "full-identifier": "DemoWebApi.Models.UserLoginInfoViewModel",
+                  "references": {
+                    "namespace": "DemoWebApi.Models",
+                    "assembly": "DemoWebApi.DemoData",
+                    "version": "1.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "ExternalLoginViewModel",
+                  "location": {
+                    "start-char-position": 28,
+                    "end-char-position": 50,
+                    "start-line-position": 28,
+                    "end-line-position": 28
+                  },
+                  "full-identifier": "DemoWebApi.Models.ExternalLoginViewModel",
+                  "references": {
+                    "namespace": "DemoWebApi.Models",
+                    "assembly": "DemoWebApi.DemoData",
+                    "version": "1.0.0.0"
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "type": "class",
+              "identifier": "UserInfoViewModel",
+              "location": {
+                "start-char-position": 5,
+                "end-char-position": 6,
+                "start-line-position": 31,
+                "end-line-position": 44
+              },
+              "full-identifier": "DemoWebApi.Models.UserInfoViewModel",
+              "base-type": "object",
+              "base-type-original-def": "object",
+              "base-list": [
+                "object"
+              ],
+              "modifiers": "public",
+              "references": {
+                "namespace": "DemoWebApi.Models",
+                "assembly": "DemoWebApi.DemoData",
+                "version": "1.0.0.0"
+              },
+              "children": []
+            },
+            {
+              "type": "class",
+              "identifier": "UserLoginInfoViewModel",
+              "location": {
+                "start-char-position": 5,
+                "end-char-position": 6,
+                "start-line-position": 46,
+                "end-line-position": 52
+              },
+              "full-identifier": "DemoWebApi.Models.UserLoginInfoViewModel",
+              "base-type": "object",
+              "base-type-original-def": "object",
+              "base-list": [
+                "object"
+              ],
+              "modifiers": "public",
+              "references": {
+                "namespace": "DemoWebApi.Models",
+                "assembly": "DemoWebApi.DemoData",
+                "version": "1.0.0.0"
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "source-file-root",
+      "language": "C#",
+      "file-path": "Entities.cs",
+      "file-full-path": "D:\\Monolitic_to_Microservice\\MonoProjects\\webapiclientgenexamples\\DemoWebApi.DemoData\\Entities.cs",
+      "lines-of-code": 215,
+      "references": [
+        {},
+        {
+          "namespace": "DemoWebApi.DemoData",
+          "assembly": "DemoWebApi.DemoData",
+          "version": "1.0.0.0"
+        },
+        {
+          "namespace": "System",
+          "assembly": "mscorlib",
+          "assembly-location": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8\\mscorlib.dll",
+          "version": "4.0.0.0"
+        },
+        {
+          "namespace": "DemoWebApi.DemoData.Another",
+          "assembly": "DemoWebApi.DemoData",
+          "version": "1.0.0.0"
+        }
+      ],
+      "children": [
+        {
+          "type": "import-dependency",
+          "identifier": "System",
+          "location": {
+            "start-char-position": 1,
+            "end-char-position": 14,
+            "start-line-position": 1,
+            "end-line-position": 1
+          },
+          "children": []
+        },
+        {
+          "type": "import-dependency",
+          "identifier": "System.Collections.Generic",
+          "location": {
+            "start-char-position": 1,
+            "end-char-position": 34,
+            "start-line-position": 2,
+            "end-line-position": 2
+          },
+          "children": []
+        },
+        {
+          "type": "import-dependency",
+          "identifier": "System.Runtime.Serialization",
+          "location": {
+            "start-char-position": 1,
+            "end-char-position": 36,
+            "start-line-position": 3,
+            "end-line-position": 3
+          },
+          "children": []
+        },
+        {
+          "type": "import-dependency",
+          "identifier": "System.Collections.ObjectModel",
+          "location": {
+            "start-char-position": 1,
+            "end-char-position": 38,
+            "start-line-position": 4,
+            "end-line-position": 4
+          },
+          "children": []
+        },
+        {
+          "type": "import-dependency",
+          "identifier": "Newtonsoft.Json",
+          "location": {
+            "start-char-position": 1,
+            "end-char-position": 23,
+            "start-line-position": 5,
+            "end-line-position": 5
+          },
+          "children": []
+        },
+        {
+          "type": "namespace",
+          "identifier": "DemoWebApi.DemoData",
+          "location": {
+            "start-char-position": 1,
+            "end-char-position": 2,
+            "start-line-position": 7,
+            "end-line-position": 237
+          },
+          "full-identifier": "DemoWebApi.DemoData",
+          "children": [
+            {
+              "type": "declaration-node",
+              "identifier": "DemoWebApi",
+              "location": {
+                "start-char-position": 11,
+                "end-char-position": 21,
+                "start-line-position": 7,
+                "end-line-position": 7
+              },
+              "full-identifier": "DemoWebApi",
+              "references": {},
+              "children": []
+            },
+            {
+              "type": "declaration-node",
+              "identifier": "DemoData",
+              "location": {
+                "start-char-position": 22,
+                "end-char-position": 30,
+                "start-line-position": 7,
+                "end-line-position": 7
+              },
+              "full-identifier": "DemoData",
+              "references": {},
+              "children": []
+            },
+            {
+              "type": "class",
+              "identifier": "Constants",
+              "location": {
+                "start-char-position": 5,
+                "end-char-position": 6,
+                "start-line-position": 9,
+                "end-line-position": 12
+              },
+              "full-identifier": "DemoWebApi.DemoData.Constants",
+              "base-type": "object",
+              "base-type-original-def": "object",
+              "base-list": [
+                "object"
+              ],
+              "modifiers": "public sealed",
+              "references": {
+                "namespace": "DemoWebApi.DemoData",
+                "assembly": "DemoWebApi.DemoData",
+                "version": "1.0.0.0"
+              },
+              "children": [
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "http://fonlow.com/DemoData/2014/02",
+                  "location": {
+                    "start-char-position": 45,
+                    "end-char-position": 81,
+                    "start-line-position": 11,
+                    "end-line-position": 11
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "type": "declaration-node",
+              "identifier": "Constants",
+              "location": {
+                "start-char-position": 31,
+                "end-char-position": 40,
+                "start-line-position": 14,
+                "end-line-position": 14
+              },
+              "full-identifier": "DemoWebApi.DemoData.Constants",
+              "references": {
+                "namespace": "DemoWebApi.DemoData",
+                "assembly": "DemoWebApi.DemoData",
+                "version": "1.0.0.0"
+              },
+              "children": []
+            },
+            {
+              "literal-type": "System.Int32",
+              "semantic-type": "Int32",
+              "type": "literal",
+              "identifier": "1",
+              "location": {
+                "start-char-position": 17,
+                "end-char-position": 18,
+                "start-line-position": 26,
+                "end-line-position": 26
+              },
+              "children": []
+            },
+            {
+              "literal-type": "System.Int32",
+              "semantic-type": "Int32",
+              "type": "literal",
+              "identifier": "2",
+              "location": {
+                "start-char-position": 15,
+                "end-char-position": 16,
+                "start-line-position": 28,
+                "end-line-position": 28
+              },
+              "children": []
+            },
+            {
+              "type": "declaration-node",
+              "identifier": "Constants",
+              "location": {
+                "start-char-position": 31,
+                "end-char-position": 40,
+                "start-line-position": 31,
+                "end-line-position": 31
+              },
+              "full-identifier": "DemoWebApi.DemoData.Constants",
+              "references": {
+                "namespace": "DemoWebApi.DemoData",
+                "assembly": "DemoWebApi.DemoData",
+                "version": "1.0.0.0"
+              },
+              "children": []
+            },
+            {
+              "literal-type": "System.Int32",
+              "semantic-type": "Int32",
+              "type": "literal",
+              "identifier": "1",
+              "location": {
+                "start-char-position": 15,
+                "end-char-position": 16,
+                "start-line-position": 35,
+                "end-line-position": 35
+              },
+              "children": []
+            },
+            {
+              "type": "class",
+              "identifier": "PhoneNumber",
+              "location": {
+                "start-char-position": 5,
+                "end-char-position": 6,
+                "start-line-position": 53,
+                "end-line-position": 71
+              },
+              "full-identifier": "DemoWebApi.DemoData.PhoneNumber",
+              "base-type": "object",
+              "base-type-original-def": "object",
+              "base-list": [
+                "object"
+              ],
+              "modifiers": "public",
+              "references": {
+                "namespace": "DemoWebApi.DemoData",
+                "assembly": "DemoWebApi.DemoData",
+                "version": "1.0.0.0"
+              },
+              "children": [
+                {
+                  "type": "declaration-node",
+                  "identifier": "Constants",
+                  "location": {
+                    "start-char-position": 31,
+                    "end-char-position": 40,
+                    "start-line-position": 53,
+                    "end-line-position": 53
+                  },
+                  "full-identifier": "DemoWebApi.DemoData.Constants",
+                  "references": {
+                    "namespace": "DemoWebApi.DemoData",
+                    "assembly": "DemoWebApi.DemoData",
+                    "version": "1.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "constructor",
+                  "identifier": "PhoneNumber",
+                  "location": {
+                    "start-char-position": 9,
+                    "end-char-position": 10,
+                    "start-line-position": 56,
+                    "end-line-position": 59
+                  },
+                  "modifiers": "public",
+                  "parameters": [],
+                  "semantic-properties": [
+                    "Public"
+                  ],
+                  "semantic-signature": "public DemoWebApi.DemoData.PhoneNumber.PhoneNumber()",
+                  "children": [
+                    {
+                      "type": "body",
+                      "identifier": "block",
+                      "location": {
+                        "start-char-position": 9,
+                        "end-char-position": 10,
+                        "start-line-position": 57,
+                        "end-line-position": 59
+                      },
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "Guid",
+                  "location": {
+                    "start-char-position": 16,
+                    "end-char-position": 20,
+                    "start-line-position": 61,
+                    "end-line-position": 61
+                  },
+                  "full-identifier": "System.Guid",
+                  "references": {
+                    "namespace": "System",
+                    "assembly": "mscorlib",
+                    "version": "4.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "PhoneType",
+                  "location": {
+                    "start-char-position": 16,
+                    "end-char-position": 25,
+                    "start-line-position": 68,
+                    "end-line-position": 68
+                  },
+                  "full-identifier": "DemoWebApi.DemoData.PhoneType",
+                  "references": {
+                    "namespace": "DemoWebApi.DemoData",
+                    "assembly": "DemoWebApi.DemoData",
+                    "version": "1.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "Guid",
+                  "location": {
+                    "start-char-position": 16,
+                    "end-char-position": 20,
+                    "start-line-position": 70,
+                    "end-line-position": 70
+                  },
+                  "full-identifier": "System.Guid",
+                  "references": {
+                    "namespace": "System",
+                    "assembly": "mscorlib",
+                    "version": "4.0.0.0"
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "type": "declaration-node",
+              "identifier": "Constants",
+              "location": {
+                "start-char-position": 31,
+                "end-char-position": 40,
+                "start-line-position": 79,
+                "end-line-position": 79
+              },
+              "full-identifier": "DemoWebApi.DemoData.Constants",
+              "references": {
+                "namespace": "DemoWebApi.DemoData",
+                "assembly": "DemoWebApi.DemoData",
+                "version": "1.0.0.0"
+              },
+              "children": []
+            },
+            {
+              "literal-type": "System.Int32",
+              "semantic-type": "Int32",
+              "type": "literal",
+              "identifier": "0",
+              "location": {
+                "start-char-position": 15,
+                "end-char-position": 16,
+                "start-line-position": 86,
+                "end-line-position": 86
+              },
+              "children": []
+            },
+            {
+              "literal-type": "System.Int32",
+              "semantic-type": "Int32",
+              "type": "literal",
+              "identifier": "1",
+              "location": {
+                "start-char-position": 18,
+                "end-char-position": 19,
+                "start-line-position": 92,
+                "end-line-position": 92
+              },
+              "children": []
+            },
+            {
+              "literal-type": "System.Int32",
+              "semantic-type": "Int32",
+              "type": "literal",
+              "identifier": "2",
+              "location": {
+                "start-char-position": 17,
+                "end-char-position": 18,
+                "start-line-position": 95,
+                "end-line-position": 95
+              },
+              "children": []
+            },
+            {
+              "literal-type": "System.Int32",
+              "semantic-type": "Int32",
+              "type": "literal",
+              "identifier": "3",
+              "location": {
+                "start-char-position": 15,
+                "end-char-position": 16,
+                "start-line-position": 97,
+                "end-line-position": 97
+              },
+              "children": []
+            },
+            {
+              "type": "class",
+              "identifier": "Address",
+              "location": {
+                "start-char-position": 5,
+                "end-char-position": 6,
+                "start-line-position": 100,
+                "end-line-position": 136
+              },
+              "full-identifier": "DemoWebApi.DemoData.Address",
+              "base-type": "object",
+              "base-type-original-def": "object",
+              "base-list": [
+                "object"
+              ],
+              "modifiers": "public",
+              "references": {
+                "namespace": "DemoWebApi.DemoData",
+                "assembly": "DemoWebApi.DemoData",
+                "version": "1.0.0.0"
+              },
+              "children": [
+                {
+                  "type": "declaration-node",
+                  "identifier": "Constants",
+                  "location": {
+                    "start-char-position": 31,
+                    "end-char-position": 40,
+                    "start-line-position": 100,
+                    "end-line-position": 100
+                  },
+                  "full-identifier": "DemoWebApi.DemoData.Constants",
+                  "references": {
+                    "namespace": "DemoWebApi.DemoData",
+                    "assembly": "DemoWebApi.DemoData",
+                    "version": "1.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "Guid",
+                  "location": {
+                    "start-char-position": 16,
+                    "end-char-position": 20,
+                    "start-line-position": 104,
+                    "end-line-position": 104
+                  },
+                  "full-identifier": "System.Guid",
+                  "references": {
+                    "namespace": "System",
+                    "assembly": "mscorlib",
+                    "version": "4.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "Entity",
+                  "location": {
+                    "start-char-position": 16,
+                    "end-char-position": 22,
+                    "start-line-position": 106,
+                    "end-line-position": 106
+                  },
+                  "full-identifier": "DemoWebApi.DemoData.Entity",
+                  "references": {
+                    "namespace": "DemoWebApi.DemoData",
+                    "assembly": "DemoWebApi.DemoData",
+                    "version": "1.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "Guid",
+                  "location": {
+                    "start-char-position": 16,
+                    "end-char-position": 20,
+                    "start-line-position": 111,
+                    "end-line-position": 111
+                  },
+                  "full-identifier": "System.Guid",
+                  "references": {
+                    "namespace": "System",
+                    "assembly": "mscorlib",
+                    "version": "4.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "AddressType",
+                  "location": {
+                    "start-char-position": 16,
+                    "end-char-position": 27,
+                    "start-line-position": 132,
+                    "end-line-position": 132
+                  },
+                  "full-identifier": "DemoWebApi.DemoData.AddressType",
+                  "references": {
+                    "namespace": "DemoWebApi.DemoData",
+                    "assembly": "DemoWebApi.DemoData",
+                    "version": "1.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "DemoWebApi",
+                  "location": {
+                    "start-char-position": 16,
+                    "end-char-position": 26,
+                    "start-line-position": 135,
+                    "end-line-position": 135
+                  },
+                  "full-identifier": "DemoWebApi",
+                  "references": {},
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "DemoData",
+                  "location": {
+                    "start-char-position": 27,
+                    "end-char-position": 35,
+                    "start-line-position": 135,
+                    "end-line-position": 135
+                  },
+                  "full-identifier": "DemoData",
+                  "references": {},
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "Another",
+                  "location": {
+                    "start-char-position": 36,
+                    "end-char-position": 43,
+                    "start-line-position": 135,
+                    "end-line-position": 135
+                  },
+                  "full-identifier": "Another",
+                  "references": {},
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "MyPoint",
+                  "location": {
+                    "start-char-position": 44,
+                    "end-char-position": 51,
+                    "start-line-position": 135,
+                    "end-line-position": 135
+                  },
+                  "full-identifier": "DemoWebApi.DemoData.Another.MyPoint",
+                  "references": {
+                    "namespace": "DemoWebApi.DemoData.Another",
+                    "assembly": "DemoWebApi.DemoData",
+                    "version": "1.0.0.0"
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "type": "class",
+              "identifier": "Entity",
+              "location": {
+                "start-char-position": 5,
+                "end-char-position": 6,
+                "start-line-position": 141,
+                "end-line-position": 173
+              },
+              "full-identifier": "DemoWebApi.DemoData.Entity",
+              "base-type": "object",
+              "base-type-original-def": "object",
+              "base-list": [
+                "object"
+              ],
+              "modifiers": "public",
+              "references": {
+                "namespace": "DemoWebApi.DemoData",
+                "assembly": "DemoWebApi.DemoData",
+                "version": "1.0.0.0"
+              },
+              "children": [
+                {
+                  "type": "declaration-node",
+                  "identifier": "Constants",
+                  "location": {
+                    "start-char-position": 31,
+                    "end-char-position": 40,
+                    "start-line-position": 141,
+                    "end-line-position": 141
+                  },
+                  "full-identifier": "DemoWebApi.DemoData.Constants",
+                  "references": {
+                    "namespace": "DemoWebApi.DemoData",
+                    "assembly": "DemoWebApi.DemoData",
+                    "version": "1.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "constructor",
+                  "identifier": "Entity",
+                  "location": {
+                    "start-char-position": 9,
+                    "end-char-position": 10,
+                    "start-line-position": 144,
+                    "end-line-position": 147
+                  },
+                  "modifiers": "public",
+                  "parameters": [],
+                  "semantic-properties": [
+                    "Public"
+                  ],
+                  "semantic-signature": "public DemoWebApi.DemoData.Entity.Entity()",
+                  "children": [
+                    {
+                      "type": "body",
+                      "identifier": "block",
+                      "location": {
+                        "start-char-position": 9,
+                        "end-char-position": 10,
+                        "start-line-position": 145,
+                        "end-line-position": 147
+                      },
+                      "children": [
+                        {
+                          "type": "object-creation",
+                          "identifier": "new List<Address>()",
+                          "location": {
+                            "start-char-position": 25,
+                            "end-char-position": 44,
+                            "start-line-position": 146,
+                            "end-line-position": 146
+                          },
+                          "full-identifier": "System.Collections.Generic.List<T>.List()",
+                          "method-name": ".ctor",
+                          "semantic-namespace": "System.Collections.Generic",
+                          "semantic-class-type": "List<DemoWebApi.DemoData.Address>",
+                          "semantic-method-signature": "System.Collections.Generic.List<DemoWebApi.DemoData.Address>.List()",
+                          "parameters": [],
+                          "arguments": [],
+                          "semantic-return-type": "Void",
+                          "semantic-original-def": "System.Collections.Generic.List<T>.List()",
+                          "semantic-properties": [
+                            "Public"
+                          ],
+                          "semantic-is-extension": false,
+                          "semantic-full-class-type": "System.Collections.Generic.List<DemoWebApi.DemoData.Address>",
+                          "references": {},
+                          "children": [
+                            {
+                              "type": "declaration-node",
+                              "identifier": "Address",
+                              "location": {
+                                "start-char-position": 34,
+                                "end-char-position": 41,
+                                "start-line-position": 146,
+                                "end-line-position": 146
+                              },
+                              "full-identifier": "DemoWebApi.DemoData.Address",
+                              "references": {
+                                "namespace": "DemoWebApi.DemoData",
+                                "assembly": "DemoWebApi.DemoData",
+                                "version": "1.0.0.0"
+                              },
+                              "children": []
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "Guid",
+                  "location": {
+                    "start-char-position": 16,
+                    "end-char-position": 20,
+                    "start-line-position": 150,
+                    "end-line-position": 150
+                  },
+                  "full-identifier": "System.Guid",
+                  "references": {
+                    "namespace": "System",
+                    "assembly": "mscorlib",
+                    "version": "4.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.Boolean",
+                  "semantic-type": "Boolean",
+                  "type": "literal",
+                  "identifier": "true",
+                  "location": {
+                    "start-char-position": 33,
+                    "end-char-position": 37,
+                    "start-line-position": 155,
+                    "end-line-position": 155
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "System",
+                  "location": {
+                    "start-char-position": 10,
+                    "end-char-position": 16,
+                    "start-line-position": 156,
+                    "end-line-position": 156
+                  },
+                  "full-identifier": "System",
+                  "references": {},
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "ComponentModel",
+                  "location": {
+                    "start-char-position": 17,
+                    "end-char-position": 31,
+                    "start-line-position": 156,
+                    "end-line-position": 156
+                  },
+                  "full-identifier": "ComponentModel",
+                  "references": {},
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "DataAnnotations",
+                  "location": {
+                    "start-char-position": 32,
+                    "end-char-position": 47,
+                    "start-line-position": 156,
+                    "end-line-position": 156
+                  },
+                  "full-identifier": "DataAnnotations",
+                  "references": {},
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "Required",
+                  "location": {
+                    "start-char-position": 48,
+                    "end-char-position": 56,
+                    "start-line-position": 156,
+                    "end-line-position": 156
+                  },
+                  "full-identifier": "Required",
+                  "references": {},
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "Address",
+                  "location": {
+                    "start-char-position": 22,
+                    "end-char-position": 29,
+                    "start-line-position": 163,
+                    "end-line-position": 163
+                  },
+                  "full-identifier": "DemoWebApi.DemoData.Address",
+                  "references": {
+                    "namespace": "DemoWebApi.DemoData",
+                    "assembly": "DemoWebApi.DemoData",
+                    "version": "1.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "PhoneNumber",
+                  "location": {
+                    "start-char-position": 45,
+                    "end-char-position": 56,
+                    "start-line-position": 167,
+                    "end-line-position": 167
+                  },
+                  "full-identifier": "DemoWebApi.DemoData.PhoneNumber",
+                  "references": {
+                    "namespace": "DemoWebApi.DemoData",
+                    "assembly": "DemoWebApi.DemoData",
+                    "version": "1.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "method",
+                  "identifier": "ToString",
+                  "location": {
+                    "start-char-position": 9,
+                    "end-char-position": 10,
+                    "start-line-position": 169,
+                    "end-line-position": 172
+                  },
+                  "full-identifier": "DemoWebApi.DemoData.Entity.ToString()",
+                  "modifiers": "public override",
+                  "parameters": [],
+                  "return-type": "string",
+                  "semantic-return-type": "String",
+                  "semantic-properties": [
+                    "Public",
+                    "override"
+                  ],
+                  "semantic-signature": "public override DemoWebApi.DemoData.Entity.ToString()",
+                  "children": [
+                    {
+                      "type": "body",
+                      "identifier": "block",
+                      "location": {
+                        "start-char-position": 9,
+                        "end-char-position": 10,
+                        "start-line-position": 170,
+                        "end-line-position": 172
+                      },
+                      "children": [
+                        {
+                          "type": "return-statement",
+                          "identifier": "Name",
+                          "location": {
+                            "start-char-position": 13,
+                            "end-char-position": 25,
+                            "start-line-position": 171,
+                            "end-line-position": 171
+                          },
+                          "semantic-return-type": "String",
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "class",
+              "identifier": "Person",
+              "location": {
+                "start-char-position": 5,
+                "end-char-position": 6,
+                "start-line-position": 175,
+                "end-line-position": 195
+              },
+              "full-identifier": "DemoWebApi.DemoData.Person",
+              "base-type": "DemoWebApi.DemoData.Entity",
+              "base-type-original-def": "DemoWebApi.DemoData.Entity",
+              "base-list": [
+                "DemoWebApi.DemoData.Entity",
+                "object"
+              ],
+              "modifiers": "public",
+              "references": {
+                "namespace": "DemoWebApi.DemoData",
+                "assembly": "DemoWebApi.DemoData",
+                "version": "1.0.0.0"
+              },
+              "children": [
+                {
+                  "type": "declaration-node",
+                  "identifier": "Constants",
+                  "location": {
+                    "start-char-position": 31,
+                    "end-char-position": 40,
+                    "start-line-position": 175,
+                    "end-line-position": 175
+                  },
+                  "full-identifier": "DemoWebApi.DemoData.Constants",
+                  "references": {
+                    "namespace": "DemoWebApi.DemoData",
+                    "assembly": "DemoWebApi.DemoData",
+                    "version": "1.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "Entity",
+                  "location": {
+                    "start-char-position": 27,
+                    "end-char-position": 33,
+                    "start-line-position": 176,
+                    "end-line-position": 176
+                  },
+                  "full-identifier": "DemoWebApi.DemoData.Entity",
+                  "references": {
+                    "namespace": "DemoWebApi.DemoData",
+                    "assembly": "DemoWebApi.DemoData",
+                    "version": "1.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "DateTime",
+                  "location": {
+                    "start-char-position": 16,
+                    "end-char-position": 24,
+                    "start-line-position": 188,
+                    "end-line-position": 188
+                  },
+                  "full-identifier": "System.DateTime",
+                  "references": {
+                    "namespace": "System",
+                    "assembly": "mscorlib",
+                    "version": "4.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "method",
+                  "identifier": "ToString",
+                  "location": {
+                    "start-char-position": 9,
+                    "end-char-position": 10,
+                    "start-line-position": 190,
+                    "end-line-position": 193
+                  },
+                  "full-identifier": "DemoWebApi.DemoData.Person.ToString()",
+                  "modifiers": "public override",
+                  "parameters": [],
+                  "return-type": "string",
+                  "semantic-return-type": "String",
+                  "semantic-properties": [
+                    "Public",
+                    "override"
+                  ],
+                  "semantic-signature": "public override DemoWebApi.DemoData.Person.ToString()",
+                  "children": [
+                    {
+                      "type": "body",
+                      "identifier": "block",
+                      "location": {
+                        "start-char-position": 9,
+                        "end-char-position": 10,
+                        "start-line-position": 191,
+                        "end-line-position": 193
+                      },
+                      "children": [
+                        {
+                          "type": "return-statement",
+                          "identifier": "Surname + \", \" + GivenName",
+                          "location": {
+                            "start-char-position": 13,
+                            "end-char-position": 47,
+                            "start-line-position": 192,
+                            "end-line-position": 192
+                          },
+                          "semantic-return-type": "String",
+                          "children": [
+                            {
+                              "literal-type": "System.String",
+                              "semantic-type": "String",
+                              "type": "literal",
+                              "identifier": ", ",
+                              "location": {
+                                "start-char-position": 30,
+                                "end-char-position": 34,
+                                "start-line-position": 192,
+                                "end-line-position": 192
+                              },
+                              "children": []
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "class",
+              "identifier": "Company",
+              "location": {
+                "start-char-position": 5,
+                "end-char-position": 6,
+                "start-line-position": 197,
+                "end-line-position": 221
+              },
+              "full-identifier": "DemoWebApi.DemoData.Company",
+              "base-type": "DemoWebApi.DemoData.Entity",
+              "base-type-original-def": "DemoWebApi.DemoData.Entity",
+              "base-list": [
+                "DemoWebApi.DemoData.Entity",
+                "object"
+              ],
+              "modifiers": "public",
+              "references": {
+                "namespace": "DemoWebApi.DemoData",
+                "assembly": "DemoWebApi.DemoData",
+                "version": "1.0.0.0"
+              },
+              "children": [
+                {
+                  "type": "declaration-node",
+                  "identifier": "Constants",
+                  "location": {
+                    "start-char-position": 31,
+                    "end-char-position": 40,
+                    "start-line-position": 197,
+                    "end-line-position": 197
+                  },
+                  "full-identifier": "DemoWebApi.DemoData.Constants",
+                  "references": {
+                    "namespace": "DemoWebApi.DemoData",
+                    "assembly": "DemoWebApi.DemoData",
+                    "version": "1.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "Entity",
+                  "location": {
+                    "start-char-position": 28,
+                    "end-char-position": 34,
+                    "start-line-position": 198,
+                    "end-line-position": 198
+                  },
+                  "full-identifier": "DemoWebApi.DemoData.Entity",
+                  "references": {
+                    "namespace": "DemoWebApi.DemoData",
+                    "assembly": "DemoWebApi.DemoData",
+                    "version": "1.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "literal-type": "System.String",
+                  "semantic-type": "String",
+                  "type": "literal",
+                  "identifier": "BusinessNum",
+                  "location": {
+                    "start-char-position": 27,
+                    "end-char-position": 40,
+                    "start-line-position": 203,
+                    "end-line-position": 203
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "type": "class",
+              "identifier": "MyPeopleDic",
+              "location": {
+                "start-char-position": 5,
+                "end-char-position": 6,
+                "start-line-position": 223,
+                "end-line-position": 235
+              },
+              "full-identifier": "DemoWebApi.DemoData.MyPeopleDic",
+              "base-type": "object",
+              "base-type-original-def": "object",
+              "base-list": [
+                "object"
+              ],
+              "modifiers": "public",
+              "references": {
+                "namespace": "DemoWebApi.DemoData",
+                "assembly": "DemoWebApi.DemoData",
+                "version": "1.0.0.0"
+              },
+              "children": [
+                {
+                  "type": "declaration-node",
+                  "identifier": "Constants",
+                  "location": {
+                    "start-char-position": 31,
+                    "end-char-position": 40,
+                    "start-line-position": 223,
+                    "end-line-position": 223
+                  },
+                  "full-identifier": "DemoWebApi.DemoData.Constants",
+                  "references": {
+                    "namespace": "DemoWebApi.DemoData",
+                    "assembly": "DemoWebApi.DemoData",
+                    "version": "1.0.0.0"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "declaration-node",
+                  "identifier": "Person",
+                  "location": {
+                    "start-char-position": 36,
+                    "end-char-position": 42,
+                    "start-line-position": 227,
+                    "end-line-position": 227
+                  },
+                  "full-identifier": "DemoWebApi.DemoData.Person",
+                  "references": {
+                    "namespace": "DemoWebApi.DemoData",
+                    "assembly": "DemoWebApi.DemoData",
+                    "version": "1.0.0.0"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "namespace",
+          "identifier": "DemoWebApi.DemoData.Another",
+          "location": {
+            "start-char-position": 1,
+            "end-char-position": 2,
+            "start-line-position": 239,
+            "end-line-position": 259
+          },
+          "full-identifier": "DemoWebApi.DemoData.Another",
+          "children": [
+            {
+              "type": "declaration-node",
+              "identifier": "DemoWebApi",
+              "location": {
+                "start-char-position": 11,
+                "end-char-position": 21,
+                "start-line-position": 239,
+                "end-line-position": 239
+              },
+              "full-identifier": "DemoWebApi",
+              "references": {},
+              "children": []
+            },
+            {
+              "type": "declaration-node",
+              "identifier": "DemoData",
+              "location": {
+                "start-char-position": 22,
+                "end-char-position": 30,
+                "start-line-position": 239,
+                "end-line-position": 239
+              },
+              "full-identifier": "DemoData",
+              "references": {},
+              "children": []
+            },
+            {
+              "type": "declaration-node",
+              "identifier": "Another",
+              "location": {
+                "start-char-position": 31,
+                "end-char-position": 38,
+                "start-line-position": 239,
+                "end-line-position": 239
+              },
+              "full-identifier": "Another",
+              "references": {},
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "source-file-root",
+      "language": "C#",
+      "file-path": "Properties\\AssemblyInfo.cs",
+      "file-full-path": "D:\\Monolitic_to_Microservice\\MonoProjects\\webapiclientgenexamples\\DemoWebApi.DemoData\\Properties\\AssemblyInfo.cs",
+      "lines-of-code": 36,
+      "references": [],
+      "children": [
+        {
+          "type": "import-dependency",
+          "identifier": "System.Reflection",
+          "location": {
+            "start-char-position": 1,
+            "end-char-position": 25,
+            "start-line-position": 1,
+            "end-line-position": 1
+          },
+          "children": []
+        },
+        {
+          "type": "import-dependency",
+          "identifier": "System.Runtime.CompilerServices",
+          "location": {
+            "start-char-position": 1,
+            "end-char-position": 39,
+            "start-line-position": 2,
+            "end-line-position": 2
+          },
+          "children": []
+        },
+        {
+          "type": "import-dependency",
+          "identifier": "System.Runtime.InteropServices",
+          "location": {
+            "start-char-position": 1,
+            "end-char-position": 38,
+            "start-line-position": 3,
+            "end-line-position": 3
+          },
+          "children": []
+        }
+      ]
+    },
+    {
+      "type": "source-file-root",
+      "language": "C#",
+      "file-path": "obj\\Debug\\.NETFramework,Version=v4.8.AssemblyAttributes.cs",
+      "file-full-path": "D:\\Monolitic_to_Microservice\\MonoProjects\\webapiclientgenexamples\\DemoWebApi.DemoData\\obj\\Debug\\.NETFramework,Version=v4.8.AssemblyAttributes.cs",
+      "lines-of-code": 4,
+      "references": [],
+      "children": [
+        {
+          "type": "import-dependency",
+          "identifier": "System",
+          "location": {
+            "start-char-position": 1,
+            "end-char-position": 14,
+            "start-line-position": 2,
+            "end-line-position": 2
+          },
+          "children": []
+        },
+        {
+          "type": "import-dependency",
+          "identifier": "System.Reflection",
+          "location": {
+            "start-char-position": 1,
+            "end-char-position": 25,
+            "start-line-position": 3,
+            "end-line-position": 3
+          },
+          "children": []
+        }
+      ]
+    }
+  ],
+  "workspace-path": "D:\\Monolitic_to_Microservice\\MonoProjects\\webapiclientgenexamples\\DemoWebApi.DemoData\\DemoWebApi.DemoData.csproj",
+  "build-errors": [],
+  "project-guid": "6d93ff51-a204-5a3a-99c3-6a32bad36192",
+  "project-type": "",
+  "lines-of-code": 400
+}
