@@ -62,7 +62,7 @@ ipcMain.on('getJson', (event, { projectPath, outputPath }) => {
     new Notification({ title: 'Success', body: `Successfully executed codelyzer command` }).show();
 
 
-    const filePath = path.join(__dirname, `E-commerce.json`);
+    const filePath = path.join(__dirname, `codelyzer.json`);
     console.log("filePath : ", filePath)
     fs.readFile(filePath, 'utf-8', (err, data) => {
       if (err) {
