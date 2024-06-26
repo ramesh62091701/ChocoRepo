@@ -17,7 +17,6 @@ namespace Aspx_To_Microservice
         {
             if (this.IsDisposed || txtBELogs.IsDisposed)
             {
-                // Optionally, log this issue or handle it appropriately.
                 return;
             }
 

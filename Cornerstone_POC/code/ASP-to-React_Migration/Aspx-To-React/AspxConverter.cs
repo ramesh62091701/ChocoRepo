@@ -18,7 +18,6 @@ namespace Aspx_To_React
         {
             if (this.IsDisposed || txtLogs.IsDisposed)
             {
-                // Optionally, log this issue or handle it appropriately.
                 return;
             }
 
