@@ -15,13 +15,26 @@ namespace Aspx_To_Microservice
 
         private void UpdateLog(string message)
         {
-            if (string.IsNullOrEmpty(txtBELogs.Text))
+            if (this.IsDisposed || txtBELogs.IsDisposed)
             {
-                txtBELogs.AppendText($"\r\n{message}");
+                // Optionally, log this issue or handle it appropriately.
+                return;
+            }
+
+            if (txtBELogs.InvokeRequired)
+            {
+                txtBELogs.Invoke(new Action<string>(UpdateLog), message);
             }
             else
             {
-                txtBELogs.AppendText($"\r\n{message}");
+                if (string.IsNullOrEmpty(txtBELogs.Text))
+                {
+                    txtBELogs.AppendText($"\r\n{message}");
+                }
+                else
+                {
+                    txtBELogs.AppendText($"\r\n{message}");
+                }
             }
         }
 

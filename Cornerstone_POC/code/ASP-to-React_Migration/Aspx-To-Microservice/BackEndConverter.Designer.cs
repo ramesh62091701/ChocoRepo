@@ -47,15 +47,15 @@
             // lblSolutionPath
             // 
             lblSolutionPath.AutoSize = true;
-            lblSolutionPath.Location = new Point(239, 150);
+            lblSolutionPath.Location = new Point(67, 150);
             lblSolutionPath.Name = "lblSolutionPath";
-            lblSolutionPath.Size = new Size(119, 25);
+            lblSolutionPath.Size = new Size(123, 25);
             lblSolutionPath.TabIndex = 0;
-            lblSolutionPath.Text = "Solution path";
+            lblSolutionPath.Text = "Solution path:";
             // 
             // txtSolutionPath
             // 
-            txtSolutionPath.Location = new Point(379, 144);
+            txtSolutionPath.Location = new Point(207, 144);
             txtSolutionPath.Name = "txtSolutionPath";
             txtSolutionPath.Size = new Size(621, 31);
             txtSolutionPath.TabIndex = 1;
@@ -63,7 +63,7 @@
             // 
             // txtClassName
             // 
-            txtClassName.Location = new Point(379, 193);
+            txtClassName.Location = new Point(207, 193);
             txtClassName.Name = "txtClassName";
             txtClassName.Size = new Size(621, 31);
             txtClassName.TabIndex = 3;
@@ -72,15 +72,15 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(239, 199);
+            label1.Location = new Point(67, 199);
             label1.Name = "label1";
-            label1.Size = new Size(104, 25);
+            label1.Size = new Size(108, 25);
             label1.TabIndex = 2;
-            label1.Text = "Class Name";
+            label1.Text = "Class Name:";
             // 
             // button1
             // 
-            button1.Location = new Point(1006, 141);
+            button1.Location = new Point(834, 141);
             button1.Name = "button1";
             button1.Size = new Size(37, 34);
             button1.TabIndex = 4;
@@ -94,7 +94,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(239, 247);
+            button2.Location = new Point(63, 247);
             button2.Name = "button2";
             button2.Size = new Size(141, 34);
             button2.TabIndex = 5;
@@ -109,17 +109,17 @@
             txtBELogs.Multiline = true;
             txtBELogs.Name = "txtBELogs";
             txtBELogs.ScrollBars = ScrollBars.Vertical;
-            txtBELogs.Size = new Size(1248, 366);
+            txtBELogs.Size = new Size(1248, 453);
             txtBELogs.TabIndex = 6;
             // 
             // lblLogs
             // 
             lblLogs.AutoSize = true;
-            lblLogs.Location = new Point(58, 309);
+            lblLogs.Location = new Point(58, 306);
             lblLogs.Name = "lblLogs";
-            lblLogs.Size = new Size(50, 25);
+            lblLogs.Size = new Size(59, 25);
             lblLogs.TabIndex = 7;
-            lblLogs.Text = "Logs";
+            lblLogs.Text = "Logs: ";
             // 
             // pictureBox2
             // 

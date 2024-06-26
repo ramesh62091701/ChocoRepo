@@ -114,12 +114,12 @@ namespace Aspx_To_React
             // 
             // txtLogs
             // 
-            txtLogs.Location = new Point(28, 461);
+            txtLogs.Location = new Point(28, 431);
             txtLogs.Margin = new Padding(0);
             txtLogs.Multiline = true;
             txtLogs.Name = "txtLogs";
             txtLogs.ScrollBars = ScrollBars.Vertical;
-            txtLogs.Size = new Size(1336, 356);
+            txtLogs.Size = new Size(1307, 380);
             txtLogs.TabIndex = 5;
             // 
             // txtOutput
@@ -364,7 +364,7 @@ namespace Aspx_To_React
             PerformLayout();
         }
 
-         #endregion
+        #endregion
 
         private FolderBrowserDialog folderBrowserDialog1;
         private TextBox txtFigmaPath;

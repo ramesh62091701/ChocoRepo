@@ -16,13 +16,26 @@ namespace Aspx_To_React
 
         private void UpdateLog(string message)
         {
-            if (string.IsNullOrEmpty(txtLogs.Text))
+            if (this.IsDisposed || txtLogs.IsDisposed)
             {
-                txtLogs.AppendText($"\r\n{message}");
+                // Optionally, log this issue or handle it appropriately.
+                return;
+            }
+
+            if (txtLogs.InvokeRequired)
+            {
+                txtLogs.Invoke(new Action<string>(UpdateLog), message);
             }
             else
             {
-                txtLogs.AppendText($"\r\n{message}");
+                if (string.IsNullOrEmpty(txtLogs.Text))
+                {
+                    txtLogs.AppendText($"\r\n{message}");
+                }
+                else
+                {
+                    txtLogs.AppendText($"\r\n{message}");
+                }
             }
         }
 
