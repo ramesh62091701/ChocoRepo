@@ -49,13 +49,13 @@ ipcMain.on('getJson', (event, { projectPath, outputPath }) => {
     event.reply('fetch:json-data-response', JSON.stringify({ error: 'Invalid project file extension' }));
     return;
   }
-  const codelyzerPath = "D:\\Monolitic_to_Microservice\\codelyzer\\src\\Analysis\\Codelyzer.Analysis\\bin\\Debug\\net6.0\\Codelyzer.Analysis.exe";
+  const codelyzerPath = `"D:\\Monolitic_to_Microservice\\codelyzer\\src\\Analysis\\Codelyzer.Analysis\\bin\\Debug\\net6.0\\Codelyzer.Analysis.exe"`;
 
   const codelyzerCommand = `${codelyzerPath} ${arg} ${projectPath} -o ${__dirname}`
 
   exec(codelyzerCommand, execOptions, (error, stdout, stderr) => {
     if (error) {
-      console.error(`Error executing cd command: ${error.message}`);
+      console.error(`Error executing Codelyzer command: ${error.message}`);
       new Notification({ title: 'Error', body: `Error: ${error.message}` }).show();
       return;
     }
@@ -79,7 +79,7 @@ ipcMain.on('getJson', (event, { projectPath, outputPath }) => {
 ipcMain.on('sendController', (event, controllers) => {
   console.log("Inside service extractor exec");
   const exePath = `"D:\\Monolitic_to_Microservice\\Naveen\\poc-samples-service-extractor\\poc-samples-service-extractor\\src\\ServiceExtractor\\ServiceExtractor\\bin\\Debug\\net8.0\\Service.Extractor.Console.exe"`;
-  const jsonPath = path.join(__dirname , globalFileName+'.json');
+  const jsonPath = path.join(__dirname , 'codelyzer.json');
   console.log("jsonPath : ",jsonPath);
   //const outputPath = `"D:\\Monolitic_to_Microservice\\Naveen\\ServiceExtractor-Output"`;
 
@@ -88,10 +88,11 @@ ipcMain.on('sendController', (event, controllers) => {
     const lastWord = controller.split('\\').pop().split('.').shift();
 
     //const cdCommand = `"D:\\Monolitic_to_Microservice\\Naveen\\poc-samples-service-extractor\\poc-samples-service-extractor\\src\\ServiceExtractor\\ServiceExtractor\\bin\\Debug\\net8.0\\Service.Extractor.Console.exe" -c extract -r AccountController -j "D:\\Monolitic_to_Microservice\\codeelyzer-output\\DemoWebApi.json" -n "D:\\Monolitic_to_Microservice\\Naveen\\ServiceExtractor-Output"`
-    const command = `${exePath} -c extract -r ${lastWord} -j ${jsonPath} -n ${globalOutputPath}`
+    const command = `${exePath} -c extract -r AccountController -j "${jsonPath}" -n "${globalOutputPath}"`
+    console.log("service command : "+command);
     exec(command, (error, stdout, stderr) => {
       if (error) {
-        console.error(`Error executing cd command: ${error.message}`);
+        console.error(`Error executing Service Extractor command: ${error.message}`);
         new Notification({ title: 'Error', body: `Error: ${error.message}` }).show();
         return;
       }

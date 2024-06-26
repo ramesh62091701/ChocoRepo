@@ -1,4 +1,6 @@
-﻿namespace Aspx_To_React
+﻿using Aspx_To_React.Design;
+
+namespace Aspx_To_React
 {
     partial class AspxConverter
     {
@@ -62,7 +64,7 @@
             // 
             // txtFigmaPath
             // 
-            txtFigmaPath.Location = new Point(108, 127);
+            txtFigmaPath.Location = new Point(108, 156);
             txtFigmaPath.Name = "txtFigmaPath";
             txtFigmaPath.Size = new Size(612, 31);
             txtFigmaPath.TabIndex = 0;
@@ -70,19 +72,23 @@
             // 
             // btnConvert
             // 
-            btnConvert.BackColor = Color.FromArgb(255, 128, 0);
-            btnConvert.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btnConvert.Location = new Point(798, 239);
+            btnConvert.BackColor = Color.FromArgb(52, 152, 219);
+            btnConvert.Cursor = Cursors.Hand;
+            btnConvert.FlatAppearance.BorderSize = 0;
+            btnConvert.FlatStyle = FlatStyle.Flat;
+            btnConvert.Font = new Font("Arial", 9F, FontStyle.Bold);
+            btnConvert.ForeColor = Color.White;
+            btnConvert.Location = new Point(807, 310);
             btnConvert.Name = "btnConvert";
-            btnConvert.Size = new Size(209, 111);
-            btnConvert.TabIndex = 1;
+            btnConvert.Size = new Size(200, 80);
+            btnConvert.TabIndex = 17;
             btnConvert.Text = "Convert to HTML";
             btnConvert.UseVisualStyleBackColor = false;
             btnConvert.Click += btnConvert_Click;
             // 
             // txtAspxPath
             // 
-            txtAspxPath.Location = new Point(111, 234);
+            txtAspxPath.Location = new Point(111, 263);
             txtAspxPath.Name = "txtAspxPath";
             txtAspxPath.Size = new Size(612, 31);
             txtAspxPath.TabIndex = 2;
@@ -91,7 +97,7 @@
             // lblFigma
             // 
             lblFigma.AutoSize = true;
-            lblFigma.Location = new Point(30, 131);
+            lblFigma.Location = new Point(30, 160);
             lblFigma.Name = "lblFigma";
             lblFigma.Size = new Size(66, 25);
             lblFigma.TabIndex = 3;
@@ -100,7 +106,7 @@
             // lblAspx
             // 
             lblAspx.AutoSize = true;
-            lblAspx.Location = new Point(28, 239);
+            lblAspx.Location = new Point(28, 268);
             lblAspx.Name = "lblAspx";
             lblAspx.Size = new Size(55, 25);
             lblAspx.TabIndex = 4;
@@ -108,17 +114,17 @@
             // 
             // txtLogs
             // 
-            txtLogs.Location = new Point(28, 403);
+            txtLogs.Location = new Point(28, 461);
             txtLogs.Margin = new Padding(0);
             txtLogs.Multiline = true;
             txtLogs.Name = "txtLogs";
             txtLogs.ScrollBars = ScrollBars.Vertical;
-            txtLogs.Size = new Size(1336, 414);
+            txtLogs.Size = new Size(1336, 356);
             txtLogs.TabIndex = 5;
             // 
             // txtOutput
             // 
-            txtOutput.Location = new Point(114, 329);
+            txtOutput.Location = new Point(114, 358);
             txtOutput.Name = "txtOutput";
             txtOutput.Size = new Size(612, 31);
             txtOutput.TabIndex = 6;
@@ -127,7 +133,7 @@
             // lblOutput
             // 
             lblOutput.AutoSize = true;
-            lblOutput.Location = new Point(28, 335);
+            lblOutput.Location = new Point(28, 364);
             lblOutput.Name = "lblOutput";
             lblOutput.Size = new Size(73, 25);
             lblOutput.TabIndex = 7;
@@ -135,7 +141,7 @@
             // 
             // btnImage
             // 
-            btnImage.Location = new Point(722, 127);
+            btnImage.Location = new Point(722, 156);
             btnImage.Name = "btnImage";
             btnImage.Size = new Size(42, 34);
             btnImage.TabIndex = 8;
@@ -145,7 +151,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(725, 231);
+            button2.Location = new Point(725, 260);
             button2.Name = "button2";
             button2.Size = new Size(42, 34);
             button2.TabIndex = 9;
@@ -155,7 +161,7 @@
             // 
             // button3
             // 
-            button3.Location = new Point(729, 327);
+            button3.Location = new Point(729, 356);
             button3.Name = "button3";
             button3.Size = new Size(42, 34);
             button3.TabIndex = 10;
@@ -167,7 +173,7 @@
             // 
             radioButton1.AutoSize = true;
             radioButton1.Checked = true;
-            radioButton1.Location = new Point(32, 275);
+            radioButton1.Location = new Point(32, 304);
             radioButton1.Name = "radioButton1";
             radioButton1.Size = new Size(151, 29);
             radioButton1.TabIndex = 11;
@@ -178,7 +184,7 @@
             // radioButton2
             // 
             radioButton2.AutoSize = true;
-            radioButton2.Location = new Point(186, 275);
+            radioButton2.Location = new Point(186, 304);
             radioButton2.Name = "radioButton2";
             radioButton2.Size = new Size(205, 29);
             radioButton2.TabIndex = 12;
@@ -189,7 +195,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point);
+            label1.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
             label1.Location = new Point(576, 9);
             label1.Name = "label1";
             label1.Size = new Size(229, 48);
@@ -199,7 +205,7 @@
             // pbLogoSonata
             // 
             pbLogoSonata.ImageLocation = "images/sonata.png";
-            pbLogoSonata.Location = new Point(1151, 7);
+            pbLogoSonata.Location = new Point(1148, 9);
             pbLogoSonata.Margin = new Padding(0);
             pbLogoSonata.Name = "pbLogoSonata";
             pbLogoSonata.Size = new Size(213, 149);
@@ -223,7 +229,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(28, 370);
+            label2.Location = new Point(28, 399);
             label2.Name = "label2";
             label2.Size = new Size(54, 25);
             label2.TabIndex = 16;
@@ -280,7 +286,7 @@
             panel1.Controls.Add(lblFigmaUrl);
             panel1.Controls.Add(txtFigmaUrl);
             panel1.Controls.Add(rdbImage);
-            panel1.Location = new Point(28, 59);
+            panel1.Location = new Point(28, 88);
             panel1.Name = "panel1";
             panel1.Size = new Size(871, 150);
             panel1.TabIndex = 21;
@@ -295,12 +301,13 @@
             rdbUseBoth.TabStop = true;
             rdbUseBoth.Text = "Use both";
             rdbUseBoth.UseVisualStyleBackColor = true;
+            rdbUseBoth.Visible = false;
             rdbUseBoth.CheckedChanged += rdbUseBoth_CheckedChanged;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label3.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label3.Location = new Point(7, 0);
             label3.Name = "label3";
             label3.Size = new Size(63, 25);
@@ -309,12 +316,16 @@
             // 
             // btnConvertToReact
             // 
-            btnConvertToReact.BackColor = Color.FromArgb(255, 128, 0);
-            btnConvertToReact.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btnConvertToReact.Location = new Point(1013, 239);
+            btnConvertToReact.BackColor = Color.FromArgb(52, 152, 219);
+            btnConvertToReact.Cursor = Cursors.Hand;
+            btnConvertToReact.FlatAppearance.BorderSize = 0;
+            btnConvertToReact.FlatStyle = FlatStyle.Flat;
+            btnConvertToReact.Font = new Font("Arial", 9F, FontStyle.Bold);
+            btnConvertToReact.ForeColor = Color.White;
+            btnConvertToReact.Location = new Point(1037, 310);
             btnConvertToReact.Name = "btnConvertToReact";
-            btnConvertToReact.Size = new Size(209, 111);
-            btnConvertToReact.TabIndex = 22;
+            btnConvertToReact.Size = new Size(200, 80);
+            btnConvertToReact.TabIndex = 0;
             btnConvertToReact.Text = "Convert to React";
             btnConvertToReact.UseVisualStyleBackColor = false;
             btnConvertToReact.Click += btnConvertToReact_Click;
@@ -353,7 +364,7 @@
             PerformLayout();
         }
 
-        #endregion
+         #endregion
 
         private FolderBrowserDialog folderBrowserDialog1;
         private TextBox txtFigmaPath;
@@ -383,4 +394,6 @@
         private Button btnConvertToReact;
         private RadioButton rdbUseBoth;
     }
+
+
 }

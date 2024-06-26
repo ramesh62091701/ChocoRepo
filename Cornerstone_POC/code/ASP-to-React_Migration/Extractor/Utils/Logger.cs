@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Extractor.Model;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +11,12 @@ namespace Extractor.Utils
 {
     public static class Logger
     {
+        private static readonly string logFolder;
+        static Logger()
+        {
+            var appSettings = ConfigurationSetup.ConfigureServices().GetService<IOptions<AppSettings>>().Value;
+            logFolder = appSettings.LogFolder;
+        }
 
         public static event Action<string> LogCreated;
         public static void Log(string message)
@@ -19,9 +28,11 @@ namespace Extractor.Utils
         public static void LogToFile(string message)
         {
             
-            if (Directory.Exists(Configuration.LogFolder))
+            if (Directory.Exists(logFolder))
             {
-                var name = $"{Configuration.LogFolder}\\log_{DateTime.Now.Date.ToString("yyyy-MM-dd")}.txt";
+                var time = DateTime.Now;    
+                var name = $"{logFolder}\\log_{DateTime.Now.Date.ToString("yyyy-MM-dd")}.txt";
+                File.AppendAllText(name, time.ToString());
                 File.AppendAllText(name, message);
                 File.AppendAllText(name, Environment.NewLine + new string('-', 50) + Environment.NewLine);
             }
