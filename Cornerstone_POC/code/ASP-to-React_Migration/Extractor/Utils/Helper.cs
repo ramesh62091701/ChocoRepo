@@ -18,6 +18,15 @@ namespace Extractor.Utils
             Logger.Log("File Created in path: " + filePath);
         }
 
+        public static async Task CreateFile(string filename, string content)
+        {
+            string destinationPath = "D:\\Demo\\CSOD\\logs";
+            filename = filename + ".txt";
+            string filePath = Path.Combine(destinationPath, filename);
+            await File.WriteAllTextAsync(filePath, content);
+            Logger.Log("File created in path: " + filePath);
+        }
+
         public static string RemoveMarkupCode(string content, string codeToRemove)
         {
             var stringToRemove = "```" + codeToRemove;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './components/ControllerExtractor.css';
+import './App.css';
 
 export default function App() {
   const [jsonData, setJsonData] = useState(null);

@@ -3,12 +3,18 @@ using System.Text;
 using Extractor.Utils;
 using Extractor.Model;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Extractor.Service
 {
     public static class ComponentProcess
     {
-        public static async Task<List<FigmaComponent>> GetFigmaControls(Request request)
+        private static IServiceProvider _serviceProvider;
+        static ComponentProcess()
+        {
+            _serviceProvider = ConfigurationSetup.ConfigureServices();
+        }
+        public static async Task<List<FigmaComponent>> GetFigmaControls(UIRequest request)
         {
             if (request.IsFigmaUrlOnly)
             {
@@ -60,14 +66,15 @@ namespace Extractor.Service
         ]
 
     ";
-            var gptService = new GPTService();
+            //var gptService = new GPTService();
+            var gptService = _serviceProvider.GetService<GPTService>();
             var jsonOutput = await gptService.GetAiResponseForImage(jsonPrompt, string.Empty, Model.Constants.Model, true, request.ImagePath);
 
             string arrayJson = Helper.SelectJsonArray(jsonOutput.Message);
             List<FigmaComponent> components = JsonConvert.DeserializeObject<List<FigmaComponent>>(arrayJson);
             return components;
         }
-        public static async Task<bool> Process(Request request)
+        public static async Task<bool> Process(UIRequest request)
         {
             StringBuilder appFileHTMLBuilder = new StringBuilder();
             StringBuilder appFileImportBuilder = new StringBuilder();
@@ -137,7 +144,7 @@ namespace Extractor.Service
             return true;
         }
 
-        private static FileContent GenerateGrid(FigmaComponent dataGrid, Request request)
+        private static FileContent GenerateGrid(FigmaComponent dataGrid, UIRequest request)
         {
             string tableName = dataGrid.Name;
             string[] columnNames = dataGrid.ColumnNames.ToArray();
@@ -193,7 +200,7 @@ namespace Extractor.Service
             };
         }
 
-        private static FileContent GenerateBreadcrumb(FigmaComponent breadcrumb , Request request)
+        private static FileContent GenerateBreadcrumb(FigmaComponent breadcrumb , UIRequest request)
         {
             string type = breadcrumb.Type;
             var pathsArray = breadcrumb.Paths.ToArray(); 
@@ -229,7 +236,7 @@ namespace Extractor.Service
             };
         }
 
-        private static FileContent GenerateButtons(List<FigmaComponent> buttons , Request request)
+        private static FileContent GenerateButtons(List<FigmaComponent> buttons , UIRequest request)
         {
             string type = buttons.First().Type;
             var buttonNames = buttons.Select(b => b.Name).ToList();

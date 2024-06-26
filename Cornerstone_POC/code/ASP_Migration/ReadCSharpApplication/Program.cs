@@ -15,8 +15,9 @@ public class Program
         // To get all methods from the whole SLN
         //await GetMethodsClass.getAllMethods();
 
-        // To get all methods from a specific class.
-        await ReadCSFile.GetAllMethodsInClass("Assign"); 
+        // Reads all the method of the given class and its method dependencies and saves the code to a file.
+        await ReadCSFile2.GetAllMethodsInClass("Assign"); 
+        //await ReadCSFile.GetAllMethodsInClass("Assign"); 
     }
 
 }

@@ -1,6 +1,6 @@
 ﻿namespace Extractor.Model
 {
-    public class Request
+    public class UIRequest
     {
         public string ImagePath { get; set; }
         public string FigmaUrl { get; set; }

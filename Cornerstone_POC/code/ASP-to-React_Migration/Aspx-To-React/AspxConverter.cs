@@ -11,6 +11,7 @@ namespace Aspx_To_React
             InitializeComponent();
             SetFigmaControls();
             Logger.LogCreated += UpdateLog;
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void UpdateLog(string message)
@@ -35,7 +36,7 @@ namespace Aspx_To_React
             try
             {
                 ClearLog();
-                var request = new Request()
+                var request = new UIRequest()
                 {
                     AspxPagePath = txtAspxPath.Text,
                     ImagePath = txtFigmaPath.Text,
@@ -117,7 +118,7 @@ namespace Aspx_To_React
             try
             {
                 ClearLog();
-                var request = new Request()
+                var request = new UIRequest()
                 {
                     AspxPagePath = txtAspxPath.Text,
                     ImagePath = txtFigmaPath.Text,

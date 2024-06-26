@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP-to-React_Migration", "ASP-to-React_Migration\ASP-to-React_Migration.csproj", "{EA32890A-BE07-455E-A537-96FEF778D612}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aspx-To-React", "Aspx-To-React\Aspx-To-React.csproj", "{19AA11FA-DC48-4455-9CAF-19B9FEF58BCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspx-To-React", "Aspx-To-React\Aspx-To-React.csproj", "{19AA11FA-DC48-4455-9CAF-19B9FEF58BCB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extractor", "Extractor\Extractor.csproj", "{B14A40B3-369F-48B9-9CF3-6FEAEFA91081}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extractor", "Extractor\Extractor.csproj", "{B14A40B3-369F-48B9-9CF3-6FEAEFA91081}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Main_App", "Main_App\Main_App.csproj", "{3584CA6D-30A5-4ADF-AFB3-9315CD2AF52D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspx-To-Microservice", "Aspx-To-Microservice\Aspx-To-Microservice.csproj", "{0431C409-5E9B-40F9-B9C8-88DDC6E45266}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EA32890A-BE07-455E-A537-96FEF778D612}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EA32890A-BE07-455E-A537-96FEF778D612}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EA32890A-BE07-455E-A537-96FEF778D612}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EA32890A-BE07-455E-A537-96FEF778D612}.Release|Any CPU.Build.0 = Release|Any CPU
 		{19AA11FA-DC48-4455-9CAF-19B9FEF58BCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{19AA11FA-DC48-4455-9CAF-19B9FEF58BCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19AA11FA-DC48-4455-9CAF-19B9FEF58BCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +25,14 @@ Global
 		{B14A40B3-369F-48B9-9CF3-6FEAEFA91081}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B14A40B3-369F-48B9-9CF3-6FEAEFA91081}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B14A40B3-369F-48B9-9CF3-6FEAEFA91081}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3584CA6D-30A5-4ADF-AFB3-9315CD2AF52D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3584CA6D-30A5-4ADF-AFB3-9315CD2AF52D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3584CA6D-30A5-4ADF-AFB3-9315CD2AF52D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3584CA6D-30A5-4ADF-AFB3-9315CD2AF52D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0431C409-5E9B-40F9-B9C8-88DDC6E45266}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0431C409-5E9B-40F9-B9C8-88DDC6E45266}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0431C409-5E9B-40F9-B9C8-88DDC6E45266}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0431C409-5E9B-40F9-B9C8-88DDC6E45266}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

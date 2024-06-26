@@ -1,24 +1,35 @@
 ﻿using Extractor.Model;
 using Extractor.Service;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text.Json;
 
 namespace Extractor.Utils
 {
-    public static class FigmaHelper
+    public class FigmaHelper
     {
-        private static List<string> ContentsToRemove = new List<string>{ "id", "scrollBehavior" , "imageRef", "blendMode" , "layoutAlign" , "layoutGrow", "scaleMode" , "exportSettings", "letterSpacing", "clipsContent" , "itemSpacing", "layoutWrap" , "lineIndentations", "lineTypes", "characterStyleOverrides", "visible" , "x" ,"y" , "key"};
-        public async static Task<string> GetContents(string fileUrl)
+        private readonly string FigmaToken;
+        private static IServiceProvider _serviceProvider;
+        public FigmaHelper(IOptions<AppSettings> appSettings)
         {
-            var contents = await HttpHelper.ExecuteGet("application/json", "X-Figma-Token", Configuration.FigmaToken, fileUrl);
+            var settings = appSettings.Value;
+            FigmaToken = settings.FigmaToken;
+            _serviceProvider = ConfigurationSetup.ConfigureServices();
+        }
+
+        private static List<string> ContentsToRemove = new List<string>{ "id", "scrollBehavior" , "imageRef", "blendMode" , "layoutAlign" , "layoutGrow", "scaleMode" , "exportSettings", "letterSpacing", "clipsContent" , "itemSpacing", "layoutWrap" , "lineIndentations", "lineTypes", "characterStyleOverrides", "visible" , "x" ,"y" , "key"};
+        public async Task<string> GetContents(string fileUrl)
+        {
+            var contents = await HttpHelper.ExecuteGet("application/json", "X-Figma-Token", FigmaToken, fileUrl);
             JObject json = JObject.Parse(contents);
             //RemoveKeys(json, ContentsToRemove);
             string filteredJsonString = JsonConvert.SerializeObject(json, Formatting.Indented);
             filteredJsonString = string.Join(string.Empty, filteredJsonString.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
 
             filteredJsonString = filteredJsonString.Replace(" ", "");
-            var gptService = new GPTService();
+            var gptService = _serviceProvider.GetService<GPTService>();
             var prompt = $@"<Figma-json>{filteredJsonString}</Figma-json>
 {Constants.FigmaUrlToHTMLPrompt}";
             var response = await gptService.GetAiResponse(prompt, String.Empty, Constants.Model, true);
@@ -26,9 +37,9 @@ namespace Extractor.Utils
 
         }
 
-        public async static Task<string> GetFigmaJsonFromUrl(string fileUrl)
+        public async Task<string> GetFigmaJsonFromUrl(string fileUrl)
         {
-            var contents = await HttpHelper.ExecuteGet("application/json", "X-Figma-Token", Configuration.FigmaToken, fileUrl);
+            var contents = await HttpHelper.ExecuteGet("application/json", "X-Figma-Token", FigmaToken, fileUrl);
             string allChildrenString = string.Empty;
             List<JsonElement> allChildren = new List<JsonElement>();
             using (JsonDocument doc = JsonDocument.Parse(contents))

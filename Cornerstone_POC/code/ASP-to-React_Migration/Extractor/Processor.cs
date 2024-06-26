@@ -1,30 +1,41 @@
 ﻿using Extractor.Model;
 using Extractor.Service;
 using Extractor.Utils;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-
 
 namespace Extractor
 {
 
     public static class Processor
     {
-        private async static Task<string> GetHTMLFromFigma(Request request)
+        private static IServiceProvider _serviceProvider;
+
+        static Processor()
+        {
+            _serviceProvider = ConfigurationSetup.ConfigureServices();
+        }
+
+        private async static Task<string> GetHTMLFromFigma(UIRequest request)
         {
             if (!request.IsFigmaUrlOnly)
             {
                 Logger.Log("Processing Figma Image.");
-                var gptService = new GPTService();
+                //var gptService = new GPTService();
+                var gptService = _serviceProvider.GetService<GPTService>();
                 var htmlResponse = await gptService.GetAiResponseForImage(Constants.FigmaImageToHTMLPrompt, string.Empty, Constants.Model, true, request.ImagePath);
                 Logger.Log("Processing Completed.");
                 return htmlResponse.Message;
             }
             Logger.Log("Started executing AI request.");
             //Will not work if nodes are more.
-            return await FigmaHelper.GetContents(request.FigmaUrl);
+
+            var figmaHelper = _serviceProvider.GetService<FigmaHelper>();
+
+            return await figmaHelper.GetContents(request.FigmaUrl);
         }
 
-        private async static Task<List<AspComponent>> GetControlsFromAspx(Request request)
+        private async static Task<List<AspComponent>> GetControlsFromAspx(UIRequest request)
         {
             try
             {
@@ -33,7 +44,8 @@ namespace Extractor
                     return new List<AspComponent>();
                 }
                 var aspxContent = File.ReadAllText(request.AspxPagePath);
-                var gptService = new GPTService();
+                //var gptService = new GPTService();
+                var gptService = _serviceProvider.GetService<GPTService>();
                 var jsonResponse = await gptService.GetAiResponseForImage($"<aspx-code>{aspxContent}</aspx-code>/n${Constants.AspxCodeToJson}", string.Empty, Constants.Model, true, request.ImagePath);
                 var jsonContent = Helper.SelectJsonArray(jsonResponse.Message);
                 var controls = JsonConvert.DeserializeObject<List<AspComponent>>(jsonContent);
@@ -45,10 +57,10 @@ namespace Extractor
             }
         }
 
-        private async static Task<bool> MigrateToReactInternal(Request request)
+        private async static Task<bool> MigrateToReactInternal(UIRequest request)
         {
-            var gptService = new GPTService();
-
+            //var gptService = new GPTService();
+            var gptService = _serviceProvider.GetService<GPTService>();
             //Get HTML for Figma Image
             var htmlResponse = await GetHTMLFromFigma(request);
             var reactPrompt = @$"<HTML-Code>
@@ -115,7 +127,7 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
         }
 
 
-        public async static Task<bool> MigrateToHtml(Request request)
+        public async static Task<bool> MigrateToHtml(UIRequest request)
         {
             Logger.Log("Started processing...");
             var htmlContent = await GetHTMLFromFigma(request);
@@ -127,7 +139,7 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
         }
 
 
-        public async static Task<Components> GetControls(Request request)
+        public async static Task<Components> GetControls(UIRequest request)
         {
             Logger.Log("Started processing...");
             var response = new Components();
@@ -142,11 +154,12 @@ From above React-Code Separate the components (like Grid, Breadcrumb, etc.) from
             return response;
         }
 
-        public async static Task<bool> MigrateToReact(Request request)
+        public async static Task<bool> MigrateToReact(UIRequest request)
         {
             if ((request.IsFigmaUrlOnly || request.IsBothFigmaUrlAndImage) && request.IsCustom)
             {
-                var content = await FigmaHelper.GetFigmaJsonFromUrl(request.FigmaUrl);
+                var figmaHelper = _serviceProvider.GetService<FigmaHelper>();
+                var content = await figmaHelper.GetFigmaJsonFromUrl(request.FigmaUrl);
                 // Enrich controls fetched from Figma url json.
             }
             if (request.IsCustom)

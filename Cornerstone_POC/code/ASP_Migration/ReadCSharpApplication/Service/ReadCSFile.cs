@@ -1,11 +1,11 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.MSBuild;
+using ReadCSharpApplication.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ReadCSharpApplication.Models;
 
 namespace ReadCSharpApplication.Service
 {
@@ -13,7 +13,8 @@ namespace ReadCSharpApplication.Service
     {
         public static async Task GetAllMethodsInClass(string targetClassName)
         {
-            string solutionFilePath = @"C:\Users\m.abhishek.SONATA\Downloads\LMS\LMS\LMS.sln"; // Replace with your solution file path
+            //string solutionFilePath = @"C:\Users\m.abhishek.SONATA\Downloads\LMS\LMS\LMS.sln"; // Replace with your solution file path
+            string solutionFilePath = @"C:\Users\m.abhishek.SONATA\source\repos\Aspx_Demo\Aspx_Demo.sln";
 
             MSBuildWorkspace workspace = MSBuildWorkspace.Create();
             Solution solution = await workspace.OpenSolutionAsync(solutionFilePath);
@@ -37,10 +38,10 @@ namespace ReadCSharpApplication.Service
             foreach (Project project in solution.Projects)
             {
                 // Process only the specified project
-                if (project.Name != "LMS.Web")
-                {
-                    continue;
-                }
+                //if (project.Name != "LMS.Web")
+                //{
+                //    continue;
+                //}
 
                 Console.WriteLine($"Project: {project.Name}");
 
@@ -67,24 +68,13 @@ namespace ReadCSharpApplication.Service
                         continue;
                     }
 
-                    // Get all class declarations in the document
-                    var root = await syntaxTree.GetRootAsync() as CompilationUnitSyntax;
-                    var classDeclarations = root.DescendantNodes().OfType<ClassDeclarationSyntax>();
+                    // Find target class and its methods
+                    var methodDependencies = await GetClassMethodAndConstructorDependencies(syntaxTree, semanticModel, targetClassName);
 
-                    foreach (var classDeclaration in classDeclarations)
+                    // Print out method dependencies
+                    foreach (var dependency in methodDependencies)
                     {
-                        // Check if the class name matches the target class name
-                        if (classDeclaration.Identifier.Text == targetClassName)
-                        {
-                            // Find target class and its methods and constructors
-                            var methodDependencies = await GetClassMethodAndConstructorDependencies(syntaxTree, semanticModel, classDeclaration.Identifier.Text);
-
-                            // Print out method dependencies
-                            foreach (var dependency in methodDependencies)
-                            {
-                                Console.WriteLine($"{dependency.CallerMethod} calls {dependency.CalledMethod}");
-                            }
-                        }
+                        Console.WriteLine($"{dependency.CallerMethod} calls {dependency.CalledMethod}");
                     }
                 }
             }
@@ -110,7 +100,7 @@ namespace ReadCSharpApplication.Service
 
             if (targetClass == null)
             {
-                Console.WriteLine($"Class {targetClassName} not found.");
+                //Console.WriteLine($"Class {targetClassName} not found.");
                 return methodDependencies;
             }
 
@@ -143,7 +133,7 @@ namespace ReadCSharpApplication.Service
                             continue;
                         }
 
-                        var calledMethodName = methodSymbol.Name;
+                        var calledMethodName = methodSymbol.ToDisplayString();
 
                         methodDependencies.Add(new MethodDependency
                         {
@@ -157,4 +147,5 @@ namespace ReadCSharpApplication.Service
             return methodDependencies;
         }
     }
+
 }

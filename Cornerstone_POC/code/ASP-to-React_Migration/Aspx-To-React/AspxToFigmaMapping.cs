@@ -7,17 +7,18 @@ namespace Aspx_To_React
     public partial class AspxToFigmaMapping : Form
     {
         private int index = 1;
-        private Request request;
+        private UIRequest request;
         private List<AspComponent> aspxComponents;
         private List<FigmaComponent> figmaComponents;
         public List<MappedControl> MappedControls { get; }
         public AspxToFigmaMapping()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
             MappedControls = new List<MappedControl>();
         }
 
-        public void Initialize(Request request)
+        public void Initialize(UIRequest request)
         {
             this.request = request;
             
