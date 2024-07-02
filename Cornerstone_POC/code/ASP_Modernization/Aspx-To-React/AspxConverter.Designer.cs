@@ -1,6 +1,4 @@
-﻿using Aspx_To_React.Design;
-
-namespace Aspx_To_React
+﻿namespace Aspx_To_React
 {
     partial class AspxConverter
     {

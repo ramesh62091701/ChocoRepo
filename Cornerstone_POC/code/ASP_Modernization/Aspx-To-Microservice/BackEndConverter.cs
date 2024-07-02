@@ -61,7 +61,7 @@ namespace Aspx_To_Microservice
                 ClassName = txtClassName.Text,
             };
             await ReadCSFile.GetAllMethodsInClass(request);
-
+            Logger.Log("Process Completed");
         }
 
     }

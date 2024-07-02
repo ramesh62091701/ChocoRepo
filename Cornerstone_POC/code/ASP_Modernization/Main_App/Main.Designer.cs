@@ -36,10 +36,10 @@
             // lblTitle
             // 
             lblTitle.AutoSize = true;
-            lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTitle.Location = new Point(261, 27);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(251, 48);
+            lblTitle.Size = new Size(269, 48);
             lblTitle.TabIndex = 0;
             lblTitle.Text = "Migration Tool";
             // 
@@ -63,7 +63,7 @@
             btnBackendMigration.UseVisualStyleBackColor = true;
             btnBackendMigration.Click += btnBackendMigration_Click;
             // 
-            // Form1
+            // Main
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -71,7 +71,7 @@
             Controls.Add(btnBackendMigration);
             Controls.Add(btnUiMigration);
             Controls.Add(lblTitle);
-            Name = "Form1";
+            Name = "Main";
             Text = "Migration Tool";
             ResumeLayout(false);
             PerformLayout();
