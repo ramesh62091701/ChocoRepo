@@ -20,6 +20,9 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="command.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\App.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

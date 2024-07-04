@@ -40,14 +40,29 @@
             pictureBox2 = new PictureBox();
             pbLogoSonata = new PictureBox();
             label2 = new Label();
+            label3 = new Label();
+            rbNet6 = new RadioButton();
+            rbNet8 = new RadioButton();
+            groupBox1 = new GroupBox();
+            button3 = new Button();
+            txtOutputPath = new TextBox();
+            label5 = new Label();
+            folderBrowserDialog1 = new FolderBrowserDialog();
+            cbMultiProject = new CheckBox();
+            cbAddComments = new CheckBox();
+            cbAddUnitTest = new CheckBox();
+            cbAddDI = new CheckBox();
+            cbAddSwagger = new CheckBox();
+            cbAddAuthentication = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbLogoSonata).BeginInit();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // lblSolutionPath
             // 
             lblSolutionPath.AutoSize = true;
-            lblSolutionPath.Location = new Point(67, 150);
+            lblSolutionPath.Location = new Point(67, 135);
             lblSolutionPath.Name = "lblSolutionPath";
             lblSolutionPath.Size = new Size(123, 25);
             lblSolutionPath.TabIndex = 0;
@@ -55,7 +70,7 @@
             // 
             // txtSolutionPath
             // 
-            txtSolutionPath.Location = new Point(207, 144);
+            txtSolutionPath.Location = new Point(207, 133);
             txtSolutionPath.Name = "txtSolutionPath";
             txtSolutionPath.Size = new Size(621, 31);
             txtSolutionPath.TabIndex = 1;
@@ -63,7 +78,7 @@
             // 
             // txtClassName
             // 
-            txtClassName.Location = new Point(207, 193);
+            txtClassName.Location = new Point(207, 237);
             txtClassName.Name = "txtClassName";
             txtClassName.Size = new Size(621, 31);
             txtClassName.TabIndex = 3;
@@ -72,7 +87,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(67, 199);
+            label1.Location = new Point(67, 239);
             label1.Name = "label1";
             label1.Size = new Size(108, 25);
             label1.TabIndex = 2;
@@ -80,7 +95,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(834, 141);
+            button1.Location = new Point(834, 130);
             button1.Name = "button1";
             button1.Size = new Size(37, 34);
             button1.TabIndex = 4;
@@ -94,7 +109,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(63, 247);
+            button2.Location = new Point(66, 399);
             button2.Name = "button2";
             button2.Size = new Size(141, 34);
             button2.TabIndex = 5;
@@ -104,18 +119,18 @@
             // 
             // txtBELogs
             // 
-            txtBELogs.Location = new Point(58, 334);
+            txtBELogs.Location = new Point(58, 464);
             txtBELogs.Margin = new Padding(0);
             txtBELogs.Multiline = true;
             txtBELogs.Name = "txtBELogs";
             txtBELogs.ScrollBars = ScrollBars.Vertical;
-            txtBELogs.Size = new Size(1248, 453);
+            txtBELogs.Size = new Size(1248, 284);
             txtBELogs.TabIndex = 6;
             // 
             // lblLogs
             // 
             lblLogs.AutoSize = true;
-            lblLogs.Location = new Point(58, 306);
+            lblLogs.Location = new Point(62, 436);
             lblLogs.Name = "lblLogs";
             lblLogs.Size = new Size(59, 25);
             lblLogs.TabIndex = 7;
@@ -145,17 +160,156 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(465, 43);
+            label2.Location = new Point(530, 43);
             label2.Name = "label2";
-            label2.Size = new Size(379, 48);
+            label2.Size = new Size(252, 48);
             label2.TabIndex = 18;
-            label2.Text = "ASPX to Microservice";
+            label2.Text = "Legacy2Micro";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(67, 294);
+            label3.Name = "label3";
+            label3.Size = new Size(104, 25);
+            label3.TabIndex = 19;
+            label3.Text = "Framework:";
+            // 
+            // rbNet6
+            // 
+            rbNet6.AutoSize = true;
+            rbNet6.Location = new Point(27, 14);
+            rbNet6.Name = "rbNet6";
+            rbNet6.Size = new Size(82, 29);
+            rbNet6.TabIndex = 20;
+            rbNet6.Text = ".NET6";
+            rbNet6.UseVisualStyleBackColor = true;
+            // 
+            // rbNet8
+            // 
+            rbNet8.AutoSize = true;
+            rbNet8.Checked = true;
+            rbNet8.Location = new Point(188, 13);
+            rbNet8.Name = "rbNet8";
+            rbNet8.Size = new Size(82, 29);
+            rbNet8.TabIndex = 21;
+            rbNet8.TabStop = true;
+            rbNet8.Text = ".NET8";
+            rbNet8.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(rbNet8);
+            groupBox1.Controls.Add(rbNet6);
+            groupBox1.Location = new Point(207, 277);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(621, 47);
+            groupBox1.TabIndex = 25;
+            groupBox1.TabStop = false;
+            // 
+            // button3
+            // 
+            button3.Location = new Point(834, 180);
+            button3.Name = "button3";
+            button3.Size = new Size(37, 34);
+            button3.TabIndex = 29;
+            button3.Text = "...";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
+            // 
+            // txtOutputPath
+            // 
+            txtOutputPath.Location = new Point(207, 183);
+            txtOutputPath.Name = "txtOutputPath";
+            txtOutputPath.Size = new Size(621, 31);
+            txtOutputPath.TabIndex = 28;
+            txtOutputPath.Text = "D:\\Demo\\CSOD\\Projects";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(67, 185);
+            label5.Name = "label5";
+            label5.Size = new Size(114, 25);
+            label5.TabIndex = 27;
+            label5.Text = "Output path:";
+            // 
+            // cbMultiProject
+            // 
+            cbMultiProject.AutoSize = true;
+            cbMultiProject.Location = new Point(67, 345);
+            cbMultiProject.Name = "cbMultiProject";
+            cbMultiProject.Size = new Size(161, 29);
+            cbMultiProject.TabIndex = 30;
+            cbMultiProject.Text = "Multiple Project";
+            cbMultiProject.UseVisualStyleBackColor = true;
+            // 
+            // cbAddComments
+            // 
+            cbAddComments.AutoSize = true;
+            cbAddComments.Location = new Point(264, 345);
+            cbAddComments.Name = "cbAddComments";
+            cbAddComments.Size = new Size(164, 29);
+            cbAddComments.TabIndex = 31;
+            cbAddComments.Text = "Add Comments";
+            cbAddComments.UseVisualStyleBackColor = true;
+            // 
+            // cbAddUnitTest
+            // 
+            cbAddUnitTest.AutoSize = true;
+            cbAddUnitTest.Location = new Point(465, 345);
+            cbAddUnitTest.Name = "cbAddUnitTest";
+            cbAddUnitTest.Size = new Size(144, 29);
+            cbAddUnitTest.TabIndex = 32;
+            cbAddUnitTest.Text = "Add Unit Test";
+            cbAddUnitTest.UseVisualStyleBackColor = true;
+            // 
+            // cbAddDI
+            // 
+            cbAddDI.AutoSize = true;
+            cbAddDI.Location = new Point(644, 345);
+            cbAddDI.Name = "cbAddDI";
+            cbAddDI.Size = new Size(95, 29);
+            cbAddDI.TabIndex = 33;
+            cbAddDI.Text = "Add DI";
+            cbAddDI.UseVisualStyleBackColor = true;
+            // 
+            // cbAddSwagger
+            // 
+            cbAddSwagger.AutoSize = true;
+            cbAddSwagger.Location = new Point(772, 345);
+            cbAddSwagger.Name = "cbAddSwagger";
+            cbAddSwagger.Size = new Size(146, 29);
+            cbAddSwagger.TabIndex = 34;
+            cbAddSwagger.Text = "Add Swagger";
+            cbAddSwagger.UseVisualStyleBackColor = true;
+            // 
+            // cbAddAuthentication
+            // 
+            cbAddAuthentication.AutoSize = true;
+            cbAddAuthentication.Location = new Point(939, 345);
+            cbAddAuthentication.Name = "cbAddAuthentication";
+            cbAddAuthentication.Size = new Size(192, 29);
+            cbAddAuthentication.TabIndex = 35;
+            cbAddAuthentication.Text = "Add Authentication";
+            cbAddAuthentication.UseVisualStyleBackColor = true;
             // 
             // BackEndConverter
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1370, 839);
+            Controls.Add(cbAddAuthentication);
+            Controls.Add(cbAddSwagger);
+            Controls.Add(cbAddDI);
+            Controls.Add(cbAddUnitTest);
+            Controls.Add(cbAddComments);
+            Controls.Add(cbMultiProject);
+            Controls.Add(button3);
+            Controls.Add(txtOutputPath);
+            Controls.Add(label5);
+            Controls.Add(groupBox1);
+            Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(pbLogoSonata);
             Controls.Add(pictureBox2);
@@ -171,6 +325,8 @@
             Text = "Aspx to Microservice";
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbLogoSonata).EndInit();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -189,5 +345,19 @@
         private PictureBox pictureBox2;
         private PictureBox pbLogoSonata;
         private Label label2;
+        private Label label3;
+        private RadioButton rbNet6;
+        private RadioButton rbNet8;
+        private GroupBox groupBox1;
+        private Button button3;
+        private TextBox txtOutputPath;
+        private Label label5;
+        private FolderBrowserDialog folderBrowserDialog1;
+        private CheckBox cbMultiProject;
+        private CheckBox cbAddComments;
+        private CheckBox cbAddUnitTest;
+        private CheckBox cbAddDI;
+        private CheckBox cbAddSwagger;
+        private CheckBox cbAddAuthentication;
     }
 }

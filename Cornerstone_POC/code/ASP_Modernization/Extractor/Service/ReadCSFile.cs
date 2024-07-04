@@ -3,11 +3,20 @@ using Extractor.Utils;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.MSBuild;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using System.Diagnostics;
+using System.Linq;
 
 namespace Extractor.Service
 {
     public static class ReadCSFile
     {
+        private static IServiceProvider _serviceProvider;
+        static ReadCSFile()
+        {
+            _serviceProvider = ConfigurationSetup.ConfigureServices();
+        }
         public static async Task GetAllMethodsInClass(BERequest request)
         {
             string solutionFilePath = request.SolutionPath;
@@ -56,7 +65,7 @@ namespace Extractor.Service
                         continue;
                     }
 
-                    var methodDependencies = await GetClassMethodAndConstructorDependencies(solution, project, document, syntaxTree, semanticModel, request.ClassName, methodCodes);
+                    var methodDependencies = await GetClassMethodAndConstructorDependencies(solution, project, document, syntaxTree, semanticModel, request.ClassName, methodCodes , request);
 
                     foreach (var dependency in methodDependencies)
                     {
@@ -66,7 +75,7 @@ namespace Extractor.Service
             }
         }
 
-        private static async Task<List<MethodDependency>> GetClassMethodAndConstructorDependencies(Solution solution, Project project, Document document, SyntaxTree syntaxTree, SemanticModel semanticModel, string targetClassName, Dictionary<string, string> methodCodes)
+        private static async Task<List<MethodDependency>> GetClassMethodAndConstructorDependencies(Solution solution, Project project, Document document, SyntaxTree syntaxTree, SemanticModel semanticModel, string targetClassName, Dictionary<string, string> methodCodes , BERequest request)
         {
             var methodDependencies = new List<MethodDependency>();
 
@@ -90,6 +99,9 @@ namespace Extractor.Service
             var methodsAndConstructors = targetClass.DescendantNodes()
                 .Where(node => node is MethodDeclarationSyntax || node is ConstructorDeclarationSyntax);
 
+            var gptService = _serviceProvider.GetService<GPTService>();
+            var codeResponses = new List<string>();
+            string addComments = string.Empty;
             foreach (var member in methodsAndConstructors)
             {
                 var methodSymbol = semanticModel.GetDeclaredSymbol(member) as IMethodSymbol;
@@ -107,14 +119,32 @@ namespace Extractor.Service
                 }
                 string content = string.Join(Environment.NewLine, methodCodes.Values);
                 string fileName = targetClassName + "." + methodSymbol.MetadataName.ToString();
-                await Helper.CreateFile(fileName, content);
+                //await Helper.CreateFile(fileName, content);
                 methodCodes.Clear();
 
-                //Call AI here with the above content.
+                
+                if (request.AddComments)
+                {
+                    addComments = Constants.AddComments; 
+                }
 
-
+                //Call AI here with the above content.   
+                var multiProjectCodePrompt = $"<Methods-Chain>\n{content}\n</Methods-Chain> \n {Constants.AspxBackendPrompt}\n{addComments}";
+                var multiProjectCodeResponse = await gptService.GetAiResponse(multiProjectCodePrompt, Constants.BackendSysPrompt, Constants.Model, true);
+                codeResponses.Add(multiProjectCodeResponse.Message);
+                if (request.MultipleProject)
+                {
+                    ExtractContentAndRunCommand(multiProjectCodeResponse.Message , fileName , request);
+                }
+                
             }
-
+            string allResponses = string.Join(Environment.NewLine, codeResponses);
+            if (!string.IsNullOrEmpty(allResponses) && (!request.MultipleProject))
+            {
+                var codePrompt = $"<Multiple-JSONS>\n{allResponses}\n</Multiple-JSONS> \n {Constants.AspxSingleProjectBackendPrompt}\n{addComments}";
+                var codeResponse = await gptService.GetAiResponse(codePrompt, string.Empty, Constants.Model, true);
+                ExtractContentAndRunCommand(codeResponse.Message , "APIService" , request);
+            }
             return methodDependencies;
         }
 
@@ -182,6 +212,88 @@ namespace Extractor.Service
             return solution.Projects.Any(p => p.AssemblyName == containingAssembly.Name);
         }
 
+        private static string ExtractContentAndRunCommand(string response , string fileName, BERequest request)
+        {
+            string jsonArray = Helper.SelectJsonArray(response);
+            List<FileContent> rootObjects = JsonConvert.DeserializeObject<List<FileContent>>(jsonArray)!;
+            string bffServiceCode = null;
+            string controllerCode = null;
+            string dataServiceCode = null;
+            string dataRepositoryCode = null;
+
+            foreach (var fileContent in rootObjects)
+            {
+                switch (fileContent.FileName)
+                {
+                    case "BFFService":
+                        bffServiceCode = fileContent.Content;
+                        break;
+                    case "Controller":
+                        controllerCode = fileContent.Content;
+                        break;
+                    case "DataService":
+                        dataServiceCode = fileContent.Content;
+                        break;
+                    case "DataRepository":
+                        dataRepositoryCode = fileContent.Content;
+                        break;
+                    default:
+                        Console.WriteLine($"Unexpected filename: {fileContent.FileName}");
+                        break;
+                }
+            }
+
+
+            string commandFilePath = "./command.ps1";
+            string template = File.ReadAllText(commandFilePath);
+            template = template.Replace("$$BFFSERVICECODE$$", bffServiceCode)
+                               .Replace("$$CONTROLLERCODE$$", controllerCode)
+                               .Replace("$$DATASERVICECODE$$", dataServiceCode)
+                               .Replace("$$DATAREPOSITORYCODE$$", dataRepositoryCode)
+                               .Replace("$$FILENAME$$" , fileName)
+                               .Replace("$$FRAMEWORK$$" , request.Framework)
+                               .Replace("$$OUTPUTPATH$$" , request.OutputPath);
+
+            string tempScriptFilePath = Path.Combine(Path.GetTempPath(), "temp_script.ps1");
+            File.WriteAllText(tempScriptFilePath, template);
+            string cmdArguments = $"/c powershell.exe -File \"{tempScriptFilePath}\"";
+            ProcessStartInfo psi = new ProcessStartInfo("cmd.exe", cmdArguments)
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+            };
+
+            using (Process process = Process.Start(psi))
+            {
+                if (process != null)
+                {
+                    string output = process.StandardOutput.ReadToEnd();
+                    string error = process.StandardError.ReadToEnd();
+
+                    Console.WriteLine($"Output: {output}");
+                    Console.WriteLine($"Error: {error}");
+
+                    process.WaitForExit();
+                }
+            }
+
+            // Delete the temporary script file after execution
+            File.Delete(tempScriptFilePath);
+            Logger.Log($"Project with name {fileName} is created in path {request.OutputPath}");
+            return string.Empty;
+        }
+
+
+        private static string EscapeCode(string code)
+        {
+            if (code == null)
+                return "";
+
+            // Escape special characters and newlines
+            return code.Replace("\t", "\\t").Replace("\"", "\\\"");
+        }
 
     }
 }

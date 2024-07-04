@@ -37,17 +37,17 @@
             // 
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTitle.Location = new Point(261, 27);
+            lblTitle.Location = new Point(201, 40);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(269, 48);
+            lblTitle.Size = new Size(349, 48);
             lblTitle.TabIndex = 0;
-            lblTitle.Text = "Migration Tool";
+            lblTitle.Text = "Modernization Tool";
             // 
             // btnUiMigration
             // 
             btnUiMigration.Location = new Point(172, 185);
             btnUiMigration.Name = "btnUiMigration";
-            btnUiMigration.Size = new Size(169, 34);
+            btnUiMigration.Size = new Size(169, 40);
             btnUiMigration.TabIndex = 1;
             btnUiMigration.Text = "UI Migration";
             btnUiMigration.UseVisualStyleBackColor = true;
@@ -57,7 +57,7 @@
             // 
             btnBackendMigration.Location = new Point(390, 185);
             btnBackendMigration.Name = "btnBackendMigration";
-            btnBackendMigration.Size = new Size(178, 34);
+            btnBackendMigration.Size = new Size(178, 40);
             btnBackendMigration.TabIndex = 2;
             btnBackendMigration.Text = "Backend Migration";
             btnBackendMigration.UseVisualStyleBackColor = true;

@@ -54,15 +54,29 @@ namespace Aspx_To_Microservice
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            ClearLog();
+            string framework = rbNet6.Checked ? "net6.0" : "net8.0";
+
             var request = new BERequest()
             {
                 SolutionPath = txtSolutionPath.Text,
+                OutputPath = txtOutputPath.Text,
                 ClassName = txtClassName.Text,
+                Framework = framework,
+                MultipleProject = cbMultiProject.Checked ? true : false,
+                AddComments = cbAddComments.Checked ? true : false,
             };
+
             await ReadCSFile.GetAllMethodsInClass(request);
             Logger.Log("Process Completed");
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            var result = folderBrowserDialog1.ShowDialog(this);
+            if (result == DialogResult.OK)
+            {
+                txtOutputPath.Text = folderBrowserDialog1.SelectedPath;
+            }
+        }
     }
 }
