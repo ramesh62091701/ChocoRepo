@@ -10,5 +10,6 @@ namespace Extractor.Model
         public string Framework { get; set; }
         public Boolean MultipleProject {  get; set; }
         public Boolean AddComments { get; set; }
+        public Boolean Swagger { get; set; }
     }
 }

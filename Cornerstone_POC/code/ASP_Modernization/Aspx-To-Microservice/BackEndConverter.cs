@@ -64,6 +64,7 @@ namespace Aspx_To_Microservice
                 Framework = framework,
                 MultipleProject = cbMultiProject.Checked ? true : false,
                 AddComments = cbAddComments.Checked ? true : false,
+                Swagger = cbAddSwagger.Checked ? true : false,
             };
 
             await ReadCSFile.GetAllMethodsInClass(request);

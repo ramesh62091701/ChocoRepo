@@ -89,7 +89,28 @@ Ensure that the migration maintains the integrity of the original business logic
 
         public const string BackendSysPrompt = "You are expert in migrating older version code to newer version. Here you are migrating aspx.cs which is monolithic code to  microservice with API.";
 
-        public const string AspxSingleProjectBackendPrompt = "Read and understand all the provided JSON objects. Then, merge the contents of all these JSON objects into a single JSON object.";
+        public const string AspxSingleProjectBackendPrompt = @"Read and understand all the provided JSON objects. Then merge the contents of all these JSON objects into a single JSON object.
+Points to follow while merging the content:
+1. Generate only JSON data without any explanation.
+2. Use the specified JSON format for the response:
+[
+    {
+        ""filename"" : ""BFFService"" ,
+        ""content"" : ""// Its code""
+    },
+    {
+        ""filename"" : ""Controller"" ,
+        ""content"" : ""// Its code""
+    },
+    {
+        ""filename"" : ""DataService"" ,
+        ""content"" : ""// Its code""
+    },
+    {
+        ""filename"" : ""DataRepository"" ,
+        ""content"" : ""// Its code""
+    }
+]";
 
         public static string AddComments = "Also add comments on the method level on the code for better understanding of the code.";
     }

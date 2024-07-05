@@ -51,9 +51,9 @@
             cbMultiProject = new CheckBox();
             cbAddComments = new CheckBox();
             cbAddUnitTest = new CheckBox();
-            cbAddDI = new CheckBox();
             cbAddSwagger = new CheckBox();
             cbAddAuthentication = new CheckBox();
+            cbEntityFramework = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbLogoSonata).BeginInit();
             groupBox1.SuspendLayout();
@@ -109,12 +109,18 @@
             // 
             // button2
             // 
-            button2.Location = new Point(66, 399);
+            button2.BackColor = Color.FromArgb(52, 152, 219);
+            button2.Cursor = Cursors.Hand;
+            button2.FlatAppearance.BorderSize = 0;
+            button2.FlatStyle = FlatStyle.Flat;
+            button2.Font = new Font("Arial", 9F, FontStyle.Bold);
+            button2.ForeColor = Color.White;
+            button2.Location = new Point(915, 345);
             button2.Name = "button2";
-            button2.Size = new Size(141, 34);
-            button2.TabIndex = 5;
-            button2.Text = "Get Methods";
-            button2.UseVisualStyleBackColor = true;
+            button2.Size = new Size(200, 80);
+            button2.TabIndex = 17;
+            button2.Text = "Generate";
+            button2.UseVisualStyleBackColor = false;
             button2.Click += button2_Click;
             // 
             // txtBELogs
@@ -247,61 +253,61 @@
             // cbAddComments
             // 
             cbAddComments.AutoSize = true;
-            cbAddComments.Location = new Point(264, 345);
+            cbAddComments.Location = new Point(254, 345);
             cbAddComments.Name = "cbAddComments";
-            cbAddComments.Size = new Size(164, 29);
+            cbAddComments.Size = new Size(125, 29);
             cbAddComments.TabIndex = 31;
-            cbAddComments.Text = "Add Comments";
+            cbAddComments.Text = "Comments";
             cbAddComments.UseVisualStyleBackColor = true;
             // 
             // cbAddUnitTest
             // 
             cbAddUnitTest.AutoSize = true;
-            cbAddUnitTest.Location = new Point(465, 345);
+            cbAddUnitTest.Location = new Point(759, 345);
             cbAddUnitTest.Name = "cbAddUnitTest";
-            cbAddUnitTest.Size = new Size(144, 29);
+            cbAddUnitTest.Size = new Size(105, 29);
             cbAddUnitTest.TabIndex = 32;
-            cbAddUnitTest.Text = "Add Unit Test";
+            cbAddUnitTest.Text = "Unit Test";
             cbAddUnitTest.UseVisualStyleBackColor = true;
-            // 
-            // cbAddDI
-            // 
-            cbAddDI.AutoSize = true;
-            cbAddDI.Location = new Point(644, 345);
-            cbAddDI.Name = "cbAddDI";
-            cbAddDI.Size = new Size(95, 29);
-            cbAddDI.TabIndex = 33;
-            cbAddDI.Text = "Add DI";
-            cbAddDI.UseVisualStyleBackColor = true;
             // 
             // cbAddSwagger
             // 
             cbAddSwagger.AutoSize = true;
-            cbAddSwagger.Location = new Point(772, 345);
+            cbAddSwagger.Location = new Point(409, 345);
             cbAddSwagger.Name = "cbAddSwagger";
-            cbAddSwagger.Size = new Size(146, 29);
+            cbAddSwagger.Size = new Size(107, 29);
             cbAddSwagger.TabIndex = 34;
-            cbAddSwagger.Text = "Add Swagger";
+            cbAddSwagger.Text = "Swagger";
             cbAddSwagger.UseVisualStyleBackColor = true;
             // 
             // cbAddAuthentication
             // 
             cbAddAuthentication.AutoSize = true;
-            cbAddAuthentication.Location = new Point(939, 345);
+            cbAddAuthentication.Location = new Point(67, 385);
             cbAddAuthentication.Name = "cbAddAuthentication";
-            cbAddAuthentication.Size = new Size(192, 29);
+            cbAddAuthentication.Size = new Size(153, 29);
             cbAddAuthentication.TabIndex = 35;
-            cbAddAuthentication.Text = "Add Authentication";
+            cbAddAuthentication.Text = "Authentication";
             cbAddAuthentication.UseVisualStyleBackColor = true;
+            // 
+            // cbEntityFramework
+            // 
+            cbEntityFramework.AutoSize = true;
+            cbEntityFramework.Location = new Point(544, 345);
+            cbEntityFramework.Name = "cbEntityFramework";
+            cbEntityFramework.Size = new Size(175, 29);
+            cbEntityFramework.TabIndex = 36;
+            cbEntityFramework.Text = "Entity Framework";
+            cbEntityFramework.UseVisualStyleBackColor = true;
             // 
             // BackEndConverter
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1370, 839);
+            Controls.Add(cbEntityFramework);
             Controls.Add(cbAddAuthentication);
             Controls.Add(cbAddSwagger);
-            Controls.Add(cbAddDI);
             Controls.Add(cbAddUnitTest);
             Controls.Add(cbAddComments);
             Controls.Add(cbMultiProject);
@@ -322,7 +328,7 @@
             Controls.Add(txtSolutionPath);
             Controls.Add(lblSolutionPath);
             Name = "BackEndConverter";
-            Text = "Aspx to Microservice";
+            Text = "Legacy2Micro Assistant";
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbLogoSonata).EndInit();
             groupBox1.ResumeLayout(false);
@@ -356,8 +362,8 @@
         private CheckBox cbMultiProject;
         private CheckBox cbAddComments;
         private CheckBox cbAddUnitTest;
-        private CheckBox cbAddDI;
         private CheckBox cbAddSwagger;
         private CheckBox cbAddAuthentication;
+        private CheckBox cbEntityFramework;
     }
 }
