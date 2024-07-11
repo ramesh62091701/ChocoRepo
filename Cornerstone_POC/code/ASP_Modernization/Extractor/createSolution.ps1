@@ -2,7 +2,7 @@
 
 # Define the output directory and solution name
 $outputDir = "$$OUTPUTPATH$$"
-$solutionName = "MySolution"
+$solutionName = "$$SOLUTIONNAME$$"
 
 # Create the solution file
 cd $outputDir

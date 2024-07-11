@@ -148,7 +148,8 @@ namespace Extractor.Service
                     string commandFilePath = "./createSolution.ps1";
                     string template = File.ReadAllText(commandFilePath);
                     string tempScriptFilePath = Path.Combine(Path.GetTempPath(), "temp_script.ps1");
-                    template = template.Replace("$$OUTPUTPATH$$", request.OutputPath+"/"+request.ClassName);
+                    template = template.Replace("$$OUTPUTPATH$$", request.OutputPath+"/"+request.ClassName)
+                                        .Replace("$$SOLUTIONNAME$$" , request.ClassName);
                     File.WriteAllText(tempScriptFilePath, template);
                     ExecuteScript(tempScriptFilePath, "SLN_File", request);
                     return methodDependencies;

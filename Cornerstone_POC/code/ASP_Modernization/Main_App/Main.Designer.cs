@@ -29,8 +29,12 @@
         private void InitializeComponent()
         {
             lblTitle = new Label();
-            btnUiMigration = new Button();
-            btnBackendMigration = new Button();
+            pictureBox1 = new PictureBox();
+            pictureBox2 = new PictureBox();
+            label1 = new Label();
+            label2 = new Label();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             SuspendLayout();
             // 
             // lblTitle
@@ -43,36 +47,62 @@
             lblTitle.TabIndex = 0;
             lblTitle.Text = "Modernization Tool";
             // 
-            // btnUiMigration
+            // pictureBox1
             // 
-            btnUiMigration.Location = new Point(172, 185);
-            btnUiMigration.Name = "btnUiMigration";
-            btnUiMigration.Size = new Size(169, 40);
-            btnUiMigration.TabIndex = 1;
-            btnUiMigration.Text = "UI Migration";
-            btnUiMigration.UseVisualStyleBackColor = true;
-            btnUiMigration.Click += btnUiMigration_Click;
+            pictureBox1.Cursor = Cursors.Hand;
+            pictureBox1.ImageLocation = "images/ux.png";
+            pictureBox1.Location = new Point(98, 135);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(184, 152);
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox1.TabIndex = 3;
+            pictureBox1.TabStop = false;
+            pictureBox1.Click += pictureBox1_Click;
             // 
-            // btnBackendMigration
+            // pictureBox2
             // 
-            btnBackendMigration.Location = new Point(390, 185);
-            btnBackendMigration.Name = "btnBackendMigration";
-            btnBackendMigration.Size = new Size(178, 40);
-            btnBackendMigration.TabIndex = 2;
-            btnBackendMigration.Text = "Backend Migration";
-            btnBackendMigration.UseVisualStyleBackColor = true;
-            btnBackendMigration.Click += btnBackendMigration_Click;
+            pictureBox2.Cursor = Cursors.Hand;
+            pictureBox2.ImageLocation = "images/backend.png";
+            pictureBox2.Location = new Point(472, 135);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(178, 152);
+            pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox2.TabIndex = 4;
+            pictureBox2.TabStop = false;
+            pictureBox2.Click += pictureBox2_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(132, 300);
+            label1.Name = "label1";
+            label1.Size = new Size(111, 25);
+            label1.TabIndex = 5;
+            label1.Text = "UI Migration";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(484, 300);
+            label2.Name = "label2";
+            label2.Size = new Size(160, 25);
+            label2.TabIndex = 6;
+            label2.Text = "Backend Migration";
             // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(btnBackendMigration);
-            Controls.Add(btnUiMigration);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(pictureBox2);
+            Controls.Add(pictureBox1);
             Controls.Add(lblTitle);
             Name = "Main";
             Text = "Migration Tool";
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -80,7 +110,9 @@
         #endregion
 
         private Label lblTitle;
-        private Button btnUiMigration;
-        private Button btnBackendMigration;
+        private PictureBox pictureBox1;
+        private PictureBox pictureBox2;
+        private Label label1;
+        private Label label2;
     }
 }
