@@ -41,11 +41,11 @@
             // 
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTitle.Location = new Point(201, 40);
+            lblTitle.Location = new Point(116, 41);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(349, 48);
+            lblTitle.Size = new Size(523, 48);
             lblTitle.TabIndex = 0;
-            lblTitle.Text = "Modernization Tool";
+            lblTitle.Text = "WebForm Modernization Tool";
             // 
             // pictureBox1
             // 
@@ -74,20 +74,20 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(132, 300);
+            label1.Location = new Point(113, 293);
             label1.Name = "label1";
-            label1.Size = new Size(111, 25);
+            label1.Size = new Size(149, 25);
             label1.TabIndex = 5;
-            label1.Text = "UI Migration";
+            label1.Text = "UI Modernization";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(484, 300);
+            label2.Location = new Point(463, 295);
             label2.Name = "label2";
-            label2.Size = new Size(160, 25);
+            label2.Size = new Size(198, 25);
             label2.TabIndex = 6;
-            label2.Text = "Backend Migration";
+            label2.Text = "Backend Modernization";
             // 
             // Main
             // 
@@ -100,7 +100,7 @@
             Controls.Add(pictureBox1);
             Controls.Add(lblTitle);
             Name = "Main";
-            Text = "Migration Tool";
+            Text = "Modernization Tool";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ResumeLayout(false);

@@ -89,9 +89,9 @@
             label1.AutoSize = true;
             label1.Location = new Point(67, 239);
             label1.Name = "label1";
-            label1.Size = new Size(108, 25);
+            label1.Size = new Size(97, 25);
             label1.TabIndex = 2;
-            label1.Text = "Class Name:";
+            label1.Text = "Aspx class:";
             // 
             // button1
             // 
@@ -111,7 +111,8 @@
             // 
             button2.BackColor = Color.FromArgb(52, 152, 219);
             button2.Cursor = Cursors.Hand;
-            button2.FlatAppearance.BorderSize = 0;
+            button2.FlatAppearance.BorderSize = 2; // Set border size
+            button2.FlatAppearance.BorderColor = Color.Black;
             button2.FlatStyle = FlatStyle.Flat;
             button2.Font = new Font("Arial", 9F, FontStyle.Bold);
             button2.ForeColor = Color.White;
@@ -263,7 +264,7 @@
             // cbAddUnitTest
             // 
             cbAddUnitTest.AutoSize = true;
-            cbAddUnitTest.Location = new Point(759, 345);
+            cbAddUnitTest.Location = new Point(254, 385);
             cbAddUnitTest.Name = "cbAddUnitTest";
             cbAddUnitTest.Size = new Size(105, 29);
             cbAddUnitTest.TabIndex = 32;
@@ -295,9 +296,9 @@
             cbEntityFramework.AutoSize = true;
             cbEntityFramework.Location = new Point(544, 345);
             cbEntityFramework.Name = "cbEntityFramework";
-            cbEntityFramework.Size = new Size(175, 29);
+            cbEntityFramework.Size = new Size(287, 29);
             cbEntityFramework.TabIndex = 36;
-            cbEntityFramework.Text = "Entity Framework";
+            cbEntityFramework.Text = "SQL Query to Entity Framework";
             cbEntityFramework.UseVisualStyleBackColor = true;
             // 
             // BackEndConverter

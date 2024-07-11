@@ -72,7 +72,8 @@
             // 
             btnConvert.BackColor = Color.FromArgb(52, 152, 219);
             btnConvert.Cursor = Cursors.Hand;
-            btnConvert.FlatAppearance.BorderSize = 0;
+            btnConvert.FlatAppearance.BorderSize = 2;
+            btnConvert.FlatAppearance.BorderColor = Color.Black;
             btnConvert.FlatStyle = FlatStyle.Flat;
             btnConvert.Font = new Font("Arial", 9F, FontStyle.Bold);
             btnConvert.ForeColor = Color.White;
@@ -316,7 +317,8 @@
             // 
             btnConvertToReact.BackColor = Color.FromArgb(52, 152, 219);
             btnConvertToReact.Cursor = Cursors.Hand;
-            btnConvertToReact.FlatAppearance.BorderSize = 0;
+            btnConvertToReact.FlatAppearance.BorderSize = 1; 
+            btnConvertToReact.FlatAppearance.BorderColor = Color.Black;
             btnConvertToReact.FlatStyle = FlatStyle.Flat;
             btnConvertToReact.Font = new Font("Arial", 9F, FontStyle.Bold);
             btnConvertToReact.ForeColor = Color.White;
