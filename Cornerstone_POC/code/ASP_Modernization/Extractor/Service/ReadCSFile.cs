@@ -6,7 +6,6 @@ using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using System.Linq;
 
 namespace Extractor.Service
 {
@@ -48,7 +47,6 @@ namespace Extractor.Service
                 foreach (Document document in project.Documents)
                 {
                     //Logger.Log($"  Document: {document.Name}");
-
                     SyntaxTree syntaxTree = await document.GetSyntaxTreeAsync();
 
                     if (syntaxTree == null)
@@ -222,29 +220,24 @@ namespace Extractor.Service
         {
             string jsonArray = Helper.SelectJsonArray(response);
             List<FileContent> rootObjects = JsonConvert.DeserializeObject<List<FileContent>>(jsonArray)!;
-            string bffServiceCode = null;
-            string controllerCode = null;
-            string dataServiceCode = null;
-            string dataRepositoryCode = null;
-
             foreach (var fileContent in rootObjects)
             {
                 switch (fileContent.FileName)
                 {
                     case "BFFService":
-                        bffServiceCode = fileContent.Content;
+                        string bffServiceCode = fileContent.Content;
                         CreateAndExecuteScript(request, bffServiceCode, fileContent);
                         break;
                     case "Controller":
-                        controllerCode = fileContent.Content;
+                        string controllerCode = fileContent.Content;
                         CreateAndExecuteScript(request, controllerCode, fileContent);
                         break;
                     case "DataService":
-                        dataServiceCode = fileContent.Content;
+                        string dataServiceCode = fileContent.Content;
                         CreateAndExecuteScript(request, dataServiceCode, fileContent);
                         break;
                     case "DataRepository":
-                        dataRepositoryCode = fileContent.Content;
+                        string dataRepositoryCode = fileContent.Content;
                         CreateAndExecuteScript(request, dataRepositoryCode, fileContent);
                         break;
                     default:
