@@ -56,6 +56,20 @@
       "defaultValue": "// Add your Data Service code here",
       "replaces": "$$DataService$$"
     },
+    "DbContext": {
+      "type": "parameter",
+      "description": "Custom code for Data Service",
+      "datatype": "text",
+      "defaultValue": "// Add your Data Service code here",
+      "replaces": "$$DbContext$$"
+    },
+    "DbSet": {
+      "type": "parameter",
+      "description": "Custom code for Data Service",
+      "datatype": "text",
+      "defaultValue": "// Add your Data Service code here",
+      "replaces": "$$DbSet$$"
+    },
     "EnableSwaggerSupport":{
       "type": "parameter",
       "description": "Enable Swagger",
@@ -106,35 +120,35 @@
         },
         {
           "condition": "BFF_Folder",
-          "include": "**/CornerStone.BFF/**"
+          "include": "**/APITemplate.BFF/**"
         },
         {
           "condition": "!BFF_Folder",
-          "exclude": "**/CornerStone.BFF/**"
+          "exclude": "**/APITemplate.BFF/**"
         },
         {
           "condition": "Controller_Folder",
-          "include": "**/CornerStone.Controllers/**"
+          "include": "**/APITemplate.Controllers/**"
         },
         {
           "condition": "!Controller_Folder",
-          "exclude": "**/CornerStone.Controllers/**"
+          "exclude": "**/APITemplate.Controllers/**"
         },
         {
           "condition": "DataRepo_Folder",
-          "include": "**/CornerStone.DataRepo/**"
+          "include": "**/APITemplate.DataRepo/**"
         },
         {
           "condition": "!DataRepo_Folder",
-          "exclude": "**/CornerStone.DataRepo/**"
+          "exclude": "**/APITemplate.DataRepo/**"
         },
         {
           "condition": "DataService_Folder",
-          "include": "**/CornerStone.DataServices/**"
+          "include": "**/APITemplate.DataServices/**"
         },
         {
           "condition": "!DataService_Folder",
-          "exclude": "**/CornerStone.DataServices/**"
+          "exclude": "**/APITemplate.DataServices/**"
         }
       ]
     }

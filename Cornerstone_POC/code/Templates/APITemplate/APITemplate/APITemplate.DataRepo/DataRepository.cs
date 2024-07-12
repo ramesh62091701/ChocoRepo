@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using APITemplate.DbContexts;
 
-namespace CornerStone.BFF
+namespace APITemplate.DataRepo
 {
-    $$BFFService$$
+    $$DataRepo$$
 }

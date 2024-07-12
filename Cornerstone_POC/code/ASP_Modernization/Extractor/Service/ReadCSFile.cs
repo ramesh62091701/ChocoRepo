@@ -64,7 +64,9 @@ namespace Extractor.Service
                     }
 
                     var methodDependencies = await GetClassMethodAndConstructorDependencies(solution, project, document, syntaxTree, semanticModel, request.ClassName, methodCodes , request);
-
+                    
+                    //Uncomment below code to print all methods in the solution
+                    
                     //foreach (var dependency in methodDependencies)
                     //{
                     //    Logger.Log($"{dependency.CallerMethod} ---> {dependency.CalledMethod}");
@@ -119,6 +121,7 @@ namespace Extractor.Service
                 string content = string.Join(Environment.NewLine, methodCodes.Values);
                 fileName = targetClassName + "." + methodSymbol.MetadataName.ToString();
                 Logger.Log($"Reading method {fileName}");
+                //Uncomment this code to save complete method chain to a file.
                 //await Helper.CreateFile(fileName, content);
                 methodCodes.Clear();
 
@@ -167,6 +170,9 @@ namespace Extractor.Service
             string controllerCode = null;
             string dataServiceCode = null;
             string dataRepositoryCode = null;
+            string dbContextCode = null;
+            string dbSetCode = null;
+
 
             foreach (var fileContent in rootObjects)
             {
@@ -184,6 +190,12 @@ namespace Extractor.Service
                     case "DataRepository":
                         dataRepositoryCode = fileContent.Content;
                         break;
+                    case "DbContext":
+                        dbContextCode = fileContent.Content;
+                        break;
+                    case "DbSet":
+                        dbSetCode = fileContent.Content;
+                        break;
                     default:
                         Console.WriteLine($"Unexpected filename: {fileContent.FileName}");
                         break;
@@ -195,12 +207,14 @@ namespace Extractor.Service
                 swagger = "--EnableSwaggerSupport \"true\"";
             }
 
-            string commandFilePath = "./api-command.ps1";
+            string commandFilePath = "./Scripts/create_api_template.ps1";
             string template = File.ReadAllText(commandFilePath);
             template = template.Replace("$$BFFSERVICECODE$$", bffServiceCode)
                                .Replace("$$CONTROLLERCODE$$", controllerCode)
                                .Replace("$$DATASERVICECODE$$", dataServiceCode)
                                .Replace("$$DATAREPOSITORYCODE$$", dataRepositoryCode)
+                               .Replace("$$DBCONTEXTCODE$$", dbContextCode)
+                               .Replace("$$DBSETCODE$$", dbSetCode)
                                .Replace("$$FILENAME$$" , fileName)
                                .Replace("$$FRAMEWORK$$" , request.Framework)
                                .Replace("$$OUTPUTPATH$$" , request.OutputPath+"/"+request.ClassName)
@@ -240,6 +254,14 @@ namespace Extractor.Service
                         string dataRepositoryCode = fileContent.Content;
                         CreateAndExecuteScript(request, dataRepositoryCode, fileContent);
                         break;
+                    case "DbContext":
+                        string dbContextCode = fileContent.Content;
+                        CreateAndExecuteScript(request, dbContextCode, fileContent);
+                        break;
+                    case "DbSet":
+                        string dbSetCode = fileContent.Content;
+                        CreateAndExecuteScript(request, dbSetCode, fileContent);
+                        break;
                     default:
                         Console.WriteLine($"Unexpected filename: {fileContent.FileName}");
                         break;
@@ -264,7 +286,7 @@ namespace Extractor.Service
             }
 
             string fileName = fileContent.FileName;
-            string commandFilePath = "./command.ps1";
+            string commandFilePath = "./Scripts/create_classlibrary_template.ps1";
             string template = File.ReadAllText(commandFilePath);
             template = template.Replace("$$SERVICECODE$$", serviceCode)
                                .Replace("$$FILENAME$$", fileName)

@@ -23,11 +23,22 @@ $dataRepositoryCode = @"
 $$DATAREPOSITORYCODE$$
 "@
 
+$dbContextCode = @"
+$$DBCONTEXTCODE$$
+"@
+
+$dbSetCode = @"
+$$DBSETCODE$$
+"@
+
 # Escape newlines and special characters
 $bffServiceCodeEscaped = $bffServiceCode -replace "`t", "\\t" -replace '"', '\"'
 $controllerCodeEscaped = $controllerCode -replace "`t", "\\t" -replace '"', '\"'
 $dataServiceCodeEscaped = $dataServiceCode -replace "`t", "\\t" -replace '"', '\"'
 $dataRepositoryCodeEscaped = $dataRepositoryCode -replace "`t", "\\t" -replace '"', '\"'
+$dbContextCodeEscaped = $dbContextCode -replace "`t", "\\t" -replace '"', '\"'
+$dbSetCodeEscaped = $dbSetCode -replace "`t", "\\t" -replace '"', '\"'
+
 
 # Run the dotnet new command using the escaped code
 cd $outputDir
@@ -37,6 +48,8 @@ dotnet new apicustomtemplate -o "$$FILENAME$$" `
     --Service "$controllerCodeEscaped" `
     --DataService "$dataServiceCodeEscaped" `
     --DataRepository "$dataRepositoryCodeEscaped" `
+    --DbContext "$dbContextCodeEscaped" `
+    --DbSet "$dbSetCodeEscaped" `
     --Framework "$$FRAMEWORK$$" `
     --BFF_Folder "true" `
     --Controller_Folder "true" `

@@ -1,0 +1,4 @@
+﻿namespace APITemplate.DbContexts
+{
+    $$DbSet$$
+}

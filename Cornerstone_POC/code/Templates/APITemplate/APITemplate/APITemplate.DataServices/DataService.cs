@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using APITemplate.DataRepo;
 
-namespace CornerStone.DataServices
+namespace APITemplate.DataServices
 {
     $$DataService$$
 }

@@ -57,15 +57,18 @@ Understand the above code which is inside <Methods-Chain>, which is method call 
 
 Points to follow while migrating the code:
 1. Change the SQL connection if exists to Entity Framework.
-2. Generate only code,  do not generate 'startup' or other supportive classes. Focus only on the core functionality files.
+2. Generate only code, do not generate 'startup' or other supportive classes. Focus only on the core functionality files.
 3. Do not generate code like namespaces and imports statements like 'using'.
-4. If there are double quotes inside a code, add a escape character before the quotes. 
+4. If there are double quotes inside a code, add a escape character before the quotes.
+5. Do not add try catch block to the code.
 
 Files to be created:
 1. Create a API Controller.
 2. Create a BFF(Backend For Frontend) file as BFFService.
 3. Create a DataService Class which should contains the Business logic of the code.
 4. Create a DataRepo Class which calls the Database.
+5. Create a DbContext Class which is called by DataRepo class.
+6. Create a DbSet Class which is called by DbContext class.
 
 Ensure that the migration maintains the integrity of the original business logic and functionality with below json format.
 [
@@ -83,6 +86,14 @@ Ensure that the migration maintains the integrity of the original business logic
     },
     {
         ""filename"" : ""DataRepository"" ,
+        ""content"" : ""// Its code""
+    },
+    
+        ""filename"" : ""DbContext"" ,
+        ""content"" : ""// Its code""
+    },
+    {
+        ""filename"" : ""DbSet"" ,
         ""content"" : ""// Its code""
     }
 ]";
@@ -109,9 +120,25 @@ Points to follow while merging the content:
     {
         ""filename"" : ""DataRepository"" ,
         ""content"" : ""// Its code""
+    },
+    {
+        ""filename"" : ""DbContext"" ,
+        ""content"" : ""// Its code""
+    },
+    {
+        ""filename"" : ""DbSet"" ,
+        ""content"" : ""// Its code""
     }
 ]";
 
-        public static string AddComments = "Also add comments on the method level on the code for better understanding of the code.";
+        public static string AddComments = @"Also add comments on the method level on the code for better
+understanding of the code. Use the below format for comments.
+/// <summary>
+///  
+/// </summary>
+/// <param name=""userName""></param>
+/// <param name=""userId""></param>
+/// <returns></returns>";
+
     }
 }
