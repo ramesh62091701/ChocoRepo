@@ -6,13 +6,14 @@ using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Net;
 
 namespace Extractor.Service
 {
-    public static class ReadCSFile
+    public static class BackendProcess
     {
         private static IServiceProvider _serviceProvider;
-        static ReadCSFile()
+        static BackendProcess()
         {
             _serviceProvider = ConfigurationSetup.ConfigureServices();
         }
@@ -140,19 +141,15 @@ namespace Extractor.Service
             string allResponses = string.Join(Environment.NewLine, codeResponses);
             if (!string.IsNullOrEmpty(allResponses))
             {
+                Logger.Log("Creating Project");
                 var codePrompt = $"<Multiple-JSONS>\n{allResponses}\n</Multiple-JSONS> \n {Constants.AspxSingleProjectBackendPrompt}\n{addComments}";
                 var codeResponse = await gptService.GetAiResponse(codePrompt, string.Empty, Constants.Model, true);
 
                 if (request.MultipleProject)
                 {
                     CreateMultipleProject(codeResponse.Message , fileName, request);
-                    string commandFilePath = "./createSolution.ps1";
-                    string template = File.ReadAllText(commandFilePath);
-                    string tempScriptFilePath = Path.Combine(Path.GetTempPath(), "temp_script.ps1");
-                    template = template.Replace("$$OUTPUTPATH$$", request.OutputPath+"/"+request.ClassName)
-                                        .Replace("$$SOLUTIONNAME$$" , request.ClassName);
-                    File.WriteAllText(tempScriptFilePath, template);
-                    ExecuteScript(tempScriptFilePath, "SLN_File", request);
+                    string outputPath = Path.Join(request.OutputPath, request.ClassName + "MultiProject");
+                    CreateSolutionFile(request , outputPath);
                     return methodDependencies;
                 }
                 CreateSingleProject(codeResponse.Message , "APIService" , request);
@@ -162,16 +159,17 @@ namespace Extractor.Service
         }
 
 
-        private static string CreateSingleProject(string response , string fileName, BERequest request)
+        private static string CreateSingleProject(string response , string projectName, BERequest request)
         {
             string jsonArray = Helper.SelectJsonArray(response);
-            List<FileContent> rootObjects = JsonConvert.DeserializeObject<List<FileContent>>(jsonArray)!;
+            List<FileTypeAndContent> rootObjects = JsonConvert.DeserializeObject<List<FileTypeAndContent>>(jsonArray)!;
             string bffServiceCode = null;
             string controllerCode = null;
             string dataServiceCode = null;
             string dataRepositoryCode = null;
             string dbContextCode = null;
             string dbSetCode = null;
+            string ibffServiceCode = null;
 
 
             foreach (var fileContent in rootObjects)
@@ -207,7 +205,7 @@ namespace Extractor.Service
                 swagger = "--EnableSwaggerSupport \"true\"";
             }
 
-            string commandFilePath = "./Scripts/create_api_template.ps1";
+            string commandFilePath = "./Scripts_Templates/create_api_ps.template";
             string template = File.ReadAllText(commandFilePath);
             template = template.Replace("$$BFFSERVICECODE$$", bffServiceCode)
                                .Replace("$$CONTROLLERCODE$$", controllerCode)
@@ -215,20 +213,52 @@ namespace Extractor.Service
                                .Replace("$$DATAREPOSITORYCODE$$", dataRepositoryCode)
                                .Replace("$$DBCONTEXTCODE$$", dbContextCode)
                                .Replace("$$DBSETCODE$$", dbSetCode)
-                               .Replace("$$FILENAME$$" , fileName)
+                               //.Replace("$$IBFFSERVICECODE$$", ibffServiceCode)
+                               .Replace("$$FILENAME$$" , projectName)
                                .Replace("$$FRAMEWORK$$" , request.Framework)
                                .Replace("$$OUTPUTPATH$$" , request.OutputPath+"/"+request.ClassName)
                                .Replace("**ENABLESWAGGER**" , swagger);
 
             string tempScriptFilePath = Path.Combine(Path.GetTempPath(), "temp_script.ps1");
             File.WriteAllText(tempScriptFilePath, template);
-            ExecuteScript(tempScriptFilePath, fileName, request);
+            ExecuteScript(tempScriptFilePath, projectName, request);
+            foreach (var fileContent in rootObjects)
+            {
+                if (fileContent.Type == "Interface")
+                {
+                    var interfaceCode = fileContent.Content;
+                    CreateInterface(request, projectName, interfaceCode, fileContent.FileName);
+                }
+            }
+            string outputPath = Path.Join(request.OutputPath, request.ClassName);
+            CreateSolutionFile(request, outputPath);
             return string.Empty;
         }
 
 
         
+        private static string CreateInterface(BERequest request , string projectName, string interfaceCode, string fileName)
+        {
+            string templatePath = "./Templates/Interface.template";
+            string outputPath = Path.Combine(request.OutputPath, request.ClassName, "Interfaces", $"{fileName}.cs");
+            string templateContent = File.ReadAllText(templatePath);
+            string finalContent = templateContent.Replace("$$InterfaceCode$$", interfaceCode)
+                                                   .Replace("$$FileName$$", projectName);
+            File.WriteAllText(outputPath, finalContent);
+            return string.Empty ;
+        }
 
+        private static Boolean CreateSolutionFile(BERequest request, string outputPath)
+        {
+            string commandFilePath = "./Scripts_Templates/create_solution_ps.template";
+            string template = File.ReadAllText(commandFilePath);
+            string tempScriptFilePath2 = Path.Combine(Path.GetTempPath(), "temp_script.ps1");
+            template = template.Replace("$$OUTPUTPATH$$", outputPath)
+                                .Replace("$$SOLUTIONNAME$$", request.ClassName);
+            File.WriteAllText(tempScriptFilePath2, template);
+            ExecuteScript(tempScriptFilePath2, "SLN_File", request);
+            return true;
+        }
 
         private static string CreateMultipleProject(string response, string fileName, BERequest request)
         {
@@ -271,6 +301,17 @@ namespace Extractor.Service
             return string.Empty;
         }
 
+        private static string CreateDataRepoClasses(BERequest request, string projectName, string interfaceCode, string fileName)
+        {
+            string templatePath = "./Templates/Interface.template";
+            string outputPath = Path.Combine(request.OutputPath, request.ClassName, "Interfaces", $"{fileName}.cs");
+            string templateContent = File.ReadAllText(templatePath);
+            string finalContent = templateContent.Replace("$$InterfaceCode$$", interfaceCode)
+                                                   .Replace("$$FileName$$", projectName);
+            File.WriteAllText(outputPath, finalContent);
+            return string.Empty;
+        }
+
         public static string CreateAndExecuteScript(BERequest request, string serviceCode , FileContent fileContent)
         {
             string swagger = string.Empty;
@@ -286,12 +327,12 @@ namespace Extractor.Service
             }
 
             string fileName = fileContent.FileName;
-            string commandFilePath = "./Scripts/create_classlibrary_template.ps1";
+            string commandFilePath = "./Scripts_Templates/create_classlibrary_ps.template";
             string template = File.ReadAllText(commandFilePath);
             template = template.Replace("$$SERVICECODE$$", serviceCode)
                                .Replace("$$FILENAME$$", fileName)
                                .Replace("$$FRAMEWORK$$", request.Framework)
-                               .Replace("$$OUTPUTPATH$$", request.OutputPath + "/" + request.ClassName)
+                               .Replace("$$OUTPUTPATH$$", request.OutputPath + "/" + request.ClassName+"MultiProject")
                                .Replace("$$PROJECTTEMPLATE$$" , projectTemplate)
                                .Replace("**ENABLESWAGGER**", swagger);
 
@@ -317,12 +358,6 @@ namespace Extractor.Service
             {
                 if (process != null)
                 {
-                    string output = process.StandardOutput.ReadToEnd();
-                    string error = process.StandardError.ReadToEnd();
-
-                    Console.WriteLine($"Output: {output}");
-                    Console.WriteLine($"Error: {error}");
-
                     process.WaitForExit();
                 }
             }

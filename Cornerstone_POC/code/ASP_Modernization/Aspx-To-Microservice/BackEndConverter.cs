@@ -67,7 +67,7 @@ namespace Aspx_To_Microservice
                 Swagger = cbAddSwagger.Checked ? true : false,
             };
 
-            await ReadCSFile.GetAllMethodsInClass(request);
+            await BackendProcess.GetAllMethodsInClass(request);
             Logger.Log("Process Completed");
         }
 

@@ -73,26 +73,32 @@ Files to be created:
 Ensure that the migration maintains the integrity of the original business logic and functionality with below json format.
 [
     {
+        ""type"" : ""Class""
         ""filename"" : ""BFFService"" ,
         ""content"" : ""// Its code""
     },
     {
+        ""type"" : ""Class""
         ""filename"" : ""Controller"" ,
         ""content"" : ""// Its code""
     },
     {
+        ""type"" : ""Class""
         ""filename"" : ""DataService"" ,
         ""content"" : ""// Its code""
     },
     {
+        ""type"" : ""Class""
         ""filename"" : ""DataRepository"" ,
         ""content"" : ""// Its code""
     },
-    
+    {
+        ""type"" : ""Class""
         ""filename"" : ""DbContext"" ,
         ""content"" : ""// Its code""
     },
     {
+        ""type"" : ""Class""
         ""filename"" : ""DbSet"" ,
         ""content"" : ""// Its code""
     }
@@ -102,30 +108,42 @@ Ensure that the migration maintains the integrity of the original business logic
 
         public const string AspxSingleProjectBackendPrompt = @"Read and understand all the provided JSON objects. Then merge the contents of all these JSON objects into a single JSON object.
 Points to follow while merging the content:
-1. Generate only JSON data without any explanation.
-2. Use the specified JSON format for the response:
+1. Create a interfaces and implement in required class.
+2. Generate only JSON data without any explanation.
+3. Use the specified JSON format for the response:
 [
     {
+        ""type"" : ""Class""
         ""filename"" : ""BFFService"" ,
         ""content"" : ""// Its code""
     },
     {
+        ""type"" : ""Interface""
+        ""filename"" : ""IBFFService"" ,
+        ""content"" : ""// Its code""
+    },
+    {
+        ""type"" : ""Class""
         ""filename"" : ""Controller"" ,
         ""content"" : ""// Its code""
     },
     {
+        ""type"" : ""Class""
         ""filename"" : ""DataService"" ,
         ""content"" : ""// Its code""
     },
     {
+        ""type"" : ""Class""
         ""filename"" : ""DataRepository"" ,
         ""content"" : ""// Its code""
     },
     {
+        ""type"" : ""Class""
         ""filename"" : ""DbContext"" ,
         ""content"" : ""// Its code""
     },
     {
+        ""type"" : ""Class""
         ""filename"" : ""DbSet"" ,
         ""content"" : ""// Its code""
     }

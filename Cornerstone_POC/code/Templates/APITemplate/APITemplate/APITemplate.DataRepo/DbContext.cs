@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace APITemplate.DbContexts
+namespace APITemplate.DataRepo
 {
     $$DbContext$$
 }

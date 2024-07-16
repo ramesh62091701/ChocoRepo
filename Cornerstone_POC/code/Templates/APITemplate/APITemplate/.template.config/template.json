@@ -35,6 +35,13 @@
       "defaultValue": "// Add your BFF Service code here",
       "replaces": "$$BFFService$$"
     },
+    "IBFFService": {
+      "type": "parameter",
+      "description": "Custom code for IBFFService",
+      "datatype": "text",
+      "defaultValue": "// Add your IBFFService code here",
+      "replaces": "$$IBFFService$$"
+    },
     "Service": {
       "type": "parameter",
       "description": "Custom code for Controller Service",

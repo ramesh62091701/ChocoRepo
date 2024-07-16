@@ -1,6 +1,17 @@
+using APITemplate.BFF;
+using APITemplate.DataRepo;
+using APITemplate.DataServices;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<IBFFService , BFFService>();
+builder.Services.AddScoped<IDataRepository, DataRepository>();
+builder.Services.AddScoped<IDataService, DataService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

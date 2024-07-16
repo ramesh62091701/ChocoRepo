@@ -31,6 +31,10 @@ $dbSetCode = @"
 $$DBSETCODE$$
 "@
 
+$ibffServiceCode = @"
+$$IBFFSERVICECODE$$
+"@
+
 # Escape newlines and special characters
 $bffServiceCodeEscaped = $bffServiceCode -replace "`t", "\\t" -replace '"', '\"'
 $controllerCodeEscaped = $controllerCode -replace "`t", "\\t" -replace '"', '\"'
@@ -38,6 +42,7 @@ $dataServiceCodeEscaped = $dataServiceCode -replace "`t", "\\t" -replace '"', '\
 $dataRepositoryCodeEscaped = $dataRepositoryCode -replace "`t", "\\t" -replace '"', '\"'
 $dbContextCodeEscaped = $dbContextCode -replace "`t", "\\t" -replace '"', '\"'
 $dbSetCodeEscaped = $dbSetCode -replace "`t", "\\t" -replace '"', '\"'
+$ibffServiceCodeEscaped = $ibffServiceCode -replace "`t", "\\t" -replace '"', '\"'
 
 
 # Run the dotnet new command using the escaped code
@@ -56,5 +61,8 @@ dotnet new apicustomtemplate -o "$$FILENAME$$" `
     --DataRepo_Folder "true" `
     --DataService_Folder "true" `
     **ENABLESWAGGER**
+
+dotnet new interfacecustomtemplate -o "Interfaces" `
+    --Framework "$$FRAMEWORK$$" 
 
 Write-Host "The placeholder replacement and template creation process is complete."

@@ -1,0 +1,4 @@
+﻿namespace APITemplate.DataRepo
+{
+    $$DbSet$$
+}
