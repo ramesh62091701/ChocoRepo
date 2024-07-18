@@ -11,4 +11,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
   </ItemGroup>
 
+	<ItemGroup>
+		<ProjectReference Include="..\Interfaces\Interfaces.csproj" />
+		<ProjectReference Include="..\BFFService\BFFService.csproj" />
+		<ProjectReference Include="..\Controller\Controller.csproj" />
+		<ProjectReference Include="..\DataRepository\DataRepository.csproj" />
+		<ProjectReference Include="..\DataService\DataService.csproj" />
+	</ItemGroup>
+
 </Project>

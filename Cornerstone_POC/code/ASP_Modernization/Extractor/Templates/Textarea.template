@@ -1,6 +1,7 @@
 ﻿import { TextField } from "@flare/primitives/textbox";
 import React from "react";
 import { useLocalizationsDefaults } from "@flare/primitives/core-ui";
+import '../Component.css';
 
 interface Props {
     inputComment: string | undefined;

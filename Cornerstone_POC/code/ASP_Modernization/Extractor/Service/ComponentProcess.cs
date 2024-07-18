@@ -79,6 +79,8 @@ namespace Extractor.Service
             StringBuilder appFileHTMLBuilder = new StringBuilder();
             StringBuilder appFileImportBuilder = new StringBuilder();
             List<FigmaComponent> buttons = new List<FigmaComponent>();
+            var customComponentsPath = Path.Join(request.OutputPath, "custom_components" , "components");
+            var customOutputPath = Path.Join(request.OutputPath, "custom_components");
             foreach (var component in request.Components.FigmaComponents)
             {
                 switch (component.Type)
@@ -86,8 +88,8 @@ namespace Extractor.Service
                     case "DataGrid":
                         var gridTemplate = GenerateGrid(component, request);
                         appFileHTMLBuilder.AppendLine($"<{gridTemplate.FileName}\nselected={{selected}}\n/>");
-                        appFileImportBuilder.AppendLine($"import {{ {gridTemplate.FileName} }} from \"components/{gridTemplate.FileName}\"; ");
-                        Helper.CreateFile(request.OutputPath, gridTemplate.FileName + ".tsx", gridTemplate.Content);
+                        appFileImportBuilder.AppendLine($"import {{ {gridTemplate.FileName} }} from \"./components/{gridTemplate.FileName}\"; ");
+                        Helper.CreateFile(customComponentsPath, gridTemplate.FileName + ".tsx", gridTemplate.Content);
                         break;
 
                     case "TextArea":
@@ -95,8 +97,8 @@ namespace Extractor.Service
                         {
                             var textAreaTemplate = GenerateTextArea(component);
                             appFileHTMLBuilder.AppendLine($"<{textAreaTemplate.FileName}\ninputcomment={{inputComment}}\n/>");
-                            appFileImportBuilder.AppendLine($"import {{ {textAreaTemplate.FileName} }} from \"components/{textAreaTemplate.FileName}\"; ");
-                            Helper.CreateFile(request.OutputPath, textAreaTemplate.FileName + ".tsx", textAreaTemplate.Content);
+                            appFileImportBuilder.AppendLine($"import {{ {textAreaTemplate.FileName} }} from \"./components/{textAreaTemplate.FileName}\"; ");
+                            Helper.CreateFile(customComponentsPath, textAreaTemplate.FileName + ".tsx", textAreaTemplate.Content);
                         }
                         break;
 
@@ -105,8 +107,8 @@ namespace Extractor.Service
                         {
                             var datePickerTemplate = GenerateDatePicker(component);
                             appFileHTMLBuilder.AppendLine($"<{datePickerTemplate.FileName}\ndatevalue={{dateValue}}\n/>");
-                            appFileImportBuilder.AppendLine($"import {{ {datePickerTemplate.FileName} }} from \"components/{datePickerTemplate.FileName}\"; ");
-                            Helper.CreateFile(request.OutputPath, datePickerTemplate.FileName + ".tsx", datePickerTemplate.Content);
+                            appFileImportBuilder.AppendLine($"import {{ {datePickerTemplate.FileName} }} from \"./components/{datePickerTemplate.FileName}\"; ");
+                            Helper.CreateFile(customComponentsPath, datePickerTemplate.FileName + ".tsx", datePickerTemplate.Content);
                         }
                         break;
 
@@ -116,8 +118,8 @@ namespace Extractor.Service
                 $"{declaredVariable.Name.ToLower()}={{{declaredVariable.Name}}}\n"));
                         appFileHTMLBuilder.AppendLine($"<{breadcrumbTemplate.FileName}\n");
                         appFileHTMLBuilder.AppendLine($"{variablesString}\n/>");
-                        appFileImportBuilder.AppendLine($"import {{ {breadcrumbTemplate.FileName} }} from \"components/{breadcrumbTemplate.FileName}\"; ");
-                        Helper.CreateFile(request.OutputPath, breadcrumbTemplate.FileName + ".tsx", breadcrumbTemplate.Content);
+                        appFileImportBuilder.AppendLine($"import {{ {breadcrumbTemplate.FileName} }} from \"./components/{breadcrumbTemplate.FileName}\"; ");
+                        Helper.CreateFile(customComponentsPath, breadcrumbTemplate.FileName + ".tsx", breadcrumbTemplate.Content);
                         break;
 
                     case "Button":
@@ -132,15 +134,19 @@ namespace Extractor.Service
             {
                 var buttonTemplate = GenerateButtons(buttons, request);
                 appFileHTMLBuilder.AppendLine($"<{buttonTemplate.FileName}\ncurrentpage={{currentPage}}\nisdisabled={{isDisabled}}\n/>");
-                appFileImportBuilder.AppendLine($"import {{ {buttonTemplate.FileName} }} from \"components/{buttonTemplate.FileName}\"; ");
-                Helper.CreateFile(request.OutputPath, buttonTemplate.FileName + ".tsx", buttonTemplate.Content);
+                appFileImportBuilder.AppendLine($"import {{ {buttonTemplate.FileName} }} from \"./components/{buttonTemplate.FileName}\"; ");
+                Helper.CreateFile(customComponentsPath, buttonTemplate.FileName + ".tsx", buttonTemplate.Content);
             }
 
             string templateFilePath = "./Templates/App.template";
             string template = File.ReadAllText(templateFilePath);
             template = template.Replace("$$Components$$", appFileHTMLBuilder.ToString())
                 .Replace("$$ImportComponents$$", appFileImportBuilder.ToString());
-            Helper.CreateFile(request.OutputPath, "App.tsx", template);
+            Helper.CreateFile(customOutputPath, "App.tsx", template);
+
+            string cssTemplatePath = "./Templates/CSS.template";
+            string cssTemplate = File.ReadAllText(cssTemplatePath);
+            Helper.CreateFile(customOutputPath, "Component.css", cssTemplate);
             return true;
         }
 

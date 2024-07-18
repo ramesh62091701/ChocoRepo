@@ -4,6 +4,7 @@
 } from "@flare/primitives/breadcrumbs";
 import { useLocalizationsDefaults } from "@flare/primitives/core-ui";
 import React from "react";
+import '../Component.css';
 
 const $$ComponentName$$Container = ({
     $$Parameters$$

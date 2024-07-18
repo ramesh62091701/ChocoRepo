@@ -1,0 +1,15 @@
+# Define the output directory
+$outputDir = "$$OUTPUTPATH$$"
+
+# Create the output directory if it doesn't exist
+if (-Not (Test-Path $outputDir)) {
+    New-Item -ItemType Directory -Path $outputDir
+}
+
+# Run the dotnet new command using the escaped code
+cd $outputDir
+
+dotnet new interfacecustomtemplate -o "Interfaces" `
+    --Framework "$$FRAMEWORK$$" 
+
+Write-Host "The placeholder replacement and template creation process is complete."

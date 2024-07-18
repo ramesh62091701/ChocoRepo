@@ -205,7 +205,7 @@ namespace Extractor.Service
                 swagger = "--EnableSwaggerSupport \"true\"";
             }
 
-            string commandFilePath = "./Scripts_Templates/create_api_ps.template";
+            string commandFilePath = "./Backend-Templates/Scripts-Templates/create_api_ps.template";
             string template = File.ReadAllText(commandFilePath);
             template = template.Replace("$$BFFSERVICECODE$$", bffServiceCode)
                                .Replace("$$CONTROLLERCODE$$", controllerCode)
@@ -227,7 +227,8 @@ namespace Extractor.Service
                 if (fileContent.Type == "Interface")
                 {
                     var interfaceCode = fileContent.Content;
-                    CreateInterface(request, projectName, interfaceCode, fileContent.FileName);
+                    var interfaceOutputPath = Path.Combine(request.OutputPath, request.ClassName, "Interfaces", $"{fileContent.FileName}.cs");
+                    CreateInterface(request, interfaceCode, fileContent.FileName , interfaceOutputPath);
                 }
             }
             string outputPath = Path.Join(request.OutputPath, request.ClassName);
@@ -237,20 +238,18 @@ namespace Extractor.Service
 
 
         
-        private static string CreateInterface(BERequest request , string projectName, string interfaceCode, string fileName)
+        private static string CreateInterface(BERequest request , string interfaceCode, string fileName , string outputPath)
         {
-            string templatePath = "./Templates/Interface.template";
-            string outputPath = Path.Combine(request.OutputPath, request.ClassName, "Interfaces", $"{fileName}.cs");
+            string templatePath = "../Backend-Templates/Interface.template";
             string templateContent = File.ReadAllText(templatePath);
-            string finalContent = templateContent.Replace("$$InterfaceCode$$", interfaceCode)
-                                                   .Replace("$$FileName$$", projectName);
+            string finalContent = templateContent.Replace("$$InterfaceCode$$", interfaceCode);
             File.WriteAllText(outputPath, finalContent);
             return string.Empty ;
         }
 
         private static Boolean CreateSolutionFile(BERequest request, string outputPath)
         {
-            string commandFilePath = "./Scripts_Templates/create_solution_ps.template";
+            string commandFilePath = "./Backend-Templates/Scripts-Templates/create_solution_ps.template";
             string template = File.ReadAllText(commandFilePath);
             string tempScriptFilePath2 = Path.Combine(Path.GetTempPath(), "temp_script.ps1");
             template = template.Replace("$$OUTPUTPATH$$", outputPath)
@@ -263,7 +262,7 @@ namespace Extractor.Service
         private static string CreateMultipleProject(string response, string fileName, BERequest request)
         {
             string jsonArray = Helper.SelectJsonArray(response);
-            List<FileContent> rootObjects = JsonConvert.DeserializeObject<List<FileContent>>(jsonArray)!;
+            List<FileTypeAndContent> rootObjects = JsonConvert.DeserializeObject<List<FileTypeAndContent>>(jsonArray)!;
             foreach (var fileContent in rootObjects)
             {
                 switch (fileContent.FileName)
@@ -285,34 +284,50 @@ namespace Extractor.Service
                         CreateAndExecuteScript(request, dataRepositoryCode, fileContent);
                         break;
                     case "DbContext":
-                        string dbContextCode = fileContent.Content;
-                        CreateAndExecuteScript(request, dbContextCode, fileContent);
-                        break;
                     case "DbSet":
-                        string dbSetCode = fileContent.Content;
-                        CreateAndExecuteScript(request, dbSetCode, fileContent);
+                        string dbContextCode = fileContent.Content;
+                        CreateDataRepoClasses(request, dbContextCode, fileContent);
                         break;
                     default:
                         Console.WriteLine($"Unexpected filename: {fileContent.FileName}");
                         break;
                 }
             }
-            
+
+            string commandFilePath = "./Backend-Templates/Scripts-Templates/create_interface_ps.template";
+            string template = File.ReadAllText(commandFilePath);
+            string outputPath = Path.Join(request.OutputPath, request.ClassName+"MultiProject");
+            template = template.Replace("$$FRAMEWORK$$", request.Framework)
+                                .Replace("$$OUTPUTPATH$$" , outputPath);
+
+            string tempScriptFilePath = Path.Combine(Path.GetTempPath(), "temp_script.ps1");
+            File.WriteAllText(tempScriptFilePath, template);
+            ExecuteScript(tempScriptFilePath, fileName, request);
+
+            foreach (var fileContent in rootObjects)
+            {
+                if (fileContent.Type == "Interface")
+                {
+                    var interfaceCode = fileContent.Content;
+                    var interfaceOutputPath = Path.Combine(request.OutputPath, request.ClassName+"MultiProject", "Interfaces", $"{fileContent.FileName}.cs");
+                    CreateInterface(request, interfaceCode, fileContent.FileName, interfaceOutputPath);
+                }
+            }
+
             return string.Empty;
         }
 
-        private static string CreateDataRepoClasses(BERequest request, string projectName, string interfaceCode, string fileName)
+        private static string CreateDataRepoClasses(BERequest request, string dataRepoCode, FileTypeAndContent fileContent)
         {
-            string templatePath = "./Templates/Interface.template";
-            string outputPath = Path.Combine(request.OutputPath, request.ClassName, "Interfaces", $"{fileName}.cs");
+            string templatePath = "./Backend-Templates/DataRepoClasses.template";
+            string outputPath = Path.Combine(request.OutputPath, request.ClassName+"MultiProject", "DataRepository", "DataRepository.Application", $"{fileContent.FileName}.cs");
             string templateContent = File.ReadAllText(templatePath);
-            string finalContent = templateContent.Replace("$$InterfaceCode$$", interfaceCode)
-                                                   .Replace("$$FileName$$", projectName);
+            string finalContent = templateContent.Replace("$$DataRepoClassesCode$$", dataRepoCode);
             File.WriteAllText(outputPath, finalContent);
             return string.Empty;
         }
 
-        public static string CreateAndExecuteScript(BERequest request, string serviceCode , FileContent fileContent)
+        public static string CreateAndExecuteScript(BERequest request, string serviceCode , FileTypeAndContent fileContent)
         {
             string swagger = string.Empty;
             string projectTemplate = "csodcustomtemplate";
@@ -327,7 +342,7 @@ namespace Extractor.Service
             }
 
             string fileName = fileContent.FileName;
-            string commandFilePath = "./Scripts_Templates/create_classlibrary_ps.template";
+            string commandFilePath = "./Backend-Templates/Scripts-Templates/create_classlibrary_ps.template";
             string template = File.ReadAllText(commandFilePath);
             template = template.Replace("$$SERVICECODE$$", serviceCode)
                                .Replace("$$FILENAME$$", fileName)

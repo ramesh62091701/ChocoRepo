@@ -2,6 +2,7 @@
 import React from "react";
 import "style/style.less";
 import { useLocalizationsDefaults } from "@flare/primitives/core-ui";
+import '../Component.css';
 
 interface Props {
     currentPage: number;

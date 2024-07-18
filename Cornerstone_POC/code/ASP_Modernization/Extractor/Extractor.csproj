@@ -20,16 +20,25 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Scripts_Templates\create_api_ps.template">
+    <None Update="Backend-Templates\Scripts-Templates\create_api_ps.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Scripts_Templates\create_classlibrary_ps.template">
+    <None Update="Backend-Templates\Scripts-Templates\create_interface_ps.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Scripts_Templates\create_solution_ps.template">
+    <None Update="Backend-Templates\Scripts-Templates\create_classlibrary_ps.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\Interface.template">
+    <None Update="Backend-Templates\Scripts-Templates\create_solution_ps.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Backend-Templates\DataRepoClasses.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Backend-Templates\Interface.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\CSS.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Templates\App.template">

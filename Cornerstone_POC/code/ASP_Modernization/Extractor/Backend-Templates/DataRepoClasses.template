@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 using Application.BFFService.Service;
 using Application.DataService.Service;
 using Application.DataRepository.Service;
-using Interfaces;
 
 
 
-namespace Application.Template.Service
+namespace Application.DataRepository.Service
 {
-    $$Servicecode$$
+	$$DataRepoClassesCode$$
 }

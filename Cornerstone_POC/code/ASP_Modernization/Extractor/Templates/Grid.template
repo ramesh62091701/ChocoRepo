@@ -7,6 +7,7 @@ import {
 import "style/style.less";
 import { fetch$$Entity$$Details } from "services/CommonAPIService";
 import $$Entity$$GridToolBar from "./$$Entity$$GridToolBar";
+import '../Component.css';
 
 // Todo: Define Properties.
 interface Props {

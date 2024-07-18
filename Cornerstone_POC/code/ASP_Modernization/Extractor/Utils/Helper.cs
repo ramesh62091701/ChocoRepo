@@ -13,6 +13,10 @@ namespace Extractor.Utils
     {
         public static void CreateFile(string destinationPath, string filename, string content)
         {
+            if (!Directory.Exists(destinationPath))
+            {
+                Directory.CreateDirectory(destinationPath);
+            }
             string filePath = Path.Combine(destinationPath, filename);
             File.WriteAllText(filePath, content);
             Logger.Log("File Created in path: " + filePath);

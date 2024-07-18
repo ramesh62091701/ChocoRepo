@@ -10,6 +10,7 @@ import { Culture } from "player-globalization";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useLocalizationsDefaults } from "@flare/primitives/core-ui";
+import '../Component.css';
 
 
 interface Props {
@@ -62,7 +63,7 @@ const $$PropertyName$$: React.FC<Props> = ({ dateValue }) => {
     };
 
 
-    //Validating proper format for the date
+    // Validating proper format for the date
     const GetValidation = (date: string, isValid: boolean) => {
         let isError = false;
         setHasError(false);
@@ -108,7 +109,7 @@ const $$PropertyName$$: React.FC<Props> = ({ dateValue }) => {
         }
     };
 
-    //Validating the date is not in the past
+    // Validating the date is not in the past
     const GetValidationForFuture = (date: SingleDateValue) => {
         if (date !== null) {
             const startDateVal = moment

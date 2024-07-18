@@ -43,7 +43,6 @@ const AppComponent: React.FC = (props: any): JSX.Element => {
 
 
     try {
-        // eslint-disable-next-line compat/compat
         const up = new URLSearchParams(search);
         const qs: any = up.get("LoId");
         const qsBack: any = up.get("back");
