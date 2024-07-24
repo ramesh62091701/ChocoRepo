@@ -5,18 +5,23 @@
     <TargetFramework>$$TargetFramework$$</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	  <ExcludeBFFService>false</ExcludeBFFService>
+	  <ExcludeController>false</ExcludeController>
+	  <ExcludeDataRepository>false</ExcludeDataRepository>
+	  <ExcludeDataService>false</ExcludeDataService>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" Condition="'$(TargetFramework)' == 'net8.0'"/>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0" Condition="'$(TargetFramework)' == 'net6.0'"/>
   </ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Interfaces\Interfaces.csproj" />
-		<ProjectReference Include="..\BFFService\BFFService.csproj" />
-		<ProjectReference Include="..\Controller\Controller.csproj" />
-		<ProjectReference Include="..\DataRepository\DataRepository.csproj" />
-		<ProjectReference Include="..\DataService\DataService.csproj" />
+		<ProjectReference Include="..\BFFService\BFFService.csproj" Condition="'$(ExcludeBFFService)' != 'true'" />
+		<ProjectReference Include="..\Controller\Controller.csproj" Condition="'$(ExcludeController)' != 'true'" />
+		<ProjectReference Include="..\DataRepository\DataRepository.csproj" Condition="'$(ExcludeDataRepository)' != 'true'" />
+		<ProjectReference Include="..\DataService\DataService.csproj" Condition="'$(ExcludeDataService)' != 'true'" />
 	</ItemGroup>
 
 </Project>

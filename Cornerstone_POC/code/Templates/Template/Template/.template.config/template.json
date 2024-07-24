@@ -35,32 +35,25 @@
       "defaultValue": "// Add your Service code here",
       "replaces": "$$Servicecode$$"
     },
-    "Controller": {
+    "ExcludeBFFService": {
       "type": "parameter",
-      "description": "Custom code for Controller Service",
-      "datatype": "text",
-      "defaultValue": "// Add your Controller Service code here",
-      "replaces": "$$Controller$$"
+      "datatype": "bool",
+      "defaultValue": "false"
     },
-    "DataRepo": {
+    "ExcludeDataService": {
       "type": "parameter",
-      "description": "Custom code for Data Repository",
-      "datatype": "text",
-      "defaultValue": "// Add your Data Repository code here",
-      "replaces": "$$DataRepo$$"
+      "datatype": "bool",
+      "defaultValue": "false"
     },
-    "DataService": {
+    "ExcludeController": {
       "type": "parameter",
-      "description": "Custom code for Data Service",
-      "datatype": "text",
-      "defaultValue": "// Add your Data Service code here",
-      "replaces": "$$DataService$$"
+      "datatype": "bool",
+      "defaultValue": "false"
     },
-    "EnbleSwaggerSupport":{
+    "ExcludeDataRepository": {
       "type": "parameter",
-      "description": "Enable Swagger",
-      "datatype" : "bool",
-      "defaultValue": "true"
+      "datatype": "bool",
+      "defaultValue": "false"
     }
   }
 }

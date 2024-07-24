@@ -240,7 +240,7 @@ namespace Extractor.Service
         
         private static string CreateInterface(BERequest request , string interfaceCode, string fileName , string outputPath)
         {
-            string templatePath = "../Backend-Templates/Interface.template";
+            string templatePath = "./Backend-Templates/Interface.template";
             string templateContent = File.ReadAllText(templatePath);
             string finalContent = templateContent.Replace("$$InterfaceCode$$", interfaceCode);
             File.WriteAllText(outputPath, finalContent);
@@ -329,19 +329,20 @@ namespace Extractor.Service
 
         public static string CreateAndExecuteScript(BERequest request, string serviceCode , FileTypeAndContent fileContent)
         {
+            string fileName = fileContent.FileName;
             string swagger = string.Empty;
             string projectTemplate = "csodcustomtemplate";
+            string excludeProject = $"--Exclude{fileName} \"true\"";
             if (fileContent.FileName == "Controller")
             {
                 projectTemplate = "apicustomtemplate";
-
+                excludeProject = string.Empty;  
                 if (request.Swagger)
                 {
                     swagger = "--EnableSwaggerSupport \"true\"";
                 }
             }
 
-            string fileName = fileContent.FileName;
             string commandFilePath = "./Backend-Templates/Scripts-Templates/create_classlibrary_ps.template";
             string template = File.ReadAllText(commandFilePath);
             template = template.Replace("$$SERVICECODE$$", serviceCode)
@@ -349,7 +350,8 @@ namespace Extractor.Service
                                .Replace("$$FRAMEWORK$$", request.Framework)
                                .Replace("$$OUTPUTPATH$$", request.OutputPath + "/" + request.ClassName+"MultiProject")
                                .Replace("$$PROJECTTEMPLATE$$" , projectTemplate)
-                               .Replace("**ENABLESWAGGER**", swagger);
+                               .Replace("**ENABLESWAGGER**", swagger)
+                               .Replace("**EXCLUDEPROJECT**", excludeProject);
 
             string tempScriptFilePath = Path.Combine(Path.GetTempPath(), "temp_script.ps1");
             File.WriteAllText(tempScriptFilePath, template);

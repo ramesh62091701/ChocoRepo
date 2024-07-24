@@ -20,6 +20,7 @@ cd $outputDir
 dotnet new $$PROJECTTEMPLATE$$ -o "$$FILENAME$$" `
     --Service "$serviceCodeEscaped" `
     --Framework "$$FRAMEWORK$$" `
+    **EXCLUDEPROJECT** `
     **ENABLESWAGGER**
 
 Write-Host "The placeholder replacement and template creation process is complete."

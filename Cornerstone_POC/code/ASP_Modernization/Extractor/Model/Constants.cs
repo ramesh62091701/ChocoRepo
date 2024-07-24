@@ -3,6 +3,8 @@
     internal class Constants
     {
         public const string Model = "gpt-4o";
+        
+        public const string BaseModel = "gpt-3.5-turbo";
 
         public const string SysPrompt = "You are expert in understanding the aspx files. Your job is to convert aspx frontend file to its equivalent React files";
 
