@@ -1,0 +1,5 @@
+{
+    "MSIDemo": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.43559 -packagepath 'D:\\CHOCO\\packs' -upgrade $false -msipath 'D:\\CHOCO\\builds\\22.0.0.43559\\MSI-Files\\MSIDemo.msi' -msiargs 'US_LOCAL_SERVER=\"sonatashrdss\" US_LOCAL_AUTHENTICATION=\"1\" US_LOCAL_USERNAME=\"sa\" US_LOCAL_PASSWORD=\"7QCGn94An8fz\" US_MSDTC_MUST_REINSTALL=\"1\" REBOOT=\"ReallySuppress\" /l*vx \"C:\\Program Files (x86)\\Common Files\\US Group\\Install Logs\\Super Site Server.msi.log\"'",
+    "MSIDemo2": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath 'D:\\CHOCO\\builds\\22.0.0.50000\\MSI-Files\\MSIDemo.msi' -msiargs 'US_LOCAL_SERVER=\"sonatashrdss\" US_LOCAL_AUTHENTICATION=\"1\" US_LOCAL_USERNAME=\"sa\" US_LOCAL_PASSWORD=\"7QCGn94An8fz\" US_MSDTC_MUST_REINSTALL=\"1\" REBOOT=\"ReallySuppress\" /l*vx \"C:\\Program Files (x86)\\Common Files\\US Group\\Install Logs\\Super Site Server.msi.log\"'"
+}
+  
