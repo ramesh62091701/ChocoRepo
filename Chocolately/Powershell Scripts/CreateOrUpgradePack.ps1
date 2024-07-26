@@ -16,7 +16,9 @@ $fileType = if ($fileExtension -eq '.msi') { 'MSI' } elseif ($fileExtension -eq 
 }
 
 if ($fileType -eq 'MSI') {
-    $silentArgs = "/qn /i $escapedMsiArgs"
+    # $silentArgs = "/qn /i $escapedMsiArgs" # For main MSI files
+    $silentArgs = $escapedMsiArgs #for local testing
+
 }
 $fileName = [System.IO.Path]::GetFileNameWithoutExtension($msipath)
 

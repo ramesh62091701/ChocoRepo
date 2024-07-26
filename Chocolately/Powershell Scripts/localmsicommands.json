@@ -1,0 +1,4 @@
+{
+    "MSIDemo": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.43559 -packagepath 'D:\\CHOCO\\packs' -upgrade $false -msipath 'D:\\CHOCO\\builds\\22.0.0.43559\\MSI-Files\\MSIDemo.msi' -msiargs '/qn /norestart' ",
+    "MSIDemo2": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath 'D:\\CHOCO\\builds\\22.0.0.50000\\MSI-Files\\MSIDemo.msi' -msiargs '/qn /norestart' "
+}
