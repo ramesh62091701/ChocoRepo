@@ -8,7 +8,7 @@ foreach ($key in $jsonContent.PSObject.Properties) {
     Invoke-Expression $key.Value
 }
 
-# Set-Location -Path "D:\CHOCO\packs" 
-# choco install msidemo --version 22.0.0.43559 -s . -y --force
+Set-Location -Path "D:\CHOCO\packs" 
+choco install msidemo --version 22.0.0.43559 -s . -y --force
 
-# choco upgrade msidemo --version 22.0.0.50000 -s . -y
+choco upgrade msidemo --version 22.0.0.50000 -s . -y

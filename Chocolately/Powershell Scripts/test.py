@@ -3,6 +3,6 @@ def escape_string(input_string):
     return escaped_string
 
 # Example usage
-input_string = r'/Hide /MaxThreads=8 /AuthType=0 /Site="sonatashrdsite" /verbose /LogPath="C:\Program Files (x86)\Common Files\US Group\Install Logs\ServerUpdater" /WorkPath="c:\installs\suwork\ServerUpdater'
+input_string = r'/SqlInstance:sonatashrdco'
 escaped_string = escape_string(input_string)
 print(escaped_string)

@@ -3,34 +3,29 @@
     
     "ServerUpdater_SuperSite.exe": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath 'c:\\installs\\ultipro\\22.0.0.43559\\NetCDStructure\\Server\\ServerUpdater_SuperSite.exe' -msiargs '/Hide /MaxThreads=8 /AuthType=0 /verbose /LogPath=\"C:\\Program Files (x86)\\Common Files\\US Group\\Install Logs\\SuperSiteUpdater\" /WorkPath=\"c:\\installs\\suwork\\SuperSiteUpdater'",
     
-    "Site Server.msi": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath '' -msiargs '' ",
+    "Site Server.msi1": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath '' -msiargs '' ",
 
-    "Site Server.msi": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath 'c:\\installs\\ultipro\\22.0.0.43559\\NetCDStructure\\Server\\ServerUpdater_SuperSite.exe' -msiargs '/Hide /MaxThreads=8 /AuthType=0 /verbose /LogPath=\"C:\\Program Files (x86)\\Common Files\\US Group\\Install Logs\\SuperSiteUpdater\" /WorkPath=\"c:\\installs\\suwork\\SuperSiteUpdater' ",
+    "Site Server.msi2": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath 'c:\\installs\\ultipro\\22.0.0.43559\\NetCDStructure\\Server\\ServerUpdater_SuperSite.exe' -msiargs '/Hide /MaxThreads=8 /AuthType=0 /verbose /LogPath=\"C:\\Program Files (x86)\\Common Files\\US Group\\Install Logs\\SuperSiteUpdater\" /WorkPath=\"c:\\installs\\suwork\\SuperSiteUpdater' ",
 
-    "Site Server.msi": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath 'c:\\installs\\ultipro\\22.0.0.43559\\NetCDStructure\\Server\\Site Server.msi' -msiargs 'INSTALLDIR=\"c:\\Windows\\\" US_LOCAL_SERVER=\"sonatashrdsite\" US_LOCAL_AUTHENTICATION=\"1\" US_LOCAL_USERNAME=\"sa\" US_LOCAL_PASSWORD=\"7QCGn94An8fz\" US_SITE_SERVER=\"sonatashrdsite\" US_SITE_AUTHENTICATION=\"1\" US_SITE_USERNAME=\"sa\" US_SITE_PASSWORD=\"7QCGn94An8fz\" US_GATEWAY_USERNAME=\"context\" US_GATEWAY_PASSWORD=\"bait\" US_DISPATCH_USERNAME=\"dpmuser\" US_DISPATCH_PASSWORD=\"password\" US_SITEADMIN_USERNAME=\"siteuser\" US_SITEADMIN_PASSWORD=\"default\" US_XPT_USERNAME=\"\" US_XPT_PASSWORD=\"\" US_COMPLUS_USERNAME=\".\\administrator\" US_COMPLUS_PASSWORD=\"!@bZjbQQ!9tz\" US_BENEFITSAPI_USERNAME=\"benefitsapi\" US_BENEFITSAPI_PASSWORD=\"password\" US_UPR_FILE=\"c:\\sbkey.upr\" US_CONTRACT_NUMBER=\"usg1000\" US_SITETYPE=\"1\" US_ALTERNATE_DOMAIN=\"https://sonatashrdwebalt.newgen.corp/UltiProContentDeliver/DisplayContent.aspx\" US_DOTNETWEB_URL=\"https://sonatashrdweb.newgen.corp:443\" US_CLASSICWEB_URL=\"https://sonatashrdweb.newgen.corp:444\" US_INTERNAL_HUB_SERVER=\"sonatashrdhi\" US_FILEURI=\"\\\\sonatashrdco\\c$\\Reports\" US_SECFILEURI=\"\\\\sonatashrdco\\c$\\Reports\\ranier\" US_IEXROOTPATH=\"\\\\dev.us.corp\\de\\Informatica\\QA\\dx-endpoints\" US_MSDTC_MUST_REINSTALL=\"1\" REBOOT=\"ReallySuppress\" /l*vx \"C:\\Program Files (x86)\\Common Files\\US Group\\Install Logs\\Site Server.msi.log' ",
+    "Site Server.msi3": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath 'c:\\installs\\ultipro\\22.0.0.43559\\NetCDStructure\\Server\\Site Server.msi' -msiargs 'INSTALLDIR=\"c:\\Windows\\\" US_LOCAL_SERVER=\"sonatashrdsite\" US_LOCAL_AUTHENTICATION=\"1\" US_LOCAL_USERNAME=\"sa\" US_LOCAL_PASSWORD=\"7QCGn94An8fz\" US_SITE_SERVER=\"sonatashrdsite\" US_SITE_AUTHENTICATION=\"1\" US_SITE_USERNAME=\"sa\" US_SITE_PASSWORD=\"7QCGn94An8fz\" US_GATEWAY_USERNAME=\"context\" US_GATEWAY_PASSWORD=\"bait\" US_DISPATCH_USERNAME=\"dpmuser\" US_DISPATCH_PASSWORD=\"password\" US_SITEADMIN_USERNAME=\"siteuser\" US_SITEADMIN_PASSWORD=\"default\" US_XPT_USERNAME=\"\" US_XPT_PASSWORD=\"\" US_COMPLUS_USERNAME=\".\\administrator\" US_COMPLUS_PASSWORD=\"!@bZjbQQ!9tz\" US_BENEFITSAPI_USERNAME=\"benefitsapi\" US_BENEFITSAPI_PASSWORD=\"password\" US_UPR_FILE=\"c:\\sbkey.upr\" US_CONTRACT_NUMBER=\"usg1000\" US_SITETYPE=\"1\" US_ALTERNATE_DOMAIN=\"https://sonatashrdwebalt.newgen.corp/UltiProContentDeliver/DisplayContent.aspx\" US_DOTNETWEB_URL=\"https://sonatashrdweb.newgen.corp:443\" US_CLASSICWEB_URL=\"https://sonatashrdweb.newgen.corp:444\" US_INTERNAL_HUB_SERVER=\"sonatashrdhi\" US_FILEURI=\"\\\\sonatashrdco\\c$\\Reports\" US_SECFILEURI=\"\\\\sonatashrdco\\c$\\Reports\\ranier\" US_IEXROOTPATH=\"\\\\dev.us.corp\\de\\Informatica\\QA\\dx-endpoints\" US_MSDTC_MUST_REINSTALL=\"1\" REBOOT=\"ReallySuppress\" /l*vx \"C:\\Program Files (x86)\\Common Files\\US Group\\Install Logs\\Site Server.msi.log' ",
 
     "ServerUpdater_Ultipro.exe": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath 'c:\\installs\\ultipro\\22.0.0.43559\\NetCDStructure\\Server\\ServerUpdater_Ultipro.exe' -msiargs '/Hide /MaxThreads=8 /AuthType=0 /Site=\"sonatashrdsite\" /verbose /LogPath=\"C:\\Program Files (x86)\\Common Files\\US Group\\Install Logs\\ServerUpdater\" /WorkPath=\"c:\\installs\\suwork\\ServerUpdater' ",
 
-    "ServerUpdater_UCN.exe": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath '' -msiargs '' ",
+    "ServerUpdater_UCN.exe": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath 'c:\\installs\\ultipro\\22.0.0.43559\\NetCDStructure\\Server\\ServerUpdater_DSI.exe' -msiargs '/Hide /MaxThreads=8 /AuthType=0 /Site=\"sonatashrdsite\" /verbose /LogPath=\"C:\\Program Files (x86)\\Common Files\\US Group\\Install Logs\\DSIUpdater\" /WorkPath=\"c:\\installs\\suwork\\DSIUpdater' ",
 
-    "Site Server.msi": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath '' -msiargs '' ",
+    "KeyPairCreatorWrapper.exe": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath 'c:\\installs\\ultipro\\22.0.0.43559\\NetCDStructure\\UltiProWeb\\Utilities\\Security Key Pair Creator\\KeyPairCreatorWrapper.exe' -msiargs '-Silent -SiteServerName:\"sonatashrdsite\" -AuthType:\"1\" -SiteUserName:\"sa\" -SitePassword:\"7QCGn94An8fz\" -KeyUserName:\"keyuser\" -KeyPassword:\"password\" -UsSalt:\"password\"' ",
 
-    "Site Server.msi": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath '' -msiargs '' ",
+    "SecurityUpdater.exe": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath 'c:\\installs\\ultipro\\22.0.0.43559\\NetCDStructure\\Server\\SecurityUpdater.exe' -msiargs '/SqlInstance:sonatashrdco' ",
 
-    "Site Server.msi": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath '' -msiargs '' ",
+    "Site Server.msi11": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath '' -msiargs '' ",
 
-    "Site Server.msi": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath '' -msiargs '' ",
+    "Site Server.msi22": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath '' -msiargs '' ",
 
-    "Site Server.msi": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath '' -msiargs '' ",
+    "Site Server.msi33": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath '' -msiargs '' ",
 
-    "Site Server.msi": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath '' -msiargs '' ",
+    "Site Server.msi44": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath '' -msiargs '' ",
 
-    "Site Server.msi": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath '' -msiargs '' ",
-
-
-
-
-
+    "Site Server.msi55": ".\\CreateOrUpgradePack.ps1 -version 22.0.0.50000 -packagepath 'D:\\CHOCO\\packs' -upgrade $true -msipath '' -msiargs '' "
 
 
 }
